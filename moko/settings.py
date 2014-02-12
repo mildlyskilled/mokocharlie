@@ -12,42 +12,6 @@ https://docs.djangoproject.com/en/1.6/ref/settings/
 import os
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
-import sys
-import urlparse
-
-# Register database schemes in URLs.
-urlparse.uses_netloc.append('mysql')
-
-try:
-
-    # Check to make sure DATABASES is set in settings.py file.
-    # If not default to {}
-
-    if 'DATABASES' not in locals():
-        DATABASES = {}
-
-    if 'DATABASE_URL' in os.environ:
-        url = urlparse.urlparse(os.environ['DATABASE_URL'])
-
-        # Ensure default database exists.
-        DATABASES['default'] = DATABASES.get('default', {})
-
-        # Update with environment configuration.
-        DATABASES['default'].update({
-            'NAME': url.path[1:],
-            'USER': url.username,
-            'PASSWORD': url.password,
-            'HOST': url.hostname,
-            'PORT': url.port,
-        })
-
-
-        if url.scheme == 'mysql':
-            DATABASES['default']['ENGINE'] = 'django.db.backends.mysql'
-except Exception:
-    print 'Unexpected error:', sys.exc_info()
-
-
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.6/howto/deployment/checklist/
@@ -93,15 +57,51 @@ WSGI_APPLICATION = 'moko.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.mysql',
     }
 }
+
+import sys
+import urlparse
+
+# Register database schemes in URLs.
+urlparse.uses_netloc.append('mysql')
+
+try:
+
+    # Check to make sure DATABASES is set in settings.py file.
+    # If not default to {}
+
+    if 'DATABASES' not in locals():
+        DATABASES = {}
+
+    if 'DATABASE_URL' in os.environ:
+        url = urlparse.urlparse(os.environ['DATABASE_URL'])
+
+        # Ensure default database exists.
+        DATABASES['default'] = DATABASES.get('default', {})
+
+        # Update with environment configuration.
+        DATABASES['default'].update({
+            'NAME': url.path[1:],
+            'USER': url.username,
+            'PASSWORD': url.password,
+            'HOST': url.hostname,
+            'PORT': url.port,
+        })
+
+
+        if url.scheme == 'mysql':
+            DATABASES['default']['ENGINE'] = 'django.db.backends.mysql'
+except Exception:
+    print 'Unexpected error:', sys.exc_info()
+
+
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.6/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'en-gb'
 
 TIME_ZONE = 'UTC'
 
@@ -119,4 +119,8 @@ STATIC_URL = '/static/'
 STATIC_ROOT = 'staticfiles'
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR, 'static'),
+)
+
+TEMPLATE_DIRS = (
+    os.path.join(BASE_DIR, 'templates')
 )
