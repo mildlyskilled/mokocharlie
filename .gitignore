@@ -1,3 +1,5 @@
 moko_venv
+moko_env
 *.pyc
 staticfiles
+.idea
