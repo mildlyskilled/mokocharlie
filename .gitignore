@@ -3,3 +3,5 @@ moko_env
 *.pyc
 staticfiles
 .idea
+prepare_local.sh
+teardown_local.sh

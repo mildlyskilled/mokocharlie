@@ -1,7 +1,11 @@
-from django.shortcuts import render
-from django.views.generic import TemplateView, DetailView, RedirectView
-from django.http import HttpResponse
+from django.views.generic.base import TemplateView
 
-def home(request):
-    content = "El home"
-    return HttpResponse(content)
+
+class HomeViewTemplate(TemplateView):
+    template_name = "home/index.html"
+
+    def get_context_data(self, **kwargs):
+        context = super(HomeViewTemplate, self).get_context_data()
+        context["home"] = "El Homie"
+        return context
+
