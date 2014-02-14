@@ -1,7 +1,9 @@
 {% extends "base.html" %}
 {% block title %}Organising Community Photos{% endblock %}
 {% block content %}
-{%  for image in images%}
-<li><a href="{{ image.get_absolute_url }}" >{{ image }}</a></li>
-{% endfor %}
+    {% for image in images %}
+        <li><a href="{{ image.get_absolute_url }}">{{ image }}</a></li>
+    {% endfor %}
+
+    {% include "partials/paginator.html" %}
 {% endblock %}
