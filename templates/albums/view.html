@@ -1,7 +1,28 @@
 {% extends "base.html" %}
 {% block title %}
-{{ album.album_label }}
+    {{ album.album_label }}
 {% endblock %}
 {% block content %}
-Album with id: {{ album }}
+    Album with id: {{ album }}
+
+    Images in this album
+    {% for image in album_images %}
+        <li><a href="{{ image.get_absolute_url }}">{{ image }}</a></li>
+    {% endfor %}
+
+    <div class="pagination">
+    <span class="step-links">
+        {% if album_images.has_previous %}
+            <a href="?page={{ album_images.previous_page_number }}">previous</a>
+        {% endif %}
+
+        <span class="current">
+            Page {{ album_images.number }} of {{ album_images.paginator.num_pages }}.
+        </span>
+
+        {% if album_images.has_next %}
+            <a href="?page={{ album_images.next_page_number }}">next</a>
+        {% endif %}
+    </span>
+    </div>
 {% endblock %}
