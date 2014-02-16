@@ -5,12 +5,11 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 class PhotosTemplate(TemplateView):
     template_name = "photos/index.html"
-    default_limit = 20
+    default_limit = 24
     default_page = 1
 
-
     def get_context_data(self, **kwargs):
-        images = Photo.objects.all()
+        images = Photo.objects.all().order_by('-date_added')
         _limit = self.request.GET.get('limit', self.default_limit)
         _page = self.request.GET.get('page', self.default_page)
         p = Paginator(images, _limit)

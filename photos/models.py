@@ -28,7 +28,6 @@ class Photo(models.Model):
     date_deleted = models.DateTimeField(blank=True, null=True)
 
     class Meta:
-        managed = False
         db_table = 'image_library'
 
     def __unicode__(self):
@@ -48,7 +47,6 @@ class ReportedImage(models.Model):
     date_reported = models.DateTimeField()
 
     class Meta:
-        managed = False
         db_table = 'reported_images'
 
     def __unicode__(self):
@@ -71,5 +69,4 @@ class UserImage(models.Model):
     published = models.IntegerField()
 
     class Meta:
-        managed = False
         db_table = 'user_image_library'

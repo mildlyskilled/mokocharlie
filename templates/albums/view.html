@@ -1,16 +1,32 @@
 {% extends "base.html" %}
+{% load cloudinary %}
 {% block title %}
     {{ album.album_label }}
 {% endblock %}
 {% block content %}
-    {{ album }}
-    <hr />
-    {{ album.album_description }}
-    <hr />
-    Images in this album
-    {% for image in album_images %}
-        <li><a href="{{ image.get_absolute_url }}">{{ image }}</a></li>
-    {% endfor %}
+    <div class="col-lg-8">
+        <div class="well">
+            <div class="page-header">
+                <h2>{{ album }}</h2>
+            </div>
+            <div class="row">
+                <div class="col-lg-6" >
+                    {% cloudinary album.album_cover|add:'.jpg' transformation="moko_resize_400" alt=album class="thumbnail"%}
+                </div>
+                <div class="col-lg-6">
+                    {{ album.album_description }}
+                </div>
+            </div>
+        </div>
+        <hr/>
 
-    {% include "partials/paginator.html" %}
+        <hr/>
+        <div class="row">
+            {% for image in album_images %}
+                {% include "partials/image_preview.html" %}
+            {% endfor %}
+            <hr/>
+        </div>
+        {% include "partials/paginator.html" %}
+    </div>
 {% endblock %}

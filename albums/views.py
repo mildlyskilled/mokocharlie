@@ -6,7 +6,7 @@ from photos.models import *
 
 class AlbumTemplate(TemplateView):
     template_name = "albums/index.html"
-    default_limit = 20
+    default_limit = 21
     default_page = 1
 
     def get_context_data(self, **kwargs):
@@ -30,7 +30,7 @@ class AlbumTemplate(TemplateView):
 
 class AlbumViewTemplate(TemplateView):
     template_name = "albums/view.html"
-    default_limit = 10
+    default_limit = 12
     default_page = 1
 
     def get_context_data(self, **kwargs):

@@ -1,7 +1,8 @@
 {% extends "base.html" %}
+{% load cloudinary %}
 {% block title %}
 {{ image }}
 {% endblock %}
 {% block content %}
-Image: {{ image }}
+    {% cloudinary image.image_id|add:'.jpg' transformation="moko_resize_730" alt=image %}
 {% endblock %}

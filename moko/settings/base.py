@@ -41,6 +41,7 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'photos',
     'albums',
+    'cloudinary',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -122,9 +123,16 @@ USE_TZ = True
 STATIC_URL = '/static/'
 STATIC_ROOT = 'staticfiles'
 STATICFILES_DIRS = (
-    os.path.join(BASE_DIR, 'static'),
+    os.path.join(BASE_DIR, '../static'),
 )
 
 TEMPLATE_DIRS = (
     os.path.join(BASE_DIR, '../templates')
 )
+
+# Cloudinary settings for Django. Add to your settings file.
+CLOUDINARY = {
+  'cloud_name': 'hv52shllz',
+  'api_key': '211234747938451',
+  'api_secret': 'ATmGWjd4_UyVsC9vwTfLqI_xzx0',
+}

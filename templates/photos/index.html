@@ -1,9 +1,27 @@
 {% extends "base.html" %}
 {% block title %}Organising Community Photos{% endblock %}
 {% block content %}
-    {% for image in images %}
-        <li><a href="{{ image.get_absolute_url }}">{{ image }}</a></li>
-    {% endfor %}
+    <div class='row'>
+        <div class="col-lg-8">
+            <div class="jumbotron">
+                <h2>Mokocharlie Images
+                    <small class="orangetext">sorted by recent</small>
+                </h2>
+                <blockquote>We have taken our time to find the best views from all over Ghana and sometimes beyond. We
+                    hope that you take pleasure in browsing through these pictures (Almost as much as we have enjoyed
+                    taking them).
+                    <small>Mokocharlie team</small>
+                </blockquote>
+                <a href="/upload" class="btn btn-success">Upload your own</a> | <a href="/album/peopleandplaces"
+                                                                                   class="btn btn-primary">See what
+                others have uploaded</a>
+            </div>
+
+            {% for image in images %}
+                {% include "partials/image_preview.html" %}
+            {% endfor %}
+        </div>
+    </div>
 
     {% include "partials/paginator.html" %}
 {% endblock %}

@@ -10,6 +10,8 @@
 from __future__ import unicode_literals
 
 from django.db import models
+from photos.models import Photo
+from django.db.models import Count
 
 
 class Album(models.Model):
@@ -30,3 +32,6 @@ class Album(models.Model):
     def get_absolute_url(self):
         from django.core.urlresolvers import reverse
         return reverse('album_view', args=[str(self.album_id)])
+
+    def album_images(self):
+        return Photo.objects.filter(image_album=self.album_id)

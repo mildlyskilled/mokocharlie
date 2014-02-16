@@ -1,0 +1,19 @@
+{% load cloudinary %}
+<div class="col-sm-6 col-md-4" style="min-height: 290px">
+    <div class="thumbnail">
+        <a href="{{ album.get_absolute_url }}">
+            {% cloudinary album.album_cover|add:'.jpg' transformation="album_preview" alt=album %}</a>
+
+        <div class="caption">
+            <h5>{{ album.album_label }}</h5>
+            <p>
+                <small><i class="glyphicon glyphicon-plus"> </i>
+                    {{ album.date_added|date:"D d M Y P" }}<br>
+                    <a class="label label-info" href="{{ album.get_absolute_url }}">
+                        {{ album.album_images.count }}
+                        images</a>
+                </small>
+            </p>
+        </div>
+    </div>
+</div>
