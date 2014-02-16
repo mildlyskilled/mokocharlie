@@ -1,31 +1,34 @@
 <nav class="navbar navbar-inverse navbar-static-top" role="navigation">
-  <div class="container-fluid">
-    <!-- Brand and toggle get grouped for better mobile display -->
-    <div class="navbar-header">
-      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-collapse">
-        <span class="sr-only">Toggle navigation</span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-      </button>
-      <a class="navbar-brand" href="/"><img src="{{ STATIC_URL }}img/moko_logo_grey_transparent_40.png" /></a>
-    </div>
-
-    <!-- Collect the nav links, forms, and other content for toggling -->
-    <div class="collapse navbar-collapse" id="navbar-collapse" style="margin-top:15px">
-      <ul class="nav navbar-nav">
-          <li><a href="{% url 'albums:album_list' %}">Albums</a></li>
-          <li><a href="{% url 'photos:photo_list' %}">Photos</a></li>
-          <li><a href="{% url 'photos:photo_list' %}">Videos</a></li>
-          <li><a href="{% url 'photos:photo_list' %}">Stories</a></li>
-          <li><a href="{% url 'photos:photo_list' %}">Hotels &amp; Resorts</a></li>
-      </ul>
-      <form class="navbar-form navbar-right" role="search">
-        <div class="form-group">
-          <input type="text" class="form-control" placeholder="Search">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            {% load cloudinary %}
+            <a class="navbar-brand" href="/">{% cloudinary "moko_logo_small"|add:'.png' %}</a>
         </div>
-      </form>
 
-    </div><!-- /.navbar-collapse -->
-  </div><!-- /.container-fluid -->
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="navbar-collapse" style="margin-top:15px">
+            <ul class="nav navbar-nav">
+                <li><a href="{% url 'albums:album_list' %}">Albums</a></li>
+                <li><a href="{% url 'photos:photo_list' %}">Photos</a></li>
+                <li><a href="{% url 'photos:photo_list' %}">Videos</a></li>
+                <li><a href="{% url 'photos:photo_list' %}">Stories</a></li>
+                <li><a href="{% url 'photos:photo_list' %}">Hotels &amp; Resorts</a></li>
+            </ul>
+            <form class="navbar-form navbar-right" role="search">
+                <div class="form-group">
+                    <input type="text" class="form-control" placeholder="Search">
+                </div>
+            </form>
+
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container-fluid -->
 </nav>
