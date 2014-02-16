@@ -6,4 +6,3 @@ staticfiles
 prepare_local.sh
 teardown_local.sh
 static/photos
-data
