@@ -104,6 +104,14 @@ CREATE TABLE `photo_album` (
   ENGINE = InnoDB
   DEFAULT CHARSET = utf8;
 
+#fix album covers
+UPDATE album SET cover = (SELECT id FROM photo WHERE image_id = cover);
+ALTER TABLE `album` CHANGE `cover` `cover` INT(11) UNSIGNED NULL;
+
+ALTER TABLE `album` ADD FOREIGN KEY (`cover`) REFERENCES `photo` (`id`)
+  ON DELETE SET NULL
+  ON UPDATE SET NULL;
+
 #CREATE LOOKUPS
 
 INSERT INTO photo_album (photo_id, album_id)

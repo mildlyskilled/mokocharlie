@@ -49,13 +49,15 @@ class CloudinaryService():
                 except urllib2.URLError, e:
                     print "[ERROR] Failed to upload image to the cloud {0}".format(str(e))
 
-    def purge_images(self):
+
+    def resource_list(self):
+        image_list = cloudinary.api.resources()
+        return image_list['resources']
+
+
+def purge_images(self):
         confirm = raw_input("Are you sure?[y/n] ")
         if confirm.lower() == 'y':
             return cloudinary.api.delete_all_resources()
         else:
             print "Aborting purge operation..."
-
-    def resource_list(self):
-        image_list = cloudinary.api.resources()
-        return image_list['resources']

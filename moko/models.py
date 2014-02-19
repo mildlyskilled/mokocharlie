@@ -12,12 +12,36 @@ from __future__ import unicode_literals
 from django.db import models
 
 
+class Photo(models.Model):
+    id = models.IntegerField(primary_key=True)
+    image_id = models.CharField(max_length=20)
+    name = models.CharField(max_length=250)
+    path = models.CharField(max_length=150)
+    caption = models.TextField()
+    video = models.CharField(max_length=15, blank=True)
+    times_viewed = models.IntegerField()
+    created_at = models.DateTimeField()
+    updated_at = models.DateTimeField()
+    owner = models.CharField(max_length=41)
+    total_rating = models.BigIntegerField()
+    times_rated = models.IntegerField()
+    published = models.IntegerField()
+    deleted_at = models.DateTimeField(blank=True, null=True)
+
+    class Meta:
+        db_table = 'photo'
+        ordering = '-created_at'
+
+    def __unicode__(self):
+        return self.name
+
+
 class Album(models.Model):
     id = models.IntegerField(primary_key=True)
     album_id = models.IntegerField(blank=True, null=True)
     label = models.CharField(max_length=150)
     description = models.TextField(blank=True)
-    cover = models.CharField(max_length=15, blank=True)
+    cover = models.ForeignKey(Photo, db_column='id')
     created_at = models.DateTimeField()
     updated_at = models.DateTimeField()
     published = models.IntegerField()
@@ -28,6 +52,10 @@ class Album(models.Model):
 
     def __unicode__(self):
         return self.label
+
+    def get_absolute_url(self):
+        from django.core.urlresolvers import reverse
+        return reverse('album_view', args=[str(self.id)])
 
 
 class AppData(models.Model):
@@ -121,30 +149,6 @@ class ImageComments(models.Model):
 
     def __unicode__(self):
         return self.image_comment
-
-
-class Photo(models.Model):
-    id = models.IntegerField(primary_key=True)
-    image_id = models.CharField(max_length=20)
-    name = models.CharField(max_length=250)
-    path = models.CharField(max_length=150)
-    caption = models.TextField()
-    video = models.CharField(max_length=15, blank=True)
-    times_viewed = models.IntegerField()
-    created_at = models.DateTimeField()
-    updated_at = models.DateTimeField()
-    owner = models.CharField(max_length=41)
-    total_rating = models.BigIntegerField()
-    times_rated = models.IntegerField()
-    published = models.IntegerField()
-    deleted_at = models.DateTimeField(blank=True, null=True)
-
-    class Meta:
-        db_table = 'photo'
-        ordering = '-created_at'
-
-    def __unicode__(self):
-        return self.name
 
 
 class PhotoAlbum(models.Model):

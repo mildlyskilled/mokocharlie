@@ -10,7 +10,7 @@ class AlbumTemplate(TemplateView):
 
     def get_context_data(self, **kwargs):
 
-        albums = Album.objects.all().order_by('-created_at')
+        albums = Album.objects.all()
         _limit = self.request.GET.get('limit', self.default_limit)
         _page = self.request.GET.get('page', self.default_page)
         p = Paginator(albums, _limit)
@@ -38,7 +38,7 @@ class AlbumViewTemplate(TemplateView):
         _page = self.request.GET.get('page', self.default_page)
         album = Album.objects.get(album_id=album_id)
 
-        p = Paginator(Photo.objects.filter(image_album=album_id), _limit)
+        p = Paginator(album.photos.all(), _limit)
         try:
             image_list = p.page(_page)
         except PageNotAnInteger:
