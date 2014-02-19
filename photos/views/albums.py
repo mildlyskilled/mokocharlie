@@ -1,7 +1,6 @@
 from django.views.generic.base import TemplateView
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-from albums.models import *
-from photos.models import *
+from moko.models import *
 
 
 class AlbumTemplate(TemplateView):
@@ -11,7 +10,7 @@ class AlbumTemplate(TemplateView):
 
     def get_context_data(self, **kwargs):
 
-        albums = Album.objects.all().order_by('-date_added')
+        albums = Album.objects.all().order_by('-created_at')
         _limit = self.request.GET.get('limit', self.default_limit)
         _page = self.request.GET.get('page', self.default_page)
         p = Paginator(albums, _limit)

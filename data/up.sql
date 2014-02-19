@@ -104,16 +104,130 @@ CREATE TABLE `photo_album` (
   ENGINE = InnoDB
   DEFAULT CHARSET = utf8;
 
+#CREATE LOOKUPS
 
-# UPDATE LOOKUPS
-INSERT INTO `photo_album` (`photo_id`, `album_id`)
+INSERT INTO photo_album (photo_id, album_id)
   SELECT
-    i.id AS new_photo_id,
+    i.id AS new_image_id,
     a.id AS new_album_id
   FROM photo AS i
     LEFT JOIN image_library AS oi ON oi.image_id = i.image_id
-    LEFT JOIN album_data AS oa ON oa.album_id = oi.image_album AND `oi`.image_album
-    LEFT JOIN album AS a ON a.album_id = oa.album_id
-  WHERE a.id <> NULL AND i.id <> NULL;
+    INNER JOIN album_data AS oa ON oa.album_id = oi.image_album
+                                   AND oi.image_album != ''
+    INNER JOIN album AS a ON a.album_id = oa.album_id;
+
+# FIX IMAGE COMMENTS
+DELETE FROM image_comments
+WHERE image_comments.image_id NOT IN (SELECT
+                                        photo.image_id
+                                      FROM photo);
+
+UPDATE image_comments
+SET image_comments.image_id = (SELECT
+                                 id
+                               FROM photo
+                               WHERE image_comments.image_id = photo.image_id);
+
+
+DELETE FROM image_comments
+WHERE image_id NOT IN (SELECT
+                         id
+                       FROM photo) OR image_id = '';
+ALTER TABLE `image_comments` CHANGE `image_id`  `image_id` INT(11) UNSIGNED NOT NULL;
+ALTER TABLE `image_comments` ENGINE = INNODB
+DEFAULT CHARACTER SET utf8
+COLLATE utf8_general_ci;
+
+ALTER TABLE `image_comments` ADD FOREIGN KEY (`image_id`) REFERENCES `photo` (`id`)
+  ON DELETE CASCADE
+  ON UPDATE CASCADE;
+
+
+# MIGRATE users TO DJANGO USERS
+
+INSERT INTO auth_user (password,
+                       last_login,
+                       is_superuser,
+                       username,
+                       first_name,
+                       last_name,
+                       email,
+                       is_staff,
+                       is_active,
+                       date_joined)
+
+  SELECT
+    user_password,
+    NOW(),
+    0,
+    CONCAT(REPLACE(TRIM(LOWER(user_firstname)), ' ', '_'), SUBSTRING(user_id, 1, 5)),
+    user_firstname,
+    user_lastname,
+    user_email,
+    0,
+    user_active,
+    NOW()
+  FROM mc_users;
+
+
+# UPDATE HOSPITALITY TABLE
+
+
+
+
+ALTER TABLE `hospitality` CHANGE `id`  `id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT;
+ALTER TABLE `hospitality_album_lookup` CHANGE `hospitality_id`  `hospitality_id` INT(11) UNSIGNED NOT NULL;
+ALTER TABLE `hospitality_album_lookup` CHANGE `album_id`  `album_id` INT(11) UNSIGNED NOT NULL;
+
+UPDATE hospitality_album_lookup
+SET album_id = (SELECT
+                  album.id
+                FROM album
+                WHERE album.album_id = hospitality_album_lookup.album_id);
+
+ALTER TABLE `hospitality_album_lookup` ADD FOREIGN KEY (`hospitality_id`) REFERENCES `hospitality` (`id`)
+  ON DELETE CASCADE
+  ON UPDATE CASCADE;
+ALTER TABLE `hospitality_album_lookup` ADD FOREIGN KEY (`album_id`) REFERENCES `album` (`id`)
+  ON DELETE CASCADE
+  ON UPDATE CASCADE;
+
+
+
+# UPDATE photo story lookup
+ALTER TABLE `photo_stories` ENGINE = INNODB;
+ALTER TABLE `photo_stories` CHANGE `story_album`  `story_album` INT(11) UNSIGNED NOT NULL;
+UPDATE photo_stories
+SET story_album = (SELECT
+                  album.id
+                FROM album
+                WHERE album.album_id = story_album);
+
+ALTER TABLE `photo_stories` ADD FOREIGN KEY (`story_album`) REFERENCES `album` (`id`)
+  ON DELETE CASCADE
+  ON UPDATE CASCADE;
+
+
+# Finally user image library
+ALTER TABLE user_image_library DROP INDEX image_name;
+ALTER TABLE `user_image_library` ENGINE = INNODB;
+ALTER TABLE user_image_library DROP PRIMARY KEY;
+ALTER TABLE `user_image_library` ADD `id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY
+FIRST;
+
+# START CLEAN UP
+
+# REMOVE CONNECT table
+DROP TABLE IF EXISTS connect;
+DROP TABLE IF EXISTS story_comments;
+DROP TABLE IF EXISTS taxonomy;
+DROP TABLE IF EXISTS messages;
+DROP TABLE IF EXISTS message_user_lookup;
+DROP TABLE IF EXISTS moko_log_data;
+DROP TABLE IF EXISTS reported_images;
+DROP TABLE IF EXISTS upload_log;
+DROP TABLE IF EXISTS album_data;
+DROP TABLE IF EXISTS image_library;
+DROP TABLE IF EXISTS mc_users;
 
 COMMIT;

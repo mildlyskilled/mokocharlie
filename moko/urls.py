@@ -1,14 +1,19 @@
 from django.conf.urls import patterns, include, url
 from django.contrib import admin
-from moko.views import HomeViewTemplate
+from photos.views import *
+from moko.views import *
 
 admin.autodiscover()
 
 urlpatterns = patterns('',
                        url(r'^$', HomeViewTemplate.as_view()),
-                       (r'^photos', include('photos.urls')),
-                       (r'^photos/', include('photos.urls', namespace='photos')),
-                       (r'^albums', include('albums.urls')),
-                       (r'^albums/', include('albums.urls', namespace='albums')),
+                       # Photo Endpoints
+                       url(r'^photos/$', PhotosTemplate.as_view(), name="photo_list"),
+                       url(r'^/view/(?P<image_id>\w+)/$', PhotoViewTemplate.as_view(), name='image_view'),
+                       # Album endpoints
+                       url(r'^albums', AlbumTemplate.as_view(), name='album_list'),
+                       url(r'^/view/(?P<album_id>\w+)/$', AlbumViewTemplate.as_view(), name='album_view'),
+
+                       # Admin endpoints
                        (r'^admin/', include(admin.site.urls)),
 )

@@ -1,5 +1,5 @@
 from django.views.generic.base import TemplateView
-from photos.models import *
+from moko.models import *
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 
@@ -9,7 +9,7 @@ class PhotosTemplate(TemplateView):
     default_page = 1
 
     def get_context_data(self, **kwargs):
-        images = Photo.objects.all().order_by('-date_added')
+        images = Photo.objects.all().order_by('-created_at')
         _limit = self.request.GET.get('limit', self.default_limit)
         _page = self.request.GET.get('page', self.default_page)
         p = Paginator(images, _limit)
