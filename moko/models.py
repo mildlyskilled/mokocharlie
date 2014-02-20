@@ -122,7 +122,7 @@ class Hotel(models.Model):
 
 class HospitalityAlbumLookup(models.Model):
     id = models.BigIntegerField(primary_key=True)
-    hospitality = models.ForeignKey(Hospitality)
+    hospitality = models.ForeignKey(Hotel)
     album = models.ForeignKey(Album)
 
     class Meta:
