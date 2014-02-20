@@ -1,8 +1,56 @@
 {% extends "base.html" %}
 {% load cloudinary %}
 {% block title %}
-{{ image }}
+    {{ image }}
 {% endblock %}
 {% block content %}
-    {% cloudinary image.image_id|add:'.jpg' transformation="moko_resize_730" alt=image %}
+    <div class="col-lg-9">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3>{{ image }}</h3>
+                Appears in:
+                {% for album in image.albums.all %}
+                    <a href="{{ album.get_absolute_url }}">{{ album }}</a>
+                {% endfor %}
+            </div>
+            <div class="panel-body">
+                <div class="text-center">
+                    {% cloudinary image.image_id|add:'.jpg' transformation="moko_resize_730" alt=image width=730 %}
+                </div>
+            </div>
+            <div class="panel-footer">
+                <ul class="pager">
+                    <li class="previous">
+                        <a href="#">&larr; Previous</a>
+                    </li>
+                    <li class="text-center">
+                        <span class="label label-primary">1 of 20</span>
+                    </li>
+                    <li class="next">
+                        <a href="#">Next &rarr;</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <hr/>
+
+        {% if image.comment_set.all.count > 0 %}
+            <h4>Image Comments</h4>
+            {% for comment in image.comment_set.all %}
+                {% include "partials/comment.html" %}
+            {% endfor %}
+        {% else %}
+            No comments on this image yet
+        {% endif %}
+        <hr/>
+        Post a comment form
+    </div>
+    <div class="col-lg-3">
+        <div class="page-header">
+            <h4>About This Image</h4>
+        </div>
+        <div class="well well-sm">
+            {{ image.caption }}
+        </div>
+    </div>
 {% endblock %}

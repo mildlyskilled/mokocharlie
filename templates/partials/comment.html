@@ -1,0 +1,9 @@
+{% load cloudinary %}
+<div class="col-lg-12">
+    <blockquote style="font-size: 14px;">
+        <p>
+            {{ comment }}
+            <footer>{{ comment.comment_author }} on {{ comment.comment_date|date:"D d M Y P" }}<br></footer>
+        </p>
+    </blockquote>
+</div>

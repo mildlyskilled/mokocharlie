@@ -27,6 +27,7 @@ class Photo(models.Model):
     times_rated = models.IntegerField()
     published = models.IntegerField()
     deleted_at = models.DateTimeField(blank=True, null=True)
+    albums = models.ManyToManyField('Album', through='PhotoAlbum', related_name='photo_albums')
 
     class Meta:
         db_table = 'photo'
