@@ -174,6 +174,13 @@ class PhotoStory(models.Model):
         ordering = ('-date_added', )
         verbose_name_plural = "Photo Stories"
 
+    def __unicode__(self):
+        return self.story_name
+
+    def get_absolute_url(self):
+        #TODO: use reverse url lookup for this
+        return "/stories/view/{0}".format(self.story_id)
+
 
 class Promotion(models.Model):
     promo_id = models.IntegerField(primary_key=True)
