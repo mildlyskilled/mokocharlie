@@ -31,5 +31,5 @@ class PhotoViewTemplate(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super(PhotoViewTemplate, self).get_context_data()
-        context["image"] = Photo.objects.get(image_id=self.kwargs.get('image_id'))
+        context["image"] = Photo.objects.get(id=self.kwargs.get('image_id'))
         return context

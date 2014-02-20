@@ -58,7 +58,7 @@ CREATE TABLE IF NOT EXISTS `album` (
   `album_id`    MEDIUMINT(9),
   `label`       VARCHAR(150)     NOT NULL DEFAULT '',
   `description` LONGTEXT,
-  `cover`       VARCHAR(15)      NULL DEFAULT NULL,
+  `cover_id`       VARCHAR(15)      NULL DEFAULT NULL,
   `created_at`  TIMESTAMP        NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at`  TIMESTAMP        NOT NULL,
   `published`   TINYINT(1)       NOT NULL DEFAULT '1',
@@ -71,7 +71,7 @@ INSERT INTO `album` (
   `album_id`,
   `label`,
   `description`,
-  `cover`,
+  `cover_id`,
   `created_at`,
   `updated_at`,
   `published`
@@ -105,10 +105,10 @@ CREATE TABLE `photo_album` (
   DEFAULT CHARSET = utf8;
 
 #fix album covers
-UPDATE album SET cover = (SELECT id FROM photo WHERE image_id = cover);
-ALTER TABLE `album` CHANGE `cover` `cover` INT(11) UNSIGNED NULL;
+UPDATE album SET cover_id = (SELECT id FROM photo WHERE image_id = cover_id);
+ALTER TABLE `album` CHANGE `cover_id` `cover_id` INT(11) UNSIGNED NULL;
 
-ALTER TABLE `album` ADD FOREIGN KEY (`cover`) REFERENCES `photo` (`id`)
+ALTER TABLE `album` ADD FOREIGN KEY (`cover_id`) REFERENCES `photo` (`id`)
   ON DELETE SET NULL
   ON UPDATE SET NULL;
 

@@ -1,32 +1,43 @@
 {% extends "base.html" %}
 {% load cloudinary %}
 {% block title %}
-    {{ album.album_label }}
+{{ album }}
 {% endblock %}
 {% block content %}
-    <div class="col-lg-8">
-        <div class="well">
-            <div class="page-header">
-                <h2>{{ album }}</h2>
-            </div>
-            <div class="row">
-                <div class="col-lg-6" >
-                    {% cloudinary album.album_cover|add:'.jpg' transformation="moko_resize_400" alt=album class="thumbnail"%}
-                </div>
-                <div class="col-lg-6">
-                    {{ album.album_description }}
-                </div>
-            </div>
+<div class="col-lg-8">
+    <div class="well">
+        <div class="page-header">
+            <h2>{{ album }}</h2>
         </div>
-        <hr/>
-
-        <hr/>
         <div class="row">
-            {% for image in album_images %}
-                {% include "partials/image_preview.html" %}
-            {% endfor %}
-            <hr/>
+            <div class="col-lg-12">
+                <div class="center-block">
+                    {% cloudinary album.cover.image_id|add:'.jpg' transformation="moko_resize_680" alt=album class="thumbnail"%}
+                </div>
+            </div>
+            <div class="col-lg-12">
+                {{ album.description }}
+            </div>
         </div>
-        {% include "partials/paginator.html" %}
     </div>
+    <hr/>
+
+    <hr/>
+    <div class="row">
+        {% for image in album_images %}
+            {% include "partials/image_preview.html" %}
+        {% endfor %}
+        <hr/>
+    </div>
+    {% include "partials/paginator.html" %}
+</div>
+
+        <div class="col-lg-4">
+            <div class="page-header">
+                <h5>Most Recent Comments</h5>
+            </div>
+            {% for comment in album_comments %}
+                {% include "partials/comment_preview.html" %}
+            {% endfor %}
+        </div>
 {% endblock %}

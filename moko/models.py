@@ -30,10 +30,14 @@ class Photo(models.Model):
 
     class Meta:
         db_table = 'photo'
-        ordering = '-created_at'
+        ordering = ('-created_at', )
 
     def __unicode__(self):
         return self.name
+
+    def get_absolute_url(self):
+        from django.core.urlresolvers import reverse
+        return reverse('photo_view', args=[str(self.id)])
 
 
 class Album(models.Model):
@@ -41,7 +45,7 @@ class Album(models.Model):
     album_id = models.IntegerField(blank=True, null=True)
     label = models.CharField(max_length=150)
     description = models.TextField(blank=True)
-    cover = models.ForeignKey(Photo, db_column='id')
+    cover = models.ForeignKey(Photo, blank=True, null=True, related_name='cover_photo')
     created_at = models.DateTimeField()
     updated_at = models.DateTimeField()
     published = models.IntegerField()
@@ -49,6 +53,7 @@ class Album(models.Model):
 
     class Meta:
         db_table = 'album'
+        ordering = ('-created_at', )
 
     def __unicode__(self):
         return self.label
@@ -146,9 +151,13 @@ class ImageComments(models.Model):
 
     class Meta:
         db_table = 'image_comments'
+        ordering = ('-comment_date',)
 
     def __unicode__(self):
         return self.image_comment
+
+    def get_absolute_url(self):
+        return '/photos/view/{0}/#comment_{1}'.format(self.image.id, self.comment_id)
 
 
 class PhotoAlbum(models.Model):
@@ -171,6 +180,7 @@ class PhotoStories(models.Model):
 
     class Meta:
         db_table = 'photo_stories'
+        ordering = ('-date_added', )
 
 
 class Promotions(models.Model):

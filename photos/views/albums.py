@@ -36,7 +36,7 @@ class AlbumViewTemplate(TemplateView):
         album_id = self.kwargs.get('album_id')
         _limit = self.request.GET.get('limit', self.default_limit)
         _page = self.request.GET.get('page', self.default_page)
-        album = Album.objects.get(album_id=album_id)
+        album = Album.objects.get(id=album_id)
 
         p = Paginator(album.photos.all(), _limit)
         try:
@@ -46,8 +46,12 @@ class AlbumViewTemplate(TemplateView):
         except EmptyPage:
             image_list = p.page(p.num_pages)
 
+        # Get comments
+        album_comments = ImageComments.objects.filter(image__album=album_id).order_by('-comment_date')
+        # Prepare context
         context = super(AlbumViewTemplate, self).get_context_data()
         context["album_images"] = image_list
         context["paginator_object"] = image_list
         context["album"] = album
+        context["album_comments"] = album_comments
         return context

@@ -5,12 +5,12 @@
             {% cloudinary album.cover.image_id|add:'.jpg' transformation="album_preview" alt=album %}</a>
 
         <div class="caption">
-            <h5>{{ album.album_label }}</h5>
+            <h5>{{ album.label }}</h5>
             <p>
                 <small><i class="glyphicon glyphicon-plus"> </i>
                     {{ album.created_at|date:"D d M Y P" }}<br>
                     <a class="label label-info" href="{{ album.get_absolute_url }}">
-                        {{ album.photos.count }}
+                        {{ album.photos.all.count }}
                         images</a>
                 </small>
             </p>
