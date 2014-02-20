@@ -172,9 +172,10 @@ class PhotoStory(models.Model):
     class Meta:
         db_table = 'photo_stories'
         ordering = ('-date_added', )
+        verbose_name_plural = "Photo Stories"
 
 
-class Promotions(models.Model):
+class Promotion(models.Model):
     promo_id = models.IntegerField(primary_key=True)
     promo_handle = models.CharField(max_length=50, blank=True)
     promo_type = models.CharField(max_length=20)
@@ -199,6 +200,7 @@ class SearchData(models.Model):
     class Meta:
         managed = False
         db_table = 'search_data'
+        verbose_name_plural = "Search Data"
 
 
 class UserPhoto(models.Model):
@@ -227,4 +229,4 @@ class VideoLibrary(models.Model):
 
     class Meta:
         db_table = 'video_library'
-
+        verbose_name_plural = "Video Library"
