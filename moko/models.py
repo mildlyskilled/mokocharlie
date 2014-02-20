@@ -101,16 +101,7 @@ class AppPropertyDefinitions(models.Model):
         db_table = 'app_property_definitions'
 
 
-class CloudinaryData(models.Model):
-    id = models.IntegerField(primary_key=True)
-    cloudinary_data = models.TextField(blank=True)
-    associated_image = models.CharField(max_length=20, blank=True)
-
-    class Meta:
-        db_table = 'cloudinary_data'
-
-
-class Hospitality(models.Model):
+class Hotel(models.Model):
     id = models.IntegerField(primary_key=True)
     featured = models.IntegerField()
     hospitality_type = models.CharField(max_length=20)
@@ -138,7 +129,7 @@ class HospitalityAlbumLookup(models.Model):
         db_table = 'hospitality_album_lookup'
 
 
-class ImageComments(models.Model):
+class Comment(models.Model):
     comment_id = models.BigIntegerField(primary_key=True)
     image = models.ForeignKey('Photo')
     image_comment = models.TextField()
@@ -170,7 +161,7 @@ class PhotoAlbum(models.Model):
         db_table = 'photo_album'
 
 
-class PhotoStories(models.Model):
+class PhotoStory(models.Model):
     story_id = models.IntegerField(primary_key=True)
     story_name = models.CharField(max_length=150)
     story_description = models.TextField()
@@ -210,7 +201,7 @@ class SearchData(models.Model):
         db_table = 'search_data'
 
 
-class UserImageLibrary(models.Model):
+class UserPhoto(models.Model):
     id = models.IntegerField(primary_key=True)
     image_id = models.CharField(max_length=15)
     image_name = models.CharField(max_length=250)

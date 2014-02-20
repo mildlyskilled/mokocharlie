@@ -47,7 +47,7 @@ class AlbumViewTemplate(TemplateView):
             image_list = p.page(p.num_pages)
 
         # Get comments
-        album_comments = ImageComments.objects.filter(image__album=album_id).order_by('-comment_date')
+        album_comments = Comment.objects.filter(image__album=album_id).order_by('-comment_date')
         # Prepare context
         context = super(AlbumViewTemplate, self).get_context_data()
         context["album_images"] = image_list
