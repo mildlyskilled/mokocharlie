@@ -61,8 +61,16 @@
     <div class="page-header">
         <h5>About This Image</h5>
     </div>
-    <div class="well well-sm">
-        {{ image.caption }}
+    {{ image.caption }}
+    <div class="page-header">
+        <h5>Most Recent Images</h5>
+    </div>
+    <div class="row">
+        {% for image in recent_images %}
+        <div class="col-lg-6">
+            {% include "partials/image_preview.html" %}
+        </div>
+        {% endfor %}
     </div>
 </div>
 {% endblock %}

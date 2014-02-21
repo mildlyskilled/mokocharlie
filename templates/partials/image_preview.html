@@ -1,7 +1,7 @@
 {% load cloudinary %}
-<div class="col-sm-6 col-md-3" style="min-height: 140px">
-    <div class="thumbnail">
-        <a href="{{ image.get_absolute_url }}">
-            {% cloudinary image.image_id|add:'.jpg' transformation="image_preview" alt=image %}</a>
-    </div>
+
+<div class="thumbnail">
+    <a href="{{ image.get_absolute_url }}">
+        {% cloudinary image.image_id|add:'.jpg' transformation="image_preview" alt=image %}</a>
 </div>
+
