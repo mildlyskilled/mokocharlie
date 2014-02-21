@@ -11,6 +11,28 @@ from __future__ import unicode_literals
 
 from django.db import models
 
+class Album(models.Model):
+    id = models.IntegerField(primary_key=True)
+    album_id = models.IntegerField(blank=True, null=True)
+    label = models.CharField(max_length=150)
+    description = models.TextField(blank=True)
+    cover = models.ForeignKey('Photo', blank=True, null=True, related_name='cover_photo')
+    created_at = models.DateTimeField()
+    updated_at = models.DateTimeField()
+    published = models.IntegerField()
+    photos = models.ManyToManyField('Photo', through='PhotoAlbum')
+
+    class Meta:
+        db_table = 'album'
+        ordering = ('-created_at', )
+
+    def __unicode__(self):
+        return self.label
+
+    def get_absolute_url(self):
+        from django.core.urlresolvers import reverse
+        return reverse('album_view', args=[str(self.id)])
+
 
 class Photo(models.Model):
     id = models.IntegerField(primary_key=True)
@@ -40,28 +62,6 @@ class Photo(models.Model):
         from django.core.urlresolvers import reverse
         return reverse('photo_view', args=[str(self.id)])
 
-
-class Album(models.Model):
-    id = models.IntegerField(primary_key=True)
-    album_id = models.IntegerField(blank=True, null=True)
-    label = models.CharField(max_length=150)
-    description = models.TextField(blank=True)
-    cover = models.ForeignKey(Photo, blank=True, null=True, related_name='cover_photo')
-    created_at = models.DateTimeField()
-    updated_at = models.DateTimeField()
-    published = models.IntegerField()
-    photos = models.ManyToManyField(Photo, through='PhotoAlbum')
-
-    class Meta:
-        db_table = 'album'
-        ordering = ('-created_at', )
-
-    def __unicode__(self):
-        return self.label
-
-    def get_absolute_url(self):
-        from django.core.urlresolvers import reverse
-        return reverse('album_view', args=[str(self.id)])
 
 
 class AppData(models.Model):
