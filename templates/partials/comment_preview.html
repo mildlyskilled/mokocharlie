@@ -1,14 +1,15 @@
 {% load cloudinary %}
-<div class="col-lg-2">
+<div class="col-lg-3">
     <a href="{{ comment.get_absolute_url }}">
         {% cloudinary comment.image.image_id|add:'.jpg' transformation="comment_image_thumbnail" class="thumbnail" %}
     </a>
 </div>
-<div class="col-lg-10">
+<div class="col-lg-9">
     <blockquote style="font-size: 12px;">
         <p>
             {{ comment|truncatewords:20 }}
-            <footer>{{ comment.comment_author }} {{ comment.comment_date|date:"D d M Y P" }}<br></footer>
+            <footer>{{ comment.comment_author }}
+                <br />{{ comment.comment_date|date:"D d M Y P" }}<br></footer>
         </p>
     </blockquote>
 </div>
