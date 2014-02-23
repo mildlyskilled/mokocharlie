@@ -2,6 +2,8 @@
 {% block title %} Organising Community Photos {% endblock %}
 {% block content %}
     <div class='row'>
+
+        <br />
         <div class="col-lg-8">
             <ul class="thumbnails">
                 {% for album in albums %}
@@ -9,10 +11,15 @@
                 {% endfor %}
             </ul>
             <hr/>
-            {% include "partials/paginator.html" %}
+            {% include "partials/paginator.html" with paginator_object=albums %}
         </div>
         <div class="col-lg-4">
-            <h6>Most Recent Comments</h6>
+            <div class="page-header">
+                <h5>Most Recent Comments</h5>
+            </div>
+            {% for comment in comments %}
+                {% include "partials/comment_preview.html" %}
+            {% endfor %}
         </div>
     </div>
 {% endblock %}

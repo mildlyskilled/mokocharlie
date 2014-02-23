@@ -1,0 +1,9 @@
+{% load simple_dict %}
+
+<ul class="nav nav-tabs">
+    {% for k, v in order_data.dictionary.iteritems %}
+        <li {% if k == order_data.selected %}class="active"{% endif %}>
+            <a href="/albums/?order={{ k }}">{{ v.1 }}</a>
+        </li>
+    {% endfor %}
+</ul>

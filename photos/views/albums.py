@@ -1,18 +1,35 @@
 from django.views.generic.base import TemplateView
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from moko.models import *
+import logging
 
+LOGGER = logging.getLogger(__name__)
 
 class AlbumTemplate(TemplateView):
     template_name = "albums/index.html"
     default_limit = 21
     default_page = 1
+    default_order = 'recent'
+
 
     def get_context_data(self, **kwargs):
 
-        albums = Album.objects.all()
         _limit = self.request.GET.get('limit', self.default_limit)
         _page = self.request.GET.get('page', self.default_page)
+        _order = self.request.GET.get('order', self.default_order)
+
+
+        _order_dict = {'alpha': ['label', 'Alphabetical'],
+                       'recent': ['-created_at', 'Most Recent'],
+                       'popular': ['-comments', 'Most Popular']}
+
+        if _order_dict.has_key(_order):
+            albums = Album.objects.distinct().order_by(_order_dict[_order][0]).all()
+        else:
+            albums = Album.objects.all()
+
+        LOGGER.debug(albums.query)
+
         p = Paginator(albums, _limit)
         try:
             album_list = p.page(_page)
@@ -21,9 +38,12 @@ class AlbumTemplate(TemplateView):
         except EmptyPage:
             album_list = p.page(p.num_pages)
 
+        comments = Comment.objects.all()[:12]
+
         context = super(AlbumTemplate, self).get_context_data()
         context["albums"] = album_list
-        context["paginator_object"] = album_list
+        context["comments"] = comments
+        context["order"] = {'selected': _order, 'dictionary': _order_dict}
         return context
 
 

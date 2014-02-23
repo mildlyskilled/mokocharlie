@@ -1,7 +1,9 @@
 from django.views.generic.base import TemplateView
 from moko.models import *
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+import logging
 
+LOGGER = logging.getLogger(__name__)
 
 class PhotosTemplate(TemplateView):
     template_name = "photos/index.html"
@@ -22,7 +24,6 @@ class PhotosTemplate(TemplateView):
 
         context = super(PhotosTemplate, self).get_context_data()
         context["images"] = image_list
-        context["paginator_object"] = image_list
         return context
 
 
