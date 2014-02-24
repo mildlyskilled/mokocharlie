@@ -3,7 +3,7 @@
 {% block content %}
     <div class='row'>
         <div class="page-header">
-            <h3>Mokocharlie Albums</h3>
+            {% include "partials/album_ordering.html" with order_data=order %}
         </div>
         <div class="col-lg-8">
             <ul class="thumbnails">

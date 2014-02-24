@@ -21,12 +21,17 @@ class AlbumTemplate(TemplateView):
 
         _order_dict = {'alpha': ['label', 'Alphabetical'],
                        'recent': ['-created_at', 'Most Recent'],
-                       'popular': ['-comments', 'Most Popular']}
+                       'popular': ['-average_views', 'Most Popular']}
 
         if _order_dict.has_key(_order):
-            albums = Album.objects.distinct().order_by(_order_dict[_order][0]).all()
+            if _order == 'popular':
+                from django.db.models.aggregates import Avg
+                albums = Album.objects.annotate(average_views=Avg('photos__times_viewed')).order_by(_order_dict[_order][0]).all()
+            else:
+                albums = Album.objects.distinct().order_by(_order_dict[_order][0]).all()
         else:
             albums = Album.objects.all()
+
 
         LOGGER.debug(albums.query)
 
