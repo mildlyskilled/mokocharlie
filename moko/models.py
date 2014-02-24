@@ -11,6 +11,7 @@ from __future__ import unicode_literals
 
 from django.db import models
 
+
 class Album(models.Model):
     id = models.IntegerField(primary_key=True)
     album_id = models.IntegerField(blank=True, null=True)
