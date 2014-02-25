@@ -13,7 +13,9 @@ urlpatterns = patterns('',
                        # Album endpoints
                        url(r'^albums/$', AlbumTemplate.as_view(), name='album_list'),
                        url(r'^albums/view/(?P<album_id>\d+)/$', AlbumViewTemplate.as_view(), name='album_view'),
-
+                       # Comments endpoints
+                       # AJAX endpoint for comment form
+                       url(r'^comments/new_form/$', NewCommentViewTemplate.as_view(), name='comment_form'),
                        # Admin endpoints
                        (r'^admin/', include(admin.site.urls)),
 )

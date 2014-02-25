@@ -41,6 +41,7 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'photos',
     'cloudinary',
+    'crispy_forms',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -135,3 +136,5 @@ CLOUDINARY = {
   'api_key': '211234747938451',
   'api_secret': 'ATmGWjd4_UyVsC9vwTfLqI_xzx0',
 }
+
+CRISPY_TEMPLATE_PACK = 'bootstrap3'

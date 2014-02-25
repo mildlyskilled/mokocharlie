@@ -1,76 +1,81 @@
 {% extends "base.html" %}
 {% load cloudinary %}
 {% block title %}
-{{ image }}
+    {{ image }}
+{% endblock %}
+{% block extrahead %}
+    <script src="{{ STATIC_URL }}js/photos.js"></script>
 {% endblock %}
 {% block content %}
-<div class="col-lg-9">
-    <div class="panel panel-default">
-        <div class="panel-heading">
-            <div class="row">
-                <div class="col-lg-10">
-                    <h3>{{ image }}</h3>
-                    Appears in:
-                    {% for album in image.albums.all %}
-                    <a href="{{ album.get_absolute_url }}">{{ album }}</a>
-                    {% endfor %}
-                </div>
-                <div class="col-lg-2">
-                    <button type="button" class="btn btn-default btn-sm pull-right col-lg-offset-1">
-                        <span class="glyphicon glyphicon-comment"></span>
-                    </button>
-                    <button type="button" class="btn btn-default btn-sm pull-right">
-                        <span class="glyphicon glyphicon-heart-empty"></span>
-                    </button>
+    <div class="col-lg-9">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <div class="row">
+                    <div class="col-lg-10">
+                        <h3>{{ image }}</h3>
+                        Appears in:
+                        {% for album in image.albums.all %}
+                            <a href="{{ album.get_absolute_url }}">{{ album }}</a>
+                        {% endfor %}
+                    </div>
+                    <div class="col-lg-2">
+                        <button type="button" class="btn btn-default btn-sm pull-right col-lg-offset-1"
+                                onclick="displayCommentForm()">
+                            <span class="glyphicon glyphicon-comment"></span>
+                        </button>
+                        <button type="button" class="btn btn-default btn-sm pull-right">
+                            <span class="glyphicon glyphicon-heart-empty"></span>
+                        </button>
+                    </div>
                 </div>
             </div>
-        </div>
-        <div class="panel-body">
-            <div class="text-center">
-                {% cloudinary image.image_id|add:'.jpg' transformation="moko_resize_730_l" alt=image width=730 %}
+            <div class="panel-body">
+                <div class="text-center">
+                    {% cloudinary image.image_id|add:'.jpg' transformation="moko_resize_730_l" alt=image width=730 %}
+                </div>
+            </div>
+            <div class="panel-footer">
+                <ul class="pager">
+                    <li class="previous">
+                        <a href="#"><i class="glyphicon glyphicon-chevron-left"></i></a>
+                    </li>
+                    <li class="text-center">
+                        <i class="badge badge-primary">1 of 20</i>
+                    </li>
+                    <li class="next">
+                        <a href="#"><i class="glyphicon glyphicon-chevron-right"></i></a>
+                    </li>
+                </ul>
             </div>
         </div>
-        <div class="panel-footer">
-            <ul class="pager">
-                <li class="previous">
-                    <a href="#"><i class="glyphicon glyphicon-chevron-left"></i></a>
-                </li>
-                <li class="text-center">
-                    <span class="label label-primary">1 of 20</span>
-                </li>
-                <li class="next">
-                    <a href="#"><i class="glyphicon glyphicon-chevron-right"></i></a>
-                </li>
-            </ul>
-        </div>
-    </div>
-    <hr/>
+        <hr/>
 
-    {% if image.comment_set.all.count > 0 %}
-    <h4>Image Comments</h4>
-    {% for comment in image.comment_set.all %}
-    {% include "partials/comment.html" %}
-    {% endfor %}
-    {% else %}
-    No comments on this image yet
-    {% endif %}
-    <hr/>
-    Post a comment form
-</div>
-<div class="col-lg-3">
-    <div class="page-header">
-        <h5>About This Image</h5>
-    </div>
-    {{ image.caption }}
-    <div class="page-header">
-        <h5>Most Recent Images</h5>
-    </div>
-    <div class="row">
-        {% for image in recent_images %}
-        <div class="col-lg-6">
-            {% include "partials/image_preview.html" %}
+        {% if comments.count > 0 %}
+            <h4>Image Comments</h4>
+            {% for comment in comments %}
+                {% include "partials/comment.html" %}
+            {% endfor %}
+        {% else %}
+            No comments on this image yet
+        {% endif %}
+        <hr/>
+        <div id="comment-form" style="display: none">
         </div>
-        {% endfor %}
     </div>
-</div>
+    <div class="col-lg-3">
+        <div class="page-header">
+            <h5>About This Image</h5>
+        </div>
+        {{ image.caption }}
+        <div class="page-header">
+            <h5>Most Recent Images</h5>
+        </div>
+        <div class="row">
+            {% for image in recent_images %}
+                <div class="col-lg-6">
+                    {% include "partials/image_preview.html" %}
+                </div>
+            {% endfor %}
+        </div>
+    </div>
 {% endblock %}

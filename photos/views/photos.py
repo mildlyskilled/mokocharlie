@@ -1,9 +1,12 @@
 from django.views.generic.base import TemplateView
 from moko.models import *
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.http import HttpResponseRedirect
 import logging
+from moko.forms import CommentForm
 
 LOGGER = logging.getLogger(__name__)
+
 
 class PhotosTemplate(TemplateView):
     template_name = "photos/index.html"
@@ -32,6 +35,37 @@ class PhotoViewTemplate(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super(PhotoViewTemplate, self).get_context_data()
-        context["image"] = Photo.objects.get(id=self.kwargs.get('image_id'))
+        photo = Photo.objects.get(id=self.kwargs.get('image_id'))
+        context["image"] = photo
+        context['comments'] = photo.comment_set.filter(comment_approved=1)
         context["recent_images"] = Photo.objects.all()[:8]
+        if self.request.method == 'POST':
+            form = CommentForm(self.request.POST)
+            if form.is_valid():
+                form_data = form.cleaned_data
+                print form_data
+        return context
+
+    def post(self, request, *args, **kwargs):
+        form = CommentForm(request.POST)
+        if form.is_valid():
+            c = form.save(commit=False)
+            c.comment_approved = request.user.is_authenticated()  # use authenticated value to set approval status
+            c.image = Photo.objects.get(id=self.kwargs.get('image_id'))
+            c.comment_reported = False
+            c.comment_report_type = 0
+            c.save()
+            return HttpResponseRedirect(request.path)
+        else:
+            return HttpResponseRedirect(request.path)
+
+
+class NewCommentViewTemplate(TemplateView):
+    template_name = "partials/comment_form.html"
+
+    def get_context_data(self, **kwargs):
+        context = super(NewCommentViewTemplate, self).get_context_data()
+        context["form"] = CommentForm
+        from time import sleep
+        sleep(3)
         return context

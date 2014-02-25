@@ -58,7 +58,7 @@ CREATE TABLE IF NOT EXISTS `album` (
   `album_id`    MEDIUMINT(9),
   `label`       VARCHAR(150)     NOT NULL DEFAULT '',
   `description` LONGTEXT,
-  `cover_id`       VARCHAR(15)      NULL DEFAULT NULL,
+  `cover_id`    VARCHAR(15)      NULL DEFAULT NULL,
   `created_at`  TIMESTAMP        NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at`  TIMESTAMP        NOT NULL,
   `published`   TINYINT(1)       NOT NULL DEFAULT '1',
@@ -105,7 +105,11 @@ CREATE TABLE `photo_album` (
   DEFAULT CHARSET = utf8;
 
 #fix album covers
-UPDATE album SET cover_id = (SELECT id FROM photo WHERE image_id = cover_id);
+UPDATE album
+SET cover_id = (SELECT
+                  id
+                FROM photo
+                WHERE image_id = cover_id);
 ALTER TABLE `album` CHANGE `cover_id` `cover_id` INT(11) UNSIGNED NULL;
 
 ALTER TABLE `album` ADD FOREIGN KEY (`cover_id`) REFERENCES `photo` (`id`)
@@ -150,6 +154,8 @@ ALTER TABLE `image_comments` ADD FOREIGN KEY (`image_id`) REFERENCES `photo` (`i
   ON DELETE CASCADE
   ON UPDATE CASCADE;
 
+ALTER TABLE `image_comments` CHANGE `comment_report_type`  `comment_report_type` TINYINT(1) NULL DEFAULT '0';
+ALTER TABLE `image_comments` CHANGE `comment_reported`  `comment_reported` TINYINT(1) NULL DEFAULT '0';
 
 # MIGRATE users TO DJANGO USERS
 
@@ -201,15 +207,14 @@ ALTER TABLE `hospitality_album_lookup` ADD FOREIGN KEY (`album_id`) REFERENCES `
   ON UPDATE CASCADE;
 
 
-
 # UPDATE photo story lookup
 ALTER TABLE `photo_stories` ENGINE = INNODB;
 ALTER TABLE `photo_stories` CHANGE `story_album`  `story_album` INT(11) UNSIGNED NOT NULL;
 UPDATE photo_stories
 SET story_album = (SELECT
-                  album.id
-                FROM album
-                WHERE album.album_id = story_album);
+                     album.id
+                   FROM album
+                   WHERE album.album_id = story_album);
 
 ALTER TABLE `photo_stories` ADD FOREIGN KEY (`story_album`) REFERENCES `album` (`id`)
   ON DELETE CASCADE

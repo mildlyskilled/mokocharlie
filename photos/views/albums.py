@@ -5,6 +5,7 @@ import logging
 
 LOGGER = logging.getLogger(__name__)
 
+
 class AlbumTemplate(TemplateView):
     template_name = "albums/index.html"
     default_limit = 21
@@ -18,7 +19,6 @@ class AlbumTemplate(TemplateView):
         _page = self.request.GET.get('page', self.default_page)
         _order = self.request.GET.get('order', self.default_order)
 
-
         _order_dict = {'alpha': ['label', 'Alphabetical'],
                        'recent': ['-created_at', 'Most Recent'],
                        'popular': ['-average_views', 'Most Popular']}
@@ -26,12 +26,13 @@ class AlbumTemplate(TemplateView):
         if _order_dict.has_key(_order):
             if _order == 'popular':
                 from django.db.models.aggregates import Avg
-                albums = Album.objects.annotate(average_views=Avg('photos__times_viewed')).order_by(_order_dict[_order][0]).all()
+
+                albums = Album.objects.annotate(average_views=Avg('photos__times_viewed')).order_by(
+                    _order_dict[_order][0]).all()
             else:
                 albums = Album.objects.distinct().order_by(_order_dict[_order][0]).all()
         else:
             albums = Album.objects.all()
-
 
         LOGGER.debug(albums.query)
 
@@ -72,7 +73,8 @@ class AlbumViewTemplate(TemplateView):
             image_list = p.page(p.num_pages)
 
         # Get comments
-        album_comments = Comment.objects.filter(image__album=album_id).order_by('-comment_date')
+        album_comments = Comment.objects.filter(image__album=album_id).filter(comment_approved=1).order_by(
+            '-comment_date')
         # Prepare context
         context = super(AlbumViewTemplate, self).get_context_data()
         context["album_images"] = image_list
