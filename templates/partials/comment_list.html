@@ -1,0 +1,8 @@
+{% if comments.count > 0 %}
+    <h4>Image Comments</h4>
+    {% for comment in comments %}
+        {% include "partials/comment.html" %}
+    {% endfor %}
+{% else %}
+    No comments on this image yet
+{% endif %}

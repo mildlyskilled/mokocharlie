@@ -4,6 +4,7 @@
     {{ image }}
 {% endblock %}
 {% block extrahead %}
+    <script src="{{ STATIC_URL }}js/main.js"></script>
     <script src="{{ STATIC_URL }}js/photos.js"></script>
 {% endblock %}
 {% block content %}
@@ -19,19 +20,21 @@
                         {% endfor %}
                     </div>
                     <div class="col-lg-2">
-                        <button type="button" class="btn btn-default btn-sm pull-right col-lg-offset-1"
-                                onclick="displayCommentForm()">
+                        <button type="button" id="comment-trigger" class="btn btn-default btn-sm pull-right col-lg-offset-1"
+                                onclick="toggleCommentForm({{ image.id }})"
+                                data-toggle="tooltip" data-placement="top" title="Click here to post a comment">
                             <span class="glyphicon glyphicon-comment"></span>
                         </button>
-                        <button type="button" class="btn btn-default btn-sm pull-right">
+                        <button type="button" id="like-button" class="btn btn-default btn-sm pull-right"
+                                data-toggle="tooltip" data-placement="top" title="Click here to like this image">
                             <span class="glyphicon glyphicon-heart-empty"></span>
                         </button>
                     </div>
                     <br/>
                     <h6 class="pull-right" style="margin-right: 4px;">
                         <small>
-                            <span class="glyphicon glyphicon-eye-open"></span>{{ image.times_viewed }} views
-                            <span class="glyphicon glyphicon-comment"></span>{{ comments.count }} comments
+                            <span class="glyphicon glyphicon-eye-open"></span> {{ image.times_viewed }} views
+                            <span class="glyphicon glyphicon-comment"></span> {{ comments.count }} comments
                         </small>
                     </h6>
                 </div>
@@ -57,14 +60,10 @@
         </div>
         <hr/>
 
-        {% if comments.count > 0 %}
-            <h4>Image Comments</h4>
-            {% for comment in comments %}
-                {% include "partials/comment.html" %}
-            {% endfor %}
-        {% else %}
-            No comments on this image yet
-        {% endif %}
+        <div id="comment-list">
+
+        </div>
+
         <hr/>
         <div id="comment-form" style="display: none">
         </div>
@@ -85,4 +84,11 @@
             {% endfor %}
         </div>
     </div>
+    <script type="application/javascript">
+        window.onload = function () {
+            loadComments({{ image.id }}, 'image');
+            $('#comment-trigger').tooltip();
+            $('#like-button').tooltip();
+        }
+    </script>
 {% endblock %}

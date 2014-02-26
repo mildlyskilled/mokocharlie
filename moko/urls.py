@@ -16,6 +16,7 @@ urlpatterns = patterns('',
                        # Comments endpoints
                        # AJAX endpoint for comment form
                        url(r'^comments/new_form/$', NewCommentViewTemplate.as_view(), name='comment_form'),
+                       url(r'^comments/$', CommentListViewTemplate.as_view(), name='comment_list'),
                        # Admin endpoints
                        (r'^admin/', include(admin.site.urls)),
 )

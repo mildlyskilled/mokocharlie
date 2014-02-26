@@ -1,9 +1,11 @@
 from django.views.generic.base import TemplateView
+from django.views.generic.edit import CreateView
 from moko.models import *
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.http import HttpResponseRedirect
 import logging
 from moko.forms import CommentForm
+from moko.mixins.ajax import AjaxResponseMixin
 
 LOGGER = logging.getLogger(__name__)
 
@@ -46,26 +48,65 @@ class PhotoViewTemplate(TemplateView):
                 print form_data
         return context
 
+
+class NewCommentViewTemplate(AjaxResponseMixin, CreateView):
+    template_name = "partials/comment_form.html"
+    model = Comment
+    form_class = CommentForm
+    object = Comment
+
+    def get_form_kwargs(self):
+        author_name = None
+        if self.request.user.is_authenticated():
+            author_name = "{0} {1}".format(self.request.user.first_name, self.request.user.last_name)
+        kwargs = super(CreateView, self).get_form_kwargs()
+        kwargs['initial'] = {'image': self.request.GET.get('image_id'), 'comment_author': author_name}
+        return kwargs
+
+    def get(self, request, *args, **kwargs):
+        return super(NewCommentViewTemplate, self).get(request, *args, **kwargs)
+
     def post(self, request, *args, **kwargs):
+        return_path = "{0}?image_id={1}".format(request.path, request.POST.get('image'))
         form = CommentForm(request.POST)
         if form.is_valid():
             c = form.save(commit=False)
             c.comment_approved = request.user.is_authenticated()  # use authenticated value to set approval status
-            c.image = Photo.objects.get(id=self.kwargs.get('image_id'))
+            c.image = Photo.objects.get(id=request.POST.get('image'))
             c.comment_reported = False
             c.comment_report_type = 0
             c.save()
-            return HttpResponseRedirect(request.path)
+            if self.request.is_ajax():
+                data = {
+                    'image_id': request.POST.get('image'),
+                }
+                return self.render_to_json_response(data)
+            else:
+                return HttpResponseRedirect(request.path)
         else:
-            return HttpResponseRedirect(request.path)
+            return self.form_invalid(form)
 
 
-class NewCommentViewTemplate(TemplateView):
-    template_name = "partials/comment_form.html"
+class CommentListViewTemplate(TemplateView):
+    template_name = "partials/comment_list.html"
 
     def get_context_data(self, **kwargs):
-        context = super(NewCommentViewTemplate, self).get_context_data()
-        context["form"] = CommentForm
-        from time import sleep
-        sleep(3)
+
+
+        if self.request.GET.get('image_id') is not None:
+            #get comments on an image
+            image_id = self.request.GET.get('image_id')
+            image = Photo.objects.get(id=image_id)
+            comments = image.comment_set.filter(comment_approved=1).order_by('-comment_date');
+        elif self.request.GET.get('album_id') is not None:
+            #get comments on all images in given album
+            album_id = self.request.GET.get('album_id')
+            comments = Comment.objects.filter(image__album=album_id).filter(comment_approved=1).order_by(
+                '-comment_date')
+        else:
+            #get most recent comments
+            comments = Comment.objects.all()[:10]
+
+        context = super(CommentListViewTemplate, self).get_context_data()
+        context['comments'] = comments
         return context
