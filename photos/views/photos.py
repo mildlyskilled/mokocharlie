@@ -67,7 +67,6 @@ class NewCommentViewTemplate(AjaxResponseMixin, CreateView):
         return super(NewCommentViewTemplate, self).get(request, *args, **kwargs)
 
     def post(self, request, *args, **kwargs):
-        return_path = "{0}?image_id={1}".format(request.path, request.POST.get('image'))
         form = CommentForm(request.POST)
         if form.is_valid():
             c = form.save(commit=False)
