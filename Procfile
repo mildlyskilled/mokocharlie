@@ -1,1 +1,1 @@
-web: newrelic-admin run-program gunicorn moko.wsgi
+newrelic-admin run-program web: gunicorn moko.wsgi
