@@ -1,1 +1,1 @@
-web:gunicorn moko.wsgi
+web: gunicorn moko.wsgi
