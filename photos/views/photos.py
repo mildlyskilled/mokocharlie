@@ -36,11 +36,34 @@ class PhotoViewTemplate(TemplateView):
     template_name = "photos/view.html"
 
     def get_context_data(self, **kwargs):
+        image_id = self.kwargs.get('image_id')
         context = super(PhotoViewTemplate, self).get_context_data()
-        photo = Photo.objects.get(id=self.kwargs.get('image_id'))
+        photo = Photo.objects.get(id=image_id)
+
+        album_photos = Photo.objects.filter(albums__photos__id__exact=image_id).order_by('created_at').all()
+
+        # find current key to get next and previous images
+        current = [p for p in album_photos].index(photo)
+
+        next = 0
+        if current < album_photos.count() - 1:
+            next = current + 1
+
+        previous = album_photos.count() - 1
+
+        if current > 0:
+            previous = current - 1
+
+
         context["image"] = photo
         context['comments'] = photo.comment_set.filter(comment_approved=1)
         context["recent_images"] = Photo.objects.all()[:8]
+
+        context["total_photos"] = album_photos.count()
+        context["next_image"] = album_photos[next]
+        context["previous_image"] = album_photos[previous]
+        context["current_image_number"] = current + 1
+
         if self.request.method == 'POST':
             form = CommentForm(self.request.POST)
             if form.is_valid():

@@ -20,7 +20,8 @@
                         {% endfor %}
                     </div>
                     <div class="col-lg-2">
-                        <button type="button" id="comment-trigger" class="btn btn-default btn-sm pull-right col-lg-offset-1"
+                        <button type="button" id="comment-trigger"
+                                class="btn btn-default btn-sm pull-right col-lg-offset-1"
                                 onclick="toggleCommentForm({{ image.id }})"
                                 data-toggle="tooltip" data-placement="top" title="Click here to post a comment">
                             <span class="glyphicon glyphicon-comment"></span>
@@ -41,19 +42,21 @@
             </div>
             <div class="panel-body">
                 <div class="text-center">
-                    {% cloudinary image.image_id|add:'.jpg' transformation="moko_resize_730_l" alt=image width=730 %}
+                    <a href="/photos/view/{{ previous_image.id }}">
+                        {% cloudinary image.image_id|add:'.jpg' transformation="moko_resize_730_l" alt=image width=730 %}
+                    </a>
                 </div>
             </div>
             <div class="panel-footer">
                 <ul class="pager">
                     <li class="previous">
-                        <a href="#"><i class="glyphicon glyphicon-chevron-left"></i></a>
+                        <a href="/photos/view/{{ previous_image.id }}"><i class="glyphicon glyphicon-chevron-left"></i></a>
                     </li>
                     <li class="text-center">
-                        <i class="badge badge-primary">1 of 20</i>
+                        <i class="badge badge-primary">{{ current_image_number }} of {{ total_photos }}</i>
                     </li>
                     <li class="next">
-                        <a href="#"><i class="glyphicon glyphicon-chevron-right"></i></a>
+                        <a href="/photos/view/{{ next_image.id }}"><i class="glyphicon glyphicon-chevron-right"></i></a>
                     </li>
                 </ul>
             </div>
