@@ -140,4 +140,10 @@ CLOUDINARY = {
 
 CRISPY_TEMPLATE_PACK = 'bootstrap3'
 
-LOGIN_REDIRECT_URL = "/account"
+LOGIN_REDIRECT_URL = "/profile"
+LOGIN_URL = '/login/'
+
+TEMPLATE_CONTEXT_PROCESSORS = (
+    'django.core.context_processors.request',
+    'django.contrib.auth.context_processors.auth',
+)

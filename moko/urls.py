@@ -2,15 +2,14 @@ from django.conf.urls import patterns, include, url
 from django.contrib import admin
 from photos.views import *
 from moko.views import *
-from django.contrib.auth.views import logout
 
 admin.autodiscover()
 
 urlpatterns = patterns('',
                        url(r'^$', HomeViewTemplate.as_view()),
                        # Authentication
-                       url(r'^login/$', LoginViewTemplate.as_view()),
-                       url(r'^logout/(?P<user_id>\d+)/$', logout, {'next_page': '/login'}),
+                       url(r'^login/$', LoginViewTemplate.as_view(), name='login'),
+                       url(r'^logout/$',LogoutViewTemplate.as_view(), name='logout'),
 
                        # Accounts
                        url(r'^profile/$', ProfileViewTemplate.as_view()),
