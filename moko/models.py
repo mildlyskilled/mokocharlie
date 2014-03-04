@@ -30,9 +30,20 @@ class Album(models.Model):
     def __unicode__(self):
         return self.label
 
+    def __str__(self):
+        return self.label
+
     def get_absolute_url(self):
         from django.core.urlresolvers import reverse
         return reverse('album_view', args=[str(self.id)])
+
+    @property
+    def album_cover(self):
+        if self.cover:
+            return self.cover
+
+        return self.photos.order_by('?')[0]
+
 
 
 class Photo(models.Model):
