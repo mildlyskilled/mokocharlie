@@ -6,11 +6,13 @@
             {% include "partials/album_ordering.html" with order_data=order %}
         </div>
         <div class="col-lg-8">
-            <ul class="thumbnails">
-                {% for album in albums %}
-                    {% include "partials/album_preview.html" %}
-                {% endfor %}
-            </ul>
+            <div class="row">
+                <ul class="thumbnails">
+                    {% for album in albums %}
+                        {% include "partials/album_preview.html" %}
+                    {% endfor %}
+                </ul>
+            </div>
             <hr/>
             {% include "partials/paginator.html" with paginator_object=albums %}
         </div>
@@ -23,7 +25,8 @@
                     You can upload your own images to the People and Places album click on the button below to begin
                 </div>
                 <div class="panel-footer">
-                    <a href="/upload" class="btn btn-success btn-sm">Upload Your Images</a> | <a class="btn btn-default btn-sm"
+                    <a href="/upload" class="btn btn-success btn-sm">Upload Your Images</a> | <a
+                        class="btn btn-default btn-sm"
                         href="/albums/peopleandplaces">People and Places</a>
                 </div>
             </div>

@@ -1,3 +1,4 @@
+from django import forms
 from django.forms import ModelForm, Textarea, TextInput, HiddenInput
 from moko.models import Comment
 from crispy_forms.helper import FormHelper
@@ -38,3 +39,20 @@ class CommentForm(ModelForm):
                 'comment_author',
             )
         )
+
+
+class LoginForm(forms.Form):
+    """ Basic username/password based login form. """
+    email = forms.CharField()
+    password = forms.CharField(widget=forms.PasswordInput)
+    def __init__(self, *args, **kwargs):
+        super(LoginForm, self).__init__(*args, **kwargs)
+        self.fields['email'].error_messages['required'] = \
+            "Please enter a username"
+        self.fields['password'].error_messages['required'] = \
+            "Please enter a password"
+        self.helper = FormHelper()
+        self.helper.form_class = 'form-horizontal'
+        self.helper.label_class = 'col-lg-3'
+        self.helper.field_class = 'col-lg-7 login-fields'
+        self.helper.add_input(Submit('submit', 'Login'))

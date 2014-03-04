@@ -1,4 +1,13 @@
-from django.views.generic.base import TemplateView
+from django.conf import settings
+from django.views.generic import TemplateView, DetailView
+from django.views.generic.edit import FormView
+from django.utils.http import is_safe_url
+from django.shortcuts import redirect, resolve_url
+from django.contrib.auth.models import User
+from django.contrib.auth import authenticate, login
+
+from moko.forms import LoginForm
+
 
 class HomeViewTemplate(TemplateView):
     template_name = "home/index.html"
@@ -7,4 +16,26 @@ class HomeViewTemplate(TemplateView):
         context = super(HomeViewTemplate, self).get_context_data()
         context["home"] = "El Homie"
         return context
+
+
+class LoginViewTemplate(FormView):
+    form_class = LoginForm
+    template_name = "profile/login.html"
+
+    def get(self, request, *args, **kwargs):
+        return super(LoginViewTemplate, self).get(request, *args, **kwargs)
+
+    def form_valid(self, form):
+        redirect_to = self.request.GET.get('next', '')
+        if not is_safe_url(url=redirect_to, host=self.request.get_host()):
+            redirect_to = resolve_url(settings.LOGIN_REDIRECT_URL)
+
+        email = self.request.POST['email']
+        #get user with this email
+        moko_user = User.objects.get(email=email)
+        password = self.request.POST['password']
+        user = authenticate(username=moko_user.username, password=password)
+        login(self.request, user)
+        return redirect(redirect_to)
+
 

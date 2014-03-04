@@ -42,6 +42,7 @@ INSTALLED_APPS = (
     'photos',
     'cloudinary',
     'crispy_forms',
+    'django_gravatar',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -138,3 +139,5 @@ CLOUDINARY = {
 }
 
 CRISPY_TEMPLATE_PACK = 'bootstrap3'
+
+LOGIN_REDIRECT_URL = "/account"

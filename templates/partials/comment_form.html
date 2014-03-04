@@ -1,7 +1,14 @@
 {% load crispy_forms_tags %}
-
+{% load gravatar %}
 <div class="col-lg-8">
-    {% crispy form %}
+    <div class="col-lg-3">
+        {% if user %}
+            {% gravatar user.email %}
+        {% endif %}
+    </div>
+    <div class="col-lg-9">
+        {% crispy form %}
+    </div>
 </div>
 <div class="col-lg-4">
     <div class="page-header">
