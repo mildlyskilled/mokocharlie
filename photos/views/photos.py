@@ -6,7 +6,7 @@ from django.http import HttpResponseRedirect
 import logging
 from moko.forms import CommentForm
 from moko.mixins.ajax import AjaxResponseMixin
-
+from django.contrib.auth.models import User
 LOGGER = logging.getLogger(__name__)
 
 
