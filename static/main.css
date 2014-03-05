@@ -1,0 +1,97 @@
+.login-fields {
+
+}
+
+.login-fields .field {
+    margin-bottom: 1.25em;
+}
+
+.login-fields label {
+    display: none;
+}
+
+.login-fields input {
+    font-family: 'Open Sans';
+    font-size: 13px;
+    color: #8e8d8d;
+    padding: 11px 15px 10px 5px;
+    background-color: #fdfdfd;
+    width: 255px;
+    display: block;
+    margin: 0;
+    box-shadow: inset 2px 2px 4px #f1f1f1;
+}
+
+/*
+Social login option icon/button.
+
+Usage:
+    <a href="#" class="social-login-facebook">Facebook</a>
+
+*/
+.social-login, .social-login-facebook, .social-login-linkedin, .social-login-twitter, .social-login-google {
+    text-indent: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+    width: 4em;
+    height: 4em;
+    display: inline-block;
+    position: relative;
+    margin-right: 0.5em;
+}
+
+.social-login:after, .social-login-facebook:after, .social-login-linkedin:after, .social-login-twitter:after, .social-login-google:after {
+    color: #fff;
+    position: absolute;
+    left: 0;
+    top: 0;
+    font-family: 'FontAwesome';
+    text-indent: 0;
+    font-size: 2em;
+    line-height: 2.2em;
+    text-align: center;
+    width: 100%;
+}
+
+.social-login-facebook {
+    background-color: #3B5997;
+}
+
+.social-login-facebook:after {
+    content: "\f09a";
+}
+
+.social-login-linkedin {
+    background-color: #007DB8;
+}
+
+.social-login-linkedin:after {
+    content: "\f0e1";
+}
+
+.social-login-twitter {
+    background-color: #00ACF0;
+}
+
+.social-login-twitter:after {
+    content: "\f099";
+}
+
+.social-login-google {
+    background-color: #DB4F48;
+}
+
+.social-login-google:after {
+    content: "\f0d5";
+}
+
+.primary-navigation--nav {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.primary-navigation--nav > li {
+    display: inline-block;
+    padding: 10px 5px;
+}
