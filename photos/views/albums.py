@@ -18,37 +18,29 @@ class AlbumTemplate(TemplateView):
         _limit = self.request.GET.get('limit', self.default_limit)
         _page = self.request.GET.get('page', self.default_page)
         _order = self.request.GET.get('order', self.default_order)
-
-        _order_dict = {'alpha': ['label', 'Alphabetical'],
+        from collections import OrderedDict
+        _order_dict_unsorted = {'alpha': ['label', 'Alphabetical'],
                        'recent': ['-created_at', 'Most Recent'],
                        'popular': ['-average_views', 'Most Popular']}
 
-        if _order_dict.has_key(_order):
+        if _order in _order_dict_unsorted:
             if _order == 'popular':
                 from django.db.models.aggregates import Avg
 
                 albums = Album.objects.annotate(average_views=Avg('photos__times_viewed')).order_by(
-                    _order_dict[_order][0]).all()
+                    _order_dict_unsorted[_order][0]).all()
             else:
-                albums = Album.objects.distinct().order_by(_order_dict[_order][0]).all()
+                albums = Album.objects.distinct().order_by(_order_dict_unsorted[_order][0]).all()
         else:
             albums = Album.objects.all()
 
-        LOGGER.debug(albums.query)
-
-        p = Paginator(albums, _limit)
-        try:
-            album_list = p.page(_page)
-        except PageNotAnInteger:
-            album_list = p.page(self.default_page)
-        except EmptyPage:
-            album_list = p.page(p.num_pages)
-
-        comments = Comment.objects.all()[:12]
+        _order_dict = OrderedDict(reversed(sorted(_order_dict_unsorted.items())), key=lambda t: t[0])
+        comments = Comment.objects.all().filter(comment_approved=1)[:12]
 
         context = super(AlbumTemplate, self).get_context_data()
-        context["albums"] = album_list
+        context["albums"] = albums
         context["comments"] = comments
+        context["limit"] = _limit
         context["order"] = {'selected': _order, 'dictionary': _order_dict}
         return context
 

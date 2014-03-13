@@ -1,20 +1,25 @@
 {% extends "base.html" %}
 {% block title %} Organising Community Photos {% endblock %}
+{% block extrahead %}
+    <script src="{{ STATIC_URL }}js/main.js"></script>
+{% endblock %}
 {% block content %}
+    {% include "partials/album_ordering.html" with order_data=order %}
+    <br/>
     <div class='row'>
-        <div class="page-header">
-            {% include "partials/album_ordering.html" with order_data=order %}
-        </div>
         <div class="col-lg-8">
             <div class="row">
+                {% load endless %}
+                {% paginate limit albums %}
                 <ul class="thumbnails">
                     {% for album in albums %}
                         {% include "partials/album_preview.html" %}
                     {% endfor %}
                 </ul>
             </div>
-            <hr/>
-            {% include "partials/paginator.html" with paginator_object=albums %}
+            <ul class="pagination">
+                {% show_pages %}
+            </ul>
         </div>
         <div class="col-lg-4">
             <div class="panel panel-default">
@@ -38,4 +43,9 @@
             {% endfor %}
         </div>
     </div>
+    <script type="application/javascript">
+        window.onload = function () {
+            endlessPaginatorStyleFix()
+        }
+    </script>
 {% endblock %}

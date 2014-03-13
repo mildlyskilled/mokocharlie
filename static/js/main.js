@@ -19,3 +19,9 @@ function loadComments(id, type) {
         }
     });
 }
+
+function endlessPaginatorStyleFix(){
+    $('.endless_page_link').wrap("<li></li>");
+    $('.endless_page_current').wrap("<li></li>");
+    $('.endless_separator').wrap("<li></li>");
+}

@@ -1,29 +1,58 @@
 {% extends "base.html" %}
 {% block title %}Organising Community Photos{% endblock %}
+{% block extrahead %}
+    <script src="{{ STATIC_URL }}js/main.js"></script>
+    <script src="{{ STATIC_URL }}js/photos.js"></script>
+{% endblock %}
 {% block content %}
-<div class='row'>
-    <div class="col-lg-8">
-        <div class="jumbotron">
-            <h2>Mokocharlie Images
-                <small class="orangetext">sorted by recent</small>
-            </h2>
-            <blockquote>We have taken our time to find the best views from all over Ghana and sometimes beyond. We
-                hope that you take pleasure in browsing through these pictures (Almost as much as we have enjoyed
-                taking them).
-                <small>Mokocharlie team</small>
-            </blockquote>
-            <a href="/upload" class="btn btn-success">Upload your own</a> | <a href="/album/peopleandplaces"
-                                                                               class="btn btn-primary">See what
-            others have uploaded</a>
-        </div>
+    <div class='row'>
+        <div class="col-lg-8">
+            {% include "partials/photo_ordering.html" with order_data=order %}
+            <br/>
 
-        {% for image in images %}
-        <div class="col-sm-6 col-md-3" style="min-height: 140px">
-            {% include "partials/image_preview.html" %}
+            <div class="row">
+                {% load endless %}
+                {% paginate limit images %}
+                {% for image in images %}
+                    <div class="col-sm-6 col-md-3" style="min-height: 140px">
+                        {% include "partials/image_preview.html" %}
+                    </div>
+                {% endfor %}
+            </div>
+            <div class="row">
+                <ul class="pagination">
+                    {% show_pages %}
+                </ul>
+            </div>
+
         </div>
-        {% endfor %}
+        <div class="col-lg-4">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    People and Places
+                </div>
+                <div class="panel-body">
+                    You can upload your own images to the People and Places album click on the button below to begin
+                </div>
+                <div class="panel-footer">
+                    <a href="/upload" class="btn btn-success btn-sm">Upload Your Images</a> | <a
+                        class="btn btn-default btn-sm"
+                        href="/albums/peopleandplaces">People and Places</a>
+                </div>
+            </div>
+             <div class="page-header">
+                <h5>Most Recent Comments</h5>
+            </div>
+            {% for comment in comments %}
+                {% include "partials/comment_preview.html" %}
+            {% endfor %}
+        </div>
     </div>
-</div>
 
-{% include "partials/paginator.html" with paginator_object=images %}
+    <script type="application/javascript">
+        window.onload = function () {
+            endlessPaginatorStyleFix()
+        }
+    </script>
+
 {% endblock %}

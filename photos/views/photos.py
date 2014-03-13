@@ -7,28 +7,48 @@ import logging
 from moko.forms import CommentForm
 from moko.mixins.ajax import AjaxResponseMixin
 from django.contrib.auth.models import User
+
 LOGGER = logging.getLogger(__name__)
 
 
 class PhotosTemplate(TemplateView):
     template_name = "photos/index.html"
-    default_limit = 24
+    default_limit = 40
     default_page = 1
+    default_order = 'recent'
 
     def get_context_data(self, **kwargs):
-        images = Photo.objects.all().order_by('-created_at')
+        images = Photo.objects.filter(published=1).order_by('-created_at')
         _limit = self.request.GET.get('limit', self.default_limit)
-        _page = self.request.GET.get('page', self.default_page)
-        p = Paginator(images, _limit)
-        try:
-            image_list = p.page(_page)
-        except PageNotAnInteger:
-            image_list = p.page(self.default_page)
-        except EmptyPage:
-            image_list = p.page(p.num_pages)
+        _order = self.request.GET.get('order', self.default_order)
+        from collections import OrderedDict
 
+        _order_dict_unsorted = {
+            'recent': ['-created_at', 'Most Recent'],
+            'alpha': ['name', 'Alphabetical'],
+            'popular': ['-times_viewed', 'Most Popular'],
+            'rating': ['-times_rated', 'Most Rated'],
+            'mostcomments': ['-comment_count', 'Most Comments'],
+        }
+
+        if _order in _order_dict_unsorted:
+            if _order == 'mostcomments':
+                from django.db.models.aggregates import Sum
+                images = Photo.objects.annotate(comment_count=Sum('comment')).order_by(
+                    _order_dict_unsorted[_order][0]).all()
+            else:
+                images = Photo.objects.distinct().order_by(_order_dict_unsorted[_order][0]).all()
+
+        else:
+            images = Photo.objects.all()
+
+        _order_dict = OrderedDict(sorted(_order_dict_unsorted.items()), key=lambda t: t[0], reverse=True)
+        comments = Comment.objects.all().filter(comment_approved=1)[:12]
         context = super(PhotosTemplate, self).get_context_data()
-        context["images"] = image_list
+        context['images'] = images
+        context['limit'] = int(_limit)
+        context['order'] = {'selected': _order, 'dictionary': _order_dict}
+        context['comments'] = comments
         return context
 
 
@@ -45,23 +65,22 @@ class PhotoViewTemplate(TemplateView):
         # find current key to get next and previous images
         current = [p for p in album_photos].index(photo)
 
-        next = 0
+        next_item = 0
         if current < album_photos.count() - 1:
-            next = current + 1
+            next_item = current + 1
 
-        previous = album_photos.count() - 1
+        previous_item = album_photos.count() - 1
 
         if current > 0:
-            previous = current - 1
-
+            previous_item = current - 1
 
         context["image"] = photo
         context['comments'] = photo.comment_set.filter(comment_approved=1)
         context["recent_images"] = Photo.objects.all()[:8]
 
         context["total_photos"] = album_photos.count()
-        context["next_image"] = album_photos[next]
-        context["previous_image"] = album_photos[previous]
+        context["next_image"] = album_photos[next_item]
+        context["previous_image"] = album_photos[previous_item]
         context["current_image_number"] = current + 1
 
         if self.request.method == 'POST':

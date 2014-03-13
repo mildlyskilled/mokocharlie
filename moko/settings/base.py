@@ -9,9 +9,11 @@ https://docs.djangoproject.com/en/1.6/ref/settings/
 """
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
-import os
 import sys
 import urlparse
+
+import os
+
 
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
@@ -43,6 +45,8 @@ INSTALLED_APPS = (
     'cloudinary',
     'crispy_forms',
     'django_gravatar',
+    'social.apps.django_app.default',
+    'endless_pagination',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -148,3 +152,32 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'django.core.context_processors.request',
     'django.core.context_processors.static',
 )
+
+SOCIAL_AUTH_STORAGE = 'social.apps.django_app.default.models.DjangoStorage'
+
+SOCIAL_AUTH_LINKEDIN_OAUTH2_KEY = "77esqvhx7ukhea"
+SOCIAL_AUTH_LINKEDIN_OAUTH2_SECRET = "ICfanfvnlIjY7o3N"
+SOCIAL_AUTH_LINKEDIN_OAUTH2_SCOPE = ['r_fullprofile']
+SOCIAL_AUTH_LINKEDIN_OAUTH2_FIELD_SELECTORS = ['positions', 'educations']
+SOCIAL_AUTH_LINKEDIN_OAUTH2_EXTRA_DATA = [('positions', 'jobs'), ('educations', 'education')]
+
+SESSION_SERIALIZER = 'django.contrib.sessions.serializers.JSONSerializer'
+LOGIN_URL = "/"
+LOGIN_REDIRECT_URL = "/profile/"
+SOCIAL_AUTH_NEW_USER_REDIRECT_URL = "/profile/"
+
+AUTHENTICATION_BACKENDS = (
+    'social.backends.twitter.TwitterOAuth',
+    'social.backends.facebook.FacebookOAuth2',
+    'social.backends.linkedin.LinkedinOAuth2',
+    'social.backends.linkedin.LinkedinOAuth',
+    'social.backends.google.GooglePlusAuth',
+    'social.backends.email.EmailAuth',
+    'django.contrib.auth.backends.ModelBackend',
+)
+
+# pagination settings
+ENDLESS_PAGINATION_PER_PAGE = 20
+ENDLESS_PAGINATION_PREVIOUS_LABEL = '<i class="glyphicon glyphicon-chevron-left"></i>'
+ENDLESS_PAGINATION_NEXT_LABEL = '<i class="glyphicon glyphicon-chevron-right"></i>'
+ENDLESS_PAGINATION_PAGE_LIST_CALLABLE = 'endless_pagination.utils.get_elastic_page_numbers'
