@@ -52,4 +52,5 @@ class LogoutViewTemplate(TemplateView):
         redirect_to = self.request.GET.get('next', '')
         if not is_safe_url(url=redirect_to, host=self.request.get_host()):
             redirect_to = resolve_url(settings.LOGIN_REDIRECT_URL)
-            return redirect(redirect_to)
+
+        return redirect(redirect_to)
