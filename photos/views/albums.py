@@ -56,21 +56,13 @@ class AlbumViewTemplate(TemplateView):
         _page = self.request.GET.get('page', self.default_page)
         album = Album.objects.get(id=album_id)
 
-        p = Paginator(album.photos.all(), _limit)
-        try:
-            image_list = p.page(_page)
-        except PageNotAnInteger:
-            image_list = p.page(self.default_page)
-        except EmptyPage:
-            image_list = p.page(p.num_pages)
-
         # Get comments
         album_comments = Comment.objects.filter(image__album=album_id).filter(comment_approved=1).order_by(
             '-comment_date')
         # Prepare context
         context = super(AlbumViewTemplate, self).get_context_data()
-        context["album_images"] = image_list
-        context["paginator_object"] = image_list
+        context["album_images"] = album.photos.all()
         context["album"] = album
         context["album_comments"] = album_comments
+        context["limit"] = _limit
         return context
