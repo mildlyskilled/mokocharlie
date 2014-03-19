@@ -1,7 +1,8 @@
-from django.views.generic.base import TemplateView
-from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-from moko.models import *
 import logging
+
+from django.views.generic.base import TemplateView
+from photos.models import *
+
 
 LOGGER = logging.getLogger(__name__)
 

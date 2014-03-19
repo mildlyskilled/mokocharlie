@@ -1,12 +1,12 @@
+import logging
+
 from django.views.generic.base import TemplateView
 from django.views.generic.edit import CreateView
-from moko.models import *
-from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.http import HttpResponseRedirect
-import logging
 from moko.forms import CommentForm
 from moko.mixins.ajax import AjaxResponseMixin
-from django.contrib.auth.models import User
+from photos.models import *
+
 
 LOGGER = logging.getLogger(__name__)
 
@@ -39,8 +39,6 @@ class PhotosTemplate(TemplateView):
             else:
                 images = Photo.objects.distinct().order_by(_order_dict_unsorted[_order][0]).all()
 
-        else:
-            images = Photo.objects.all()
 
         _order_dict = OrderedDict(sorted(_order_dict_unsorted.items()), key=lambda t: t[0], reverse=True)
         comments = Comment.objects.all().filter(comment_approved=1)[:12]

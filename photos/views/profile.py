@@ -2,7 +2,7 @@ from django.shortcuts import redirect
 from django.views.generic.base import TemplateView
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
-from moko.models import CustomUser
+from photos.models import CustomUser
 
 
 class ProfileViewTemplate(TemplateView):

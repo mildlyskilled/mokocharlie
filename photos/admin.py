@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.forms import ModelForm
-from moko.models import Photo, Album, Comment, Hotel, PhotoStory, Promotion, UserPhoto
+from photos.models import Photo, Album, Comment, Hotel, PhotoStory, Promotion, UserPhoto
 
 
 # class AlbumModelAdmin(admin.ModelAdmin):

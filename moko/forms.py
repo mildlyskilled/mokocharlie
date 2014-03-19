@@ -1,6 +1,6 @@
 from django import forms
 from django.forms import ModelForm, Textarea, TextInput, HiddenInput
-from moko.models import Comment
+from photos.models import Comment
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Submit, Layout, Fieldset
 from django.utils.translation import gettext as _

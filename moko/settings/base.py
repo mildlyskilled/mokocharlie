@@ -14,7 +14,6 @@ import urlparse
 
 import os
 
-
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
 
@@ -47,6 +46,7 @@ INSTALLED_APPS = (
     'django_gravatar',
     'social.apps.django_app.default',
     'endless_pagination',
+    'south'
 )
 
 MIDDLEWARE_CLASSES = (
@@ -71,7 +71,6 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
     }
 }
-
 
 
 # Register database schemes in URLs.
