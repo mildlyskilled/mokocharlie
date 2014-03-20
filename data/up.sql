@@ -1,5 +1,4 @@
 BEGIN;
-DROP TABLE IF EXISTS `photo`;
 
 CREATE TABLE IF NOT EXISTS `photo` (
   `id`           INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
@@ -52,7 +51,6 @@ INSERT INTO `photo` (`image_id`,
 
 
 # albums
-DROP TABLE IF EXISTS `album`;
 CREATE TABLE IF NOT EXISTS `album` (
   `id`          INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
   `album_id`    MEDIUMINT(9),
@@ -157,32 +155,6 @@ ALTER TABLE `image_comments` ADD FOREIGN KEY (`image_id`) REFERENCES `photo` (`i
 ALTER TABLE `image_comments` CHANGE `comment_report_type`  `comment_report_type` TINYINT(1) NULL DEFAULT '0';
 ALTER TABLE `image_comments` CHANGE `comment_reported`  `comment_reported` TINYINT(1) NULL DEFAULT '0';
 
-# MIGRATE users TO DJANGO USERS
-
-INSERT INTO auth_user (password,
-                       last_login,
-                       is_superuser,
-                       username,
-                       first_name,
-                       last_name,
-                       email,
-                       is_staff,
-                       is_active,
-                       date_joined)
-
-  SELECT
-    user_password,
-    NOW(),
-    0,
-    CONCAT(REPLACE(TRIM(LOWER(user_firstname)), ' ', '_'), SUBSTRING(user_id, 1, 5)),
-    user_firstname,
-    user_lastname,
-    user_email,
-    0,
-    user_active,
-    NOW()
-  FROM mc_users;
-
 
 # UPDATE HOSPITALITY TABLE
 
@@ -241,6 +213,6 @@ DROP TABLE IF EXISTS reported_images;
 DROP TABLE IF EXISTS upload_log;
 DROP TABLE IF EXISTS album_data;
 DROP TABLE IF EXISTS image_library;
-DROP TABLE IF EXISTS mc_users;
+DROP TABLE IF EXISTS play_evolutions;
 
 COMMIT;

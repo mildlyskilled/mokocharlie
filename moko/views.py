@@ -4,10 +4,10 @@ from django.views.generic.edit import FormView
 from django.utils.http import is_safe_url
 from django.contrib.auth import logout
 from django.shortcuts import redirect, resolve_url
-from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login
 
 from moko.forms import LoginForm
+from photos.models import MokoUser
 
 
 class HomeViewTemplate(TemplateView):
@@ -38,10 +38,8 @@ class LoginViewTemplate(FormView):
             redirect_to = resolve_url(settings.LOGIN_REDIRECT_URL)
 
         email = self.request.POST['email']
-        #get user with this email
-        moko_user = User.objects.get(email=email)
         password = self.request.POST['password']
-        user = authenticate(username=moko_user.username, password=password)
+        user = authenticate(email=email, password=password)
         login(self.request, user)
         return redirect(redirect_to)
 

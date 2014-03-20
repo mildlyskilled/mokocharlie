@@ -12,7 +12,7 @@ urlpatterns = patterns('',
                        url(r'^logout/$',LogoutViewTemplate.as_view(), name='logout'),
 
                        # Accounts
-                       url(r'^profile/$', ProfileViewTemplate.as_view()),
+                       url(r'^profile/$', ProfileViewTemplate.as_view(), name='profile'),
                        # Photo Endpoints
                        url(r'^photos/$', PhotosTemplate.as_view(), name="photo_list"),
                        url(r'^photos/view/(?P<image_id>\d+)/$', PhotoViewTemplate.as_view(), name='photo_view'),

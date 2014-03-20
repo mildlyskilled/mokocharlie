@@ -1,15 +1,9 @@
 from django.contrib import admin
+from django.contrib.auth.admin import UserAdmin
 from django.forms import ModelForm
-from photos.models import Photo, Album, Comment, Hotel, PhotoStory, Promotion, UserPhoto
-
-
-# class AlbumModelAdmin(admin.ModelAdmin):
-#     def formfield_for_foreignkey(self, db_field, request, **kwargs):
-#         if db_field.name == 'cover':
-#             print request
-#             kwargs["queryset"] = Photo.objects.filter(album=self.id)
-#
-#         return super(AlbumModelAdmin, self).formfield_for_foreignkey(db_field, request, **kwargs)
+from moko.forms import CustomUserChangeForm, CustomUserCreationForm
+from photos.models import Photo, Album, Comment, Hotel, PhotoStory, Promotion, UserPhoto, MokoUser
+from django.utils.translation import ugettext_lazy as _
 
 
 class AlbumForm(ModelForm):
@@ -18,9 +12,38 @@ class AlbumForm(ModelForm):
         super(AlbumForm, self).__init__(*args, **kwargs)
         self.fields['cover'].queryset = Photo.objects.filter(album=self.instance.pk)
 
+
 class AlbumAdmin(admin.ModelAdmin):
     form = AlbumForm
 
+
+class MokoUserAdmin(UserAdmin):
+    # The forms to add and change user instances
+
+    # The fields to be used in displaying the User model.
+    # These override the definitions on the base UserAdmin
+    # that reference the removed 'username' field
+    fieldsets = (
+        (None, {'fields': ('email', 'password')}),
+        (_('Personal info'), {'fields': ('first_name', 'last_name')}),
+        (_('Permissions'), {'fields': ('is_active', 'is_staff', 'is_superuser',
+                                       'groups', 'user_permissions')}),
+        (_('Important dates'), {'fields': ('last_login', 'date_joined')}),
+    )
+    add_fieldsets = (
+        (None, {
+            'classes': ('wide',),
+            'fields': ('email', 'password1', 'password2')}
+        ),
+    )
+    form = CustomUserChangeForm
+    add_form = CustomUserCreationForm
+    list_display = ('email', 'first_name', 'last_name', 'is_staff')
+    search_fields = ('email', 'first_name', 'last_name')
+    ordering = ('email',)
+
+
+admin.site.register(MokoUser, MokoUserAdmin)
 admin.site.register(Photo)
 admin.site.register(Album,AlbumAdmin)
 admin.site.register(Comment)

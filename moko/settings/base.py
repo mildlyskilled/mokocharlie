@@ -175,6 +175,9 @@ AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
 )
 
+AUTH_USER_MODEL = 'photos.MokoUser'
+EMAIL_FROM = "info@mokocharlie.com"
+
 # pagination settings
 ENDLESS_PAGINATION_PER_PAGE = 20
 ENDLESS_PAGINATION_PREVIOUS_LABEL = '<i class="glyphicon glyphicon-chevron-left"></i>'

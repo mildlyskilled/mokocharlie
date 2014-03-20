@@ -75,7 +75,12 @@
         <div class="page-header">
             <h5>About This Image</h5>
         </div>
+        <div class="well well-sm">
         {{ image.caption }}
+        </div>
+
+        <abbr title="You can upload your own images as well, just log in">By: {{ image.owner.get_full_name }}</abbr>
+
         <div class="page-header">
             <h5>Most Recent Images</h5>
         </div>
