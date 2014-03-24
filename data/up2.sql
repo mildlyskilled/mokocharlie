@@ -83,4 +83,6 @@ INSERT INTO photo_album (photo_id, album_id)
   WHERE image_id IN (SELECT
                        image_id
                      FROM user_image_library);
+
+DROP TABLE IF EXISTS user_image_library;
 COMMIT;
