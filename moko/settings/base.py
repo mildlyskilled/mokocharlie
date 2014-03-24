@@ -43,6 +43,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'common.middleware.moko_social.MokoSocialMiddleWare',
 )
 
 ROOT_URLCONF = 'moko.urls'
@@ -142,14 +143,22 @@ TEMPLATE_CONTEXT_PROCESSORS = (
 
 SOCIAL_AUTH_STORAGE = 'social.apps.django_app.default.models.DjangoStorage'
 
+SOCIAL_AUTH_TWITTER_KEY = "bqOTvdYoySztq1ylQFqzw"
+SOCIAL_AUTH_TWITTER_SECRET = "STWqPpO0O02vKptUpiNrYsHpgrj1HMExtPn3xhf336I"
+
+SOCIAL_AUTH_FACEBOOK_KEY = "81700851985"
+SOCIAL_AUTH_FACEBOOK_SECRET = "1abaa53b4babeb3c860506d8f57e577a"
+
 SOCIAL_AUTH_LINKEDIN_OAUTH2_KEY = "77esqvhx7ukhea"
 SOCIAL_AUTH_LINKEDIN_OAUTH2_SECRET = "ICfanfvnlIjY7o3N"
-SOCIAL_AUTH_LINKEDIN_OAUTH2_SCOPE = ['r_fullprofile']
-SOCIAL_AUTH_LINKEDIN_OAUTH2_FIELD_SELECTORS = ['positions', 'educations']
-SOCIAL_AUTH_LINKEDIN_OAUTH2_EXTRA_DATA = [('positions', 'jobs'), ('educations', 'education')]
+SOCIAL_AUTH_LINKEDIN_OAUTH2_SCOPE = ['r_emailaddress', 'r_basicprofile']
+SOCIAL_AUTH_LINKEDIN_OAUTH2_FIELD_SELECTORS = ['email-address',]
+SOCIAL_AUTH_LINKEDIN_OAUTH2_EXTRA_DATA = [('email-address', 'email_address')]
+
+SOCIAL_AUTH_PROTECTED_USER_FIELDS = ['email', ]
 
 SESSION_SERIALIZER = 'django.contrib.sessions.serializers.JSONSerializer'
-LOGIN_URL = "/"
+LOGIN_URL = "/login"
 LOGIN_REDIRECT_URL = "/profile/"
 SOCIAL_AUTH_NEW_USER_REDIRECT_URL = "/profile/"
 
@@ -171,3 +180,15 @@ ENDLESS_PAGINATION_PAGE_LIST_CALLABLE = 'endless_pagination.utils.get_elastic_pa
 
 AUTH_USER_MODEL = 'common.MokoUser'
 EMAIL_FROM = "info@mokocharlie.com"
+
+SOCIAL_AUTH_PIPELINE = (
+    'social.pipeline.social_auth.social_details',
+    'social.pipeline.social_auth.social_uid',
+    'social.pipeline.social_auth.auth_allowed',
+    'social.pipeline.social_auth.social_user',
+    'social.pipeline.user.get_username',
+    'social.pipeline.user.create_user',
+    'social.pipeline.social_auth.associate_user',
+    'social.pipeline.social_auth.load_extra_data',
+    'social.pipeline.user.user_details',
+)

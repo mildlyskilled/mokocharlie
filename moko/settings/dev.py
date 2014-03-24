@@ -53,3 +53,8 @@ LOGGING = {
         },
     },
 }
+
+# override facebook settings
+
+SOCIAL_AUTH_FACEBOOK_KEY = "376334572402987"
+SOCIAL_AUTH_FACEBOOK_SECRET = "5ebd62c909c9d9f9d3b512b8e7078d53"

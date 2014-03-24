@@ -25,4 +25,6 @@ urlpatterns = patterns('',
                        url(r'^comments/$', CommentListViewTemplate.as_view(), name='comment_list'),
                        # Admin endpoints
                        (r'^admin/', include(admin.site.urls)),
+                       # Social logins
+                        url(r'^social/', include('social.apps.django_app.urls', namespace='social')),
 )

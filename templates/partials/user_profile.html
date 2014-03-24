@@ -6,7 +6,34 @@
     </div>
     <div class="col-lg-9">
         <div class="page-header"><h3>{{ user.get_full_name }}</h3></div>
-        {{ user.email }}<br />
+        {{ user.email }}<br/>
         Member since {{ user.date_joined }}
+        <div class="page-header">
+            <h4>Your Social Accounts</h4>
+        </div>
+        {% if user.social_accounts %}
+            {% if 'linkedin_oauth2' not in user.social_accounts.keys %}
+                <a href="{% url 'social:begin' 'linkedin-oauth2' %}?next={% url 'profile' %}"
+                   class="social-login-linkedin dissociate">LinkedIn</a>
+            {% else %}
+                <span class="social-login-linkedin" title="Already connected to LinkedIn">LinkedIn</span>
+            {% endif %}
+
+            {% if 'facebook' not in user.social_accounts.keys %}
+                <a href="{% url 'social:begin' 'facebook' %}?next={{ request.GET.next }}"
+                   class="social-login-facebook dissociate">Facebook</a>
+            {% else %}
+                <span class="social-login-facebook" title="Already connected to Facebook">Facebook</span>
+            {% endif %}
+
+            {% if 'twitter' not in user.social_accounts.keys %}
+                <a href="{% url 'social:begin' 'twitter' %}?next={{ request.GET.next }}"
+                   class="social-login-twitter dissociate">Twitter</a>
+            {% else %}
+                <span class="social-login-twitter" title="Already connected to Twitter">Twitter</span>
+            {% endif %}
+        {% endif %}
+
+
     </div>
 </div>

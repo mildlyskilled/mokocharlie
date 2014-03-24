@@ -290,6 +290,12 @@ class MokoUser(AbstractBaseUser, PermissionsMixin):
     def get_photos(self):
         return Photo.objects.filter(owner=self.id)
 
+    def social_accounts(self):
+        """ Returns the social accounts the user is authorised with """
+        social_accounts = {}
+        for social in self.social_auth.all():
+            social_accounts[social.provider.replace('-', '_')] = social
+        return social_accounts
 
     def __unicode__(self):
         return self.get_full_name()
