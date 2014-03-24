@@ -287,5 +287,9 @@ class MokoUser(AbstractBaseUser, PermissionsMixin):
         """
         send_mail(subject, message, from_email, [self.email])
 
+    def get_photos(self):
+        return Photo.objects.filter(owner=self.id)
+
+
     def __unicode__(self):
         return self.get_full_name()

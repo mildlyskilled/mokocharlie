@@ -2,7 +2,7 @@
 <div class="row">
     <div class="col-lg-2">
         <a href="{{ comment.get_absolute_url }}">
-            {% cloudinary comment.image.image_id|add:'.jpg' transformation="comment_image_thumbnail" class="thumbnail" %}
+            {% cloudinary comment.image.image_id|add:'.jpg' transformation="comment_image_pre" class="thumbnail" %}
         </a>
     </div>
     <div class="col-lg-10">

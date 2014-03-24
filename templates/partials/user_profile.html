@@ -1,0 +1,12 @@
+{% load gravatar %}
+<div class="row">
+    <div class="col-lg-3">
+        <a href="https://en.gravatar.com/"
+           target="_blank">{% gravatar user.email size=195 css_class="thumbnail" %}</a>
+    </div>
+    <div class="col-lg-9">
+        <div class="page-header"><h3>{{ user.get_full_name }}</h3></div>
+        {{ user.email }}<br />
+        Member since {{ user.date_joined }}
+    </div>
+</div>

@@ -1,7 +1,42 @@
-{% extends "base.html" %}
-{% load gravatar %}
+{% extends "master.html" %}
 {% block title %}{{ user.first_name }} {{ user.last_name }}{% endblock %}
-
+{% block extrahead %}
+    <script src="{{ STATIC_URL }}js/main.js"></script>
+    <script src="{{ STATIC_URL }}js/photos.js"></script>
+{% endblock %}
 {% block content %}
-{% gravatar user.email size=150 %}
+    <div class="panel">
+        <ul class="nav nav-tabs" id="profileTabs">
+            <li><a href="#profile" data-toggle="tab">Profile</a></li>
+            <li><a href="#pictures" data-toggle="tab">Pictures</a></li>
+            <li><a href="#comments" data-toggle="tab">Comments</a></li>
+        </ul>
+
+        <div class="tab-content" style="padding-top: 20px;">
+
+            <div class="tab-pane" id="profile">
+                {% include "partials/user_profile.html" %}
+            </div>
+
+            <div class="tab-pane" id="pictures">
+                {% include "partials/user_photos.html" %}
+            </div>
+
+            <div class="tab-pane" id="comments">
+                {% include "partials/user_photo_comments.html" %}
+            </div>
+        </div>
+
+    </div>
+    <script type="application/javascript">
+        $(function () {
+            $('#profileTabs a[href="#profile"]').tab('show');
+            endlessPaginatorStyleFix();
+        });
+
+        $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+            e.target // activated tab
+            e.relatedTarget // previous tab
+        })
+    </script>
 {% endblock %}

@@ -1,0 +1,17 @@
+<div class="page-header">
+    <h3>Comments on Images You Posted</h3>
+</div>
+{% if photo_comments %}
+    {% load endless %}
+    {% paginate 30 photo_comments %}
+    <div class="row">
+        {% for comment in photo_comments %}
+            {% include "partials/comment_preview_large.html" %}
+        {% endfor %}
+    </div>
+    <div class="row">
+        <ul class="pagination">
+            {% show_pages %}
+        </ul>
+    </div>
+{% endif %}
