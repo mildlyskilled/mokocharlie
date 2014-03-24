@@ -1,7 +1,7 @@
 BEGIN;
 # MIGRATE users TO DJANGO USERS
 
-INSERT INTO photos_mokouser (password,
+INSERT INTO common_mokouser (password,
                              last_login,
                              is_superuser,
                              first_name,
@@ -32,9 +32,9 @@ AFTER `caption`;
 UPDATE `photo`
 SET owner = (SELECT
                id
-             FROM photos_mokouser
+             FROM common_mokouser
              WHERE email = "kwakuchintoh@gmail.com");
-ALTER TABLE `photo` ADD FOREIGN KEY (`owner`) REFERENCES `photos_mokouser` (`id`)
+ALTER TABLE `photo` ADD FOREIGN KEY (`owner`) REFERENCES `common_mokouser` (`id`)
   ON DELETE CASCADE
   ON UPDATE CASCADE;
 
@@ -69,7 +69,7 @@ INSERT INTO photo (image_id,
     times_rated,
     published
   FROM user_image_library
-    JOIN photos_mokouser AS u ON uploader_email = u.email;
+    JOIN common_mokouser AS u ON uploader_email = u.email;
 
 # put those photos in an album lookup as well
 INSERT INTO photo_album (photo_id, album_id)

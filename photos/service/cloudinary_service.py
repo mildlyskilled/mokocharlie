@@ -1,9 +1,10 @@
+import urllib2
+
 import os
 import cloudinary
 import cloudinary.uploader
 import cloudinary.api
-import urllib2
-from photos.models import Photo, UserImage
+from common.models import Photo, UserImage
 
 
 class CloudinaryService():

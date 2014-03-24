@@ -20,7 +20,7 @@ class Album(models.Model):
     cover = models.ForeignKey('Photo', blank=True, null=True, related_name='cover_photo')
     created_at = models.DateTimeField()
     updated_at = models.DateTimeField()
-    published = models.IntegerField()
+    published = models.BooleanField()
     photos = models.ManyToManyField('Photo', through='PhotoAlbum')
 
     class Meta:
@@ -45,6 +45,11 @@ class Album(models.Model):
 
         return self.photos.order_by('?')[0]
 
+    def album_images(self):
+        return self.photos.count()
+
+    album_images.short_description = "Images in Album"
+
 
 class Photo(models.Model):
     id = models.IntegerField(primary_key=True)
@@ -59,7 +64,7 @@ class Photo(models.Model):
     owner = models.ForeignKey('MokoUser', related_name='photo_owner', db_column='owner')
     total_rating = models.BigIntegerField()
     times_rated = models.IntegerField()
-    published = models.IntegerField()
+    published = models.BooleanField(default=False)
     deleted_at = models.DateTimeField(blank=True, null=True)
     albums = models.ManyToManyField('Album', through='PhotoAlbum', related_name='photo_albums')
 
@@ -72,50 +77,18 @@ class Photo(models.Model):
 
     def get_absolute_url(self):
         from django.core.urlresolvers import reverse
+
         return reverse('photo_view', args=[str(self.id)])
 
+    def get_albums(self):
+        return "<br />".join([a.label for a in self.albums.all()])
 
-class AppData(models.Model):
-    id = models.IntegerField(primary_key=True)
-    app_name = models.TextField()
-    app_description = models.TextField()
-    app_key = models.TextField()
-    date_created = models.DateTimeField()
-    created_by = models.CharField(max_length=41)
-    enabled = models.IntegerField(blank=True, null=True)
-    deleted = models.IntegerField(blank=True, null=True)
-    deleted_by = models.CharField(max_length=41, blank=True)
-    deleted_date = models.DateTimeField(blank=True, null=True)
-
-    class Meta:
-        db_table = 'app_data'
-
-
-class AppProperties(models.Model):
-    id = models.IntegerField(primary_key=True)
-    app = models.ForeignKey(AppData)
-    definition = models.ForeignKey('AppPropertyDefinitions')
-    property_data = models.TextField()
-
-    class Meta:
-        db_table = 'app_properties'
-
-
-class AppPropertyDefinitions(models.Model):
-    id = models.IntegerField(primary_key=True)
-    prop_handle = models.CharField(max_length=150)
-    prop_name = models.CharField(max_length=250)
-    prop_type = models.CharField(max_length=150)
-    prop_required = models.IntegerField()
-    prop_protected = models.IntegerField()
-
-    class Meta:
-        db_table = 'app_property_definitions'
+    get_albums.short_description = 'Image Appears In'
 
 
 class Hotel(models.Model):
     id = models.IntegerField(primary_key=True)
-    featured = models.IntegerField()
+    featured = models.BooleanField()
     hospitality_type = models.CharField(max_length=20)
     name = models.TextField()
     description = models.TextField()
@@ -123,7 +96,10 @@ class Hotel(models.Model):
     telephone = models.TextField()
     website = models.TextField()
     date_added = models.DateTimeField()
-    published = models.IntegerField()
+    published = models.BooleanField()
+    albums = models.ManyToManyField('Album', through='HospitalityAlbum', blank=True, null=True,
+                                    related_name='hotel_album',
+                                    db_column='hospitality_id')
 
     class Meta:
         db_table = 'hospitality'
@@ -131,14 +107,19 @@ class Hotel(models.Model):
     def __unicode__(self):
         return self.name
 
+    def get_albums(self):
+        return "<br />".join([a.label for a in self.albums.all()])
 
-class HospitalityAlbumLookup(models.Model):
+    get_albums.short_description = 'Album'
+
+
+class HospitalityAlbum(models.Model):
     id = models.BigIntegerField(primary_key=True)
     hospitality = models.ForeignKey(Hotel)
     album = models.ForeignKey(Album)
 
     class Meta:
-        db_table = 'hospitality_album_lookup'
+        db_table = 'hospitality_albums'
 
 
 class Comment(models.Model):
@@ -147,8 +128,8 @@ class Comment(models.Model):
     image_comment = models.TextField()
     comment_author = models.CharField(max_length=150)
     comment_date = models.DateTimeField()
-    comment_approved = models.IntegerField()
-    comment_reported = models.IntegerField()
+    comment_approved = models.BooleanField()
+    comment_reported = models.BooleanField()
     comment_report_type = models.IntegerField()
     report_comments = models.TextField(blank=True)
 
@@ -222,26 +203,6 @@ class SearchData(models.Model):
         verbose_name_plural = "Search Data"
 
 
-class UserPhoto(models.Model):
-    id = models.IntegerField(primary_key=True)
-    image_id = models.CharField(max_length=15)
-    image_name = models.CharField(max_length=250)
-    image_path = models.CharField(max_length=150)
-    image_album = models.CharField(max_length=150)
-    image_caption = models.TextField()
-    image_source = models.CharField(max_length=11)
-    times_viewed = models.IntegerField()
-    date_added = models.DateTimeField()
-    image_uploader = models.CharField(max_length=150)
-    uploader_email = models.CharField(max_length=150)
-    total_rating = models.BigIntegerField()
-    times_rated = models.IntegerField()
-    published = models.IntegerField()
-
-    class Meta:
-        db_table = 'user_image_library'
-
-
 class VideoLibrary(models.Model):
     video_id = models.IntegerField(primary_key=True)
     external_id = models.CharField(max_length=150, blank=True)
@@ -289,11 +250,11 @@ class MokoUser(AbstractBaseUser, PermissionsMixin):
     first_name = models.CharField(_('first name'), max_length=30, blank=True)
     last_name = models.CharField(_('last name'), max_length=30, blank=True)
     is_staff = models.BooleanField(_('staff status'), default=False,
-        help_text=_('Designates whether the user can log into this admin '
-                    'site.'))
+                                   help_text=_('Designates whether the user can log into this admin '
+                                               'site.'))
     is_active = models.BooleanField(_('active'), default=True,
-        help_text=_('Designates whether this user should be treated as '
-                    'active. Unselect this instead of deleting accounts.'))
+                                    help_text=_('Designates whether this user should be treated as '
+                                                'active. Unselect this instead of deleting accounts.'))
     date_joined = models.DateTimeField(_('date joined'), default=timezone.now)
 
     objects = MokoUserManager()
@@ -304,6 +265,7 @@ class MokoUser(AbstractBaseUser, PermissionsMixin):
     class Meta:
         verbose_name = _('user')
         verbose_name_plural = _('users')
+
 
     def get_absolute_url(self):
         return "/users/%s/" % urlquote(self.email)
@@ -324,3 +286,6 @@ class MokoUser(AbstractBaseUser, PermissionsMixin):
         Sends an email to this User.
         """
         send_mail(subject, message, from_email, [self.email])
+
+    def __unicode__(self):
+        return self.get_full_name()

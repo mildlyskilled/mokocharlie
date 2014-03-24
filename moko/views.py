@@ -7,7 +7,6 @@ from django.shortcuts import redirect, resolve_url
 from django.contrib.auth import authenticate, login
 
 from moko.forms import LoginForm
-from photos.models import MokoUser
 
 
 class HomeViewTemplate(TemplateView):

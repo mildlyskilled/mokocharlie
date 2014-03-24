@@ -1,7 +1,7 @@
 import logging
 
 from django.views.generic.base import TemplateView
-from photos.models import *
+from common.models import *
 
 
 LOGGER = logging.getLogger(__name__)

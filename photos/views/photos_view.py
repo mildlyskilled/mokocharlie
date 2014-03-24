@@ -5,7 +5,7 @@ from django.views.generic.edit import CreateView
 from django.http import HttpResponseRedirect
 from moko.forms import CommentForm
 from moko.mixins.ajax import AjaxResponseMixin
-from photos.models import *
+from common.models import *
 
 
 LOGGER = logging.getLogger(__name__)

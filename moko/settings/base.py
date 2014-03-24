@@ -1,14 +1,3 @@
-"""
-Django settings for moko project.
-
-For more information on this file, see
-https://docs.djangoproject.com/en/1.6/topics/settings/
-
-For the full list of settings and their values, see
-https://docs.djangoproject.com/en/1.6/ref/settings/
-"""
-
-# Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import sys
 import urlparse
 
@@ -16,9 +5,6 @@ import os
 
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
-
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/1.6/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'pqu+!+4e==a0#=n(z$1b21iyalhh^5#%axb#$e!ga61*-8w!(l'
@@ -46,7 +32,8 @@ INSTALLED_APPS = (
     'django_gravatar',
     'social.apps.django_app.default',
     'endless_pagination',
-    'south'
+    'south',
+    'common'
 )
 
 MIDDLEWARE_CLASSES = (
@@ -175,11 +162,11 @@ AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
 )
 
-AUTH_USER_MODEL = 'photos.MokoUser'
-EMAIL_FROM = "info@mokocharlie.com"
-
 # pagination settings
 ENDLESS_PAGINATION_PER_PAGE = 20
 ENDLESS_PAGINATION_PREVIOUS_LABEL = '<i class="glyphicon glyphicon-chevron-left"></i>'
 ENDLESS_PAGINATION_NEXT_LABEL = '<i class="glyphicon glyphicon-chevron-right"></i>'
 ENDLESS_PAGINATION_PAGE_LIST_CALLABLE = 'endless_pagination.utils.get_elastic_page_numbers'
+
+AUTH_USER_MODEL = 'common.MokoUser'
+EMAIL_FROM = "info@mokocharlie.com"

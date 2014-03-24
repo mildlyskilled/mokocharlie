@@ -1,11 +1,11 @@
 from django import forms
 from django.forms import ModelForm, Textarea, TextInput, HiddenInput
-from photos.models import Comment
+from common.models import Comment
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Submit, Layout, Fieldset
 from django.utils.translation import gettext as _
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
-from photos.models import MokoUser
+from common.models import MokoUser
 
 
 class CommentForm(ModelForm):
