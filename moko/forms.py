@@ -47,6 +47,7 @@ class LoginForm(forms.Form):
     """ Basic username/password based login form. """
     email = forms.CharField()
     password = forms.CharField(widget=forms.PasswordInput)
+
     def __init__(self, *args, **kwargs):
         super(LoginForm, self).__init__(*args, **kwargs)
         self.fields['email'].error_messages['required'] = \
@@ -69,10 +70,18 @@ class CustomUserCreationForm(UserCreationForm):
     def __init__(self, *args, **kargs):
         super(CustomUserCreationForm, self).__init__(*args, **kargs)
         del self.fields['username']
+        self.fields['email'].error_messages['required'] = \
+            "Please enter a username"
+        self.helper = FormHelper()
+        self.helper.form_class = 'form-horizontal'
+        self.helper.label_class = 'col-lg-3'
+        self.helper.field_class = 'col-lg-7 login-fields'
+        self.helper.add_input(Submit('submit', 'Save'))
+
 
     class Meta:
         model = MokoUser
-        fields = ("email",)
+        fields = ("email", "first_name", "last_name")
 
 
 class CustomUserChangeForm(UserChangeForm):

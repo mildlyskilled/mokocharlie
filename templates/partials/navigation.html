@@ -29,10 +29,13 @@
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                         {% load gravatar %}
                         {% gravatar user.email 20 %} {{ user.first_name }} {{ user.last_name }}
-                    <b class="caret"></b></a>
+                        <b class="caret"></b></a>
                     <ul class="dropdown-menu">
                         <li><a href="{% url 'profile' %}">My Profile</a></li>
                         <li><a href="#">My Images</a></li>
+                        {% if user.is_superuser %}
+                            <li><a href="/admin">Site Admin</a></li>
+                        {% endif %}
                         <li><a href="{% url 'logout' %}?next={{ request.path }}">Logout</a></li>
                     </ul>
                 {% endif %}

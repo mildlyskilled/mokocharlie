@@ -87,7 +87,6 @@ try:
             'PORT': url.port,
         })
 
-
         if url.scheme == 'mysql':
             DATABASES['default']['ENGINE'] = 'django.db.backends.mysql'
 except Exception:
@@ -124,9 +123,9 @@ TEMPLATE_DIRS = (
 
 # Cloudinary settings for Django. Add to your settings file.
 CLOUDINARY = {
-  'cloud_name': 'hv52shllz',
-  'api_key': '211234747938451',
-  'api_secret': 'ATmGWjd4_UyVsC9vwTfLqI_xzx0',
+    'cloud_name': 'hv52shllz',
+    'api_key': '211234747938451',
+    'api_secret': 'ATmGWjd4_UyVsC9vwTfLqI_xzx0',
 }
 
 CRISPY_TEMPLATE_PACK = 'bootstrap3'
@@ -151,11 +150,14 @@ SOCIAL_AUTH_FACEBOOK_SECRET = "1abaa53b4babeb3c860506d8f57e577a"
 
 SOCIAL_AUTH_LINKEDIN_OAUTH2_KEY = "77esqvhx7ukhea"
 SOCIAL_AUTH_LINKEDIN_OAUTH2_SECRET = "ICfanfvnlIjY7o3N"
-SOCIAL_AUTH_LINKEDIN_OAUTH2_SCOPE = ['r_emailaddress', 'r_basicprofile']
-SOCIAL_AUTH_LINKEDIN_OAUTH2_FIELD_SELECTORS = ['email-address',]
-SOCIAL_AUTH_LINKEDIN_OAUTH2_EXTRA_DATA = [('email-address', 'email_address')]
+SOCIAL_AUTH_LINKEDIN_OAUTH2_SCOPE = ['r_basicprofile', 'r_emailaddress']
+SOCIAL_AUTH_LINKEDIN_OAUTH2_FIELD_SELECTORS = ['id', 'email-address', 'first-name', 'last-name']
+SOCIAL_AUTH_LINKEDIN_OAUTH2_EXTRA_DATA = [('id', 'id'),
+                                          ('first-name', 'first_name'),
+                                          ('last-name', 'last_name'),
+                                          ('email-address', 'email_address')]
 
-SOCIAL_AUTH_PROTECTED_USER_FIELDS = ['email', ]
+#SOCIAL_AUTH_PROTECTED_USER_FIELDS = ['email', ]
 
 SESSION_SERIALIZER = 'django.contrib.sessions.serializers.JSONSerializer'
 LOGIN_URL = "/login"
@@ -187,8 +189,10 @@ SOCIAL_AUTH_PIPELINE = (
     'social.pipeline.social_auth.auth_allowed',
     'social.pipeline.social_auth.social_user',
     'social.pipeline.user.get_username',
+    'social.pipeline.social_auth.associate_by_email',  # <--- enable this one
     'social.pipeline.user.create_user',
     'social.pipeline.social_auth.associate_user',
     'social.pipeline.social_auth.load_extra_data',
-    'social.pipeline.user.user_details',
+    'social.pipeline.user.user_details'
+
 )

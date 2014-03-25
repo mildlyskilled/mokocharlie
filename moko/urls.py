@@ -13,6 +13,7 @@ urlpatterns = patterns('',
 
                        # Accounts
                        url(r'^profile/$', ProfileViewTemplate.as_view(), name='profile'),
+                       url(r'^profile/new$', ExtraDetailsViewTemplate.as_view(), name='new_profile'),
                        # Photo Endpoints
                        url(r'^photos/$', PhotosTemplate.as_view(), name="photo_list"),
                        url(r'^photos/view/(?P<image_id>\d+)/$', PhotoViewTemplate.as_view(), name='photo_view'),
