@@ -24,12 +24,17 @@
                     </div>
                 </div>
                 <div class="panel-body">
-                    <a href="{% url 'social:begin' 'linkedin-oauth2' %}?next={{ request.GET.next }}"
-                       class="social-login-linkedin">LinkedIn</a>
-                    <a href="{% url 'social:begin' 'facebook' %}?next={{ request.GET.next }}"
-                       class="social-login-facebook">Facebook</a>
-                    <a href="{% url 'social:begin' 'twitter' %}?next={{ request.GET.next }}"
-                       class="social-login-twitter">Twitter</a>
+                    <div class="col-lg-6">
+                        <a href="{% url 'social:begin' 'linkedin-oauth2' %}?next={{ request.GET.next }}"
+                           class="social-login-linkedin">LinkedIn</a>
+                        <a href="{% url 'social:begin' 'facebook' %}?next={{ request.GET.next }}"
+                           class="social-login-facebook">Facebook</a>
+                        <a href="{% url 'social:begin' 'twitter' %}?next={{ request.GET.next }}"
+                           class="social-login-twitter">Twitter</a>
+                    </div>
+                    <div class="col-lg-6">
+                        <a href="/" class="btn btn-default">Go back to the homepage</a>
+                    </div>
                 </div>
             </div>
         </div>

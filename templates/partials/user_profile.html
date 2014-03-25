@@ -32,6 +32,13 @@
             {% else %}
                 <span class="social-login-twitter" title="Already connected to Twitter">Twitter</span>
             {% endif %}
+        {% else %}
+            <a href="{% url 'social:begin' 'linkedin-oauth2' %}?next={{ request.path }}"
+                   class="social-login-linkedin dissociate">LinkedIn</a>
+             <a href="{% url 'social:begin' 'facebook' %}?next={{ request.path }}"
+                   class="social-login-facebook dissociate">Facebook</a>
+            <a href="{% url 'social:begin' 'twitter' %}?next={{ request.path }}"
+                   class="social-login-twitter dissociate">Twitter</a>
         {% endif %}
 
 

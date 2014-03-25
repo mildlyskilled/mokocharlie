@@ -4,10 +4,10 @@
     </div>
     {% if user.get_photos.count > 0 %}
         {% load endless %}
-        {% paginate 10 user.get_photos as images %}
+        {% paginate 30 user.get_photos as images %}
         <div class="row">
             {% for image in images %}
-                <div class="col-sm-6 col-md-3" style="min-height: 140px">
+                <div style="min-height: 140px; width: 180px; float:left">
                     {% include "partials/image_preview.html" %}
                 </div>
             {% endfor %}
