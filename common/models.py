@@ -299,3 +299,13 @@ class MokoUser(AbstractBaseUser, PermissionsMixin):
 
     def __unicode__(self):
         return self.get_full_name()
+
+
+class Favourite(models.Model):
+    id = models.IntegerField(primary_key=True)
+    photo = models.ForeignKey(Photo)
+    user = models.ForeignKey(MokoUser)
+    created_at = models.DateTimeField(default=timezone.now())
+
+    class Meta:
+        db_table = 'favourite'

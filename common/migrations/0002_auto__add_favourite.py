@@ -8,176 +8,19 @@ from django.db import models
 class Migration(SchemaMigration):
 
     def forwards(self, orm):
-        # Adding model 'Album'
-        db.create_table(u'album', (
+        # Adding model 'Favourite'
+        db.create_table(u'favourite', (
             ('id', self.gf('django.db.models.fields.IntegerField')(primary_key=True)),
-            ('album_id', self.gf('django.db.models.fields.IntegerField')(null=True, blank=True)),
-            ('label', self.gf('django.db.models.fields.CharField')(max_length=150)),
-            ('description', self.gf('django.db.models.fields.TextField')(blank=True)),
-            ('cover', self.gf('django.db.models.fields.related.ForeignKey')(blank=True, related_name=u'cover_photo', null=True, to=orm['common.Photo'])),
-            ('created_at', self.gf('django.db.models.fields.DateTimeField')()),
-            ('updated_at', self.gf('django.db.models.fields.DateTimeField')()),
-            ('published', self.gf('django.db.models.fields.BooleanField')()),
+            ('photo', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['common.Photo'])),
+            ('user', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['common.MokoUser'])),
+            ('created_at', self.gf('django.db.models.fields.DateTimeField')(default=datetime.datetime(2014, 3, 25, 0, 0))),
         ))
-        db.send_create_signal(u'common', ['Album'])
-
-        # Adding model 'Photo'
-        db.create_table(u'photo', (
-            ('id', self.gf('django.db.models.fields.IntegerField')(primary_key=True)),
-            ('image_id', self.gf('django.db.models.fields.CharField')(max_length=20)),
-            ('name', self.gf('django.db.models.fields.CharField')(max_length=250)),
-            ('path', self.gf('django.db.models.fields.CharField')(max_length=150)),
-            ('caption', self.gf('django.db.models.fields.TextField')()),
-            ('video', self.gf('django.db.models.fields.CharField')(max_length=15, blank=True)),
-            ('times_viewed', self.gf('django.db.models.fields.IntegerField')()),
-            ('created_at', self.gf('django.db.models.fields.DateTimeField')()),
-            ('updated_at', self.gf('django.db.models.fields.DateTimeField')()),
-            ('owner', self.gf('django.db.models.fields.related.ForeignKey')(related_name=u'photo_owner', db_column=u'owner', to=orm['common.MokoUser'])),
-            ('total_rating', self.gf('django.db.models.fields.BigIntegerField')()),
-            ('times_rated', self.gf('django.db.models.fields.IntegerField')()),
-            ('published', self.gf('django.db.models.fields.BooleanField')(default=False)),
-            ('deleted_at', self.gf('django.db.models.fields.DateTimeField')(null=True, blank=True)),
-        ))
-        db.send_create_signal(u'common', ['Photo'])
-
-        # Adding model 'Hotel'
-        db.create_table(u'hospitality', (
-            ('id', self.gf('django.db.models.fields.IntegerField')(primary_key=True)),
-            ('featured', self.gf('django.db.models.fields.BooleanField')()),
-            ('hospitality_type', self.gf('django.db.models.fields.CharField')(max_length=20)),
-            ('name', self.gf('django.db.models.fields.TextField')()),
-            ('description', self.gf('django.db.models.fields.TextField')()),
-            ('address', self.gf('django.db.models.fields.TextField')()),
-            ('telephone', self.gf('django.db.models.fields.TextField')()),
-            ('website', self.gf('django.db.models.fields.TextField')()),
-            ('date_added', self.gf('django.db.models.fields.DateTimeField')()),
-            ('published', self.gf('django.db.models.fields.BooleanField')()),
-        ))
-        db.send_create_signal(u'common', ['Hotel'])
-
-        # Adding model 'HospitalityAlbum'
-        db.create_table(u'hospitality_albums', (
-            ('id', self.gf('django.db.models.fields.BigIntegerField')(primary_key=True)),
-            ('hospitality', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['common.Hotel'])),
-            ('album', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['common.Album'])),
-        ))
-        db.send_create_signal(u'common', ['HospitalityAlbum'])
-
-        # Adding model 'Comment'
-        db.create_table(u'image_comments', (
-            ('comment_id', self.gf('django.db.models.fields.BigIntegerField')(primary_key=True)),
-            ('image', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['common.Photo'])),
-            ('image_comment', self.gf('django.db.models.fields.TextField')()),
-            ('comment_author', self.gf('django.db.models.fields.CharField')(max_length=150)),
-            ('comment_date', self.gf('django.db.models.fields.DateTimeField')()),
-            ('comment_approved', self.gf('django.db.models.fields.BooleanField')()),
-            ('comment_reported', self.gf('django.db.models.fields.BooleanField')()),
-            ('comment_report_type', self.gf('django.db.models.fields.IntegerField')()),
-            ('report_comments', self.gf('django.db.models.fields.TextField')(blank=True)),
-        ))
-        db.send_create_signal(u'common', ['Comment'])
-
-        # Adding model 'PhotoStory'
-        db.create_table(u'photo_stories', (
-            ('story_id', self.gf('django.db.models.fields.IntegerField')(primary_key=True)),
-            ('story_name', self.gf('django.db.models.fields.CharField')(max_length=150)),
-            ('story_description', self.gf('django.db.models.fields.TextField')()),
-            ('story_album', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['common.Album'], db_column=u'story_album')),
-            ('date_added', self.gf('django.db.models.fields.DateTimeField')()),
-            ('published', self.gf('django.db.models.fields.IntegerField')()),
-        ))
-        db.send_create_signal(u'common', ['PhotoStory'])
-
-        # Adding model 'Promotion'
-        db.create_table(u'promotions', (
-            ('promo_id', self.gf('django.db.models.fields.IntegerField')(primary_key=True)),
-            ('promo_handle', self.gf('django.db.models.fields.CharField')(max_length=50, blank=True)),
-            ('promo_type', self.gf('django.db.models.fields.CharField')(max_length=20)),
-            ('promo_name', self.gf('django.db.models.fields.CharField')(max_length=150)),
-            ('promo_instructions', self.gf('django.db.models.fields.TextField')()),
-            ('promo_album', self.gf('django.db.models.fields.IntegerField')(null=True, blank=True)),
-            ('static_image_path', self.gf('django.db.models.fields.CharField')(max_length=250)),
-            ('start_date', self.gf('django.db.models.fields.DateTimeField')()),
-            ('end_date', self.gf('django.db.models.fields.DateTimeField')()),
-            ('featured', self.gf('django.db.models.fields.IntegerField')()),
-            ('published', self.gf('django.db.models.fields.IntegerField')()),
-        ))
-        db.send_create_signal(u'common', ['Promotion'])
-
-        # Adding model 'VideoLibrary'
-        db.create_table(u'video_library', (
-            ('video_id', self.gf('django.db.models.fields.IntegerField')(primary_key=True)),
-            ('external_id', self.gf('django.db.models.fields.CharField')(max_length=150, blank=True)),
-        ))
-        db.send_create_signal(u'common', ['VideoLibrary'])
-
-        # Adding model 'MokoUser'
-        db.create_table(u'common_mokouser', (
-            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('password', self.gf('django.db.models.fields.CharField')(max_length=128)),
-            ('last_login', self.gf('django.db.models.fields.DateTimeField')(default=datetime.datetime.now)),
-            ('is_superuser', self.gf('django.db.models.fields.BooleanField')(default=False)),
-            ('email', self.gf('django.db.models.fields.EmailField')(unique=True, max_length=254)),
-            ('first_name', self.gf('django.db.models.fields.CharField')(max_length=30, blank=True)),
-            ('last_name', self.gf('django.db.models.fields.CharField')(max_length=30, blank=True)),
-            ('is_staff', self.gf('django.db.models.fields.BooleanField')(default=False)),
-            ('is_active', self.gf('django.db.models.fields.BooleanField')(default=True)),
-            ('date_joined', self.gf('django.db.models.fields.DateTimeField')(default=datetime.datetime.now)),
-        ))
-        db.send_create_signal(u'common', ['MokoUser'])
-
-        # Adding M2M table for field groups on 'MokoUser'
-        m2m_table_name = db.shorten_name(u'common_mokouser_groups')
-        db.create_table(m2m_table_name, (
-            ('id', models.AutoField(verbose_name='ID', primary_key=True, auto_created=True)),
-            ('mokouser', models.ForeignKey(orm[u'common.mokouser'], null=False)),
-            ('group', models.ForeignKey(orm[u'auth.group'], null=False))
-        ))
-        db.create_unique(m2m_table_name, ['mokouser_id', 'group_id'])
-
-        # Adding M2M table for field user_permissions on 'MokoUser'
-        m2m_table_name = db.shorten_name(u'common_mokouser_user_permissions')
-        db.create_table(m2m_table_name, (
-            ('id', models.AutoField(verbose_name='ID', primary_key=True, auto_created=True)),
-            ('mokouser', models.ForeignKey(orm[u'common.mokouser'], null=False)),
-            ('permission', models.ForeignKey(orm[u'auth.permission'], null=False))
-        ))
-        db.create_unique(m2m_table_name, ['mokouser_id', 'permission_id'])
+        db.send_create_signal(u'common', ['Favourite'])
 
 
     def backwards(self, orm):
-        # Deleting model 'Album'
-        db.delete_table(u'album')
-
-        # Deleting model 'Photo'
-        db.delete_table(u'photo')
-
-        # Deleting model 'Hotel'
-        db.delete_table(u'hospitality')
-
-        # Deleting model 'HospitalityAlbum'
-        db.delete_table(u'hospitality_albums')
-
-        # Deleting model 'Comment'
-        db.delete_table(u'image_comments')
-
-        # Deleting model 'PhotoStory'
-        db.delete_table(u'photo_stories')
-
-        # Deleting model 'Promotion'
-        db.delete_table(u'promotions')
-
-        # Deleting model 'VideoLibrary'
-        db.delete_table(u'video_library')
-
-        # Deleting model 'MokoUser'
-        db.delete_table(u'common_mokouser')
-
-        # Removing M2M table for field groups on 'MokoUser'
-        db.delete_table(db.shorten_name(u'common_mokouser_groups'))
-
-        # Removing M2M table for field user_permissions on 'MokoUser'
-        db.delete_table(db.shorten_name(u'common_mokouser_user_permissions'))
+        # Deleting model 'Favourite'
+        db.delete_table(u'favourite')
 
 
     models = {
@@ -217,6 +60,13 @@ class Migration(SchemaMigration):
             'image': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['common.Photo']"}),
             'image_comment': ('django.db.models.fields.TextField', [], {}),
             'report_comments': ('django.db.models.fields.TextField', [], {'blank': 'True'})
+        },
+        u'common.favourite': {
+            'Meta': {'object_name': 'Favourite', 'db_table': "u'favourite'"},
+            'created_at': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(2014, 3, 25, 0, 0)'}),
+            'id': ('django.db.models.fields.IntegerField', [], {'primary_key': 'True'}),
+            'photo': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['common.Photo']"}),
+            'user': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['common.MokoUser']"})
         },
         u'common.hospitalityalbum': {
             'Meta': {'object_name': 'HospitalityAlbum', 'db_table': "u'hospitality_albums'"},
