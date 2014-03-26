@@ -297,14 +297,19 @@ class MokoUser(AbstractBaseUser, PermissionsMixin):
             social_accounts[social.provider.replace('-', '_')] = social
         return social_accounts
 
+    @property
+    def favourite_photos(self):
+        return Photo.favourites.objects.filter(user_id=self.id)
+
     def __unicode__(self):
         return self.get_full_name()
 
 
 class Favourite(models.Model):
-    id = models.IntegerField(primary_key=True)
+    id = models.AutoField(primary_key=True)
     photo = models.ForeignKey(Photo)
     user = models.ForeignKey(MokoUser)
+    client_ip = models.CharField(max_length=13, null=True)
     created_at = models.DateTimeField(default=timezone.now())
 
     class Meta:

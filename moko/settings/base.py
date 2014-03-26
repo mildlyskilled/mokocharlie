@@ -27,6 +27,7 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'photos',
+    'ipware',
     'cloudinary',
     'crispy_forms',
     'django_gravatar',
@@ -203,3 +204,40 @@ SOCIAL_AUTH_DISCONNECT_PIPELINE = (
     'social.pipeline.disconnect.revoke_tokens',
     'social.pipeline.disconnect.disconnect'
 )
+
+# you can provide your own meta precedence order by
+# including IPWARE_META_PRECEDENCE_ORDER in your
+# settings.py. The check is done from top to bottom
+IPWARE_META_PRECEDENCE_LIST = (
+    'HTTP_X_FORWARDED_FOR',  # client, proxy1, proxy2
+    'HTTP_CLIENT_IP',
+    'HTTP_X_REAL_IP',
+    'HTTP_X_FORWARDED',
+    'HTTP_X_CLUSTER_CLIENT_IP',
+    'HTTP_FORWARDED_FOR',
+    'HTTP_FORWARDED',
+    'HTTP_VIA',
+    'REMOTE_ADDR',
+)
+
+# you can provide your own private IP prefixes by
+# including IPWARE_PRIVATE_IP_PREFIX in your setting.py
+# IPs that start with items listed below are ignored
+# and are not considered a `real` IP address
+IPWARE_PRIVATE_IP_PREFIX = (
+                               '0.', '1.', '2.',  # externally non-routable
+                               '10.',  # class A private block
+                               '169.254.',  # link-local block
+                               '172.16.', '172.17.', '172.18.', '172.19.',
+                               '172.20.', '172.21.', '172.22.', '172.23.',
+                               '172.24.', '172.25.', '172.26.', '172.27.',
+                               '172.28.', '172.29.', '172.30.', '172.31.',  # class B private blocks
+                               '192.0.2.',  # reserved for documentation and example code
+                               '192.168.',  # class C private block
+                               '255.255.255.',  # IPv4 broadcast address
+                           ) + (  # the following addresses MUST be in lowercase)
+                                  '2001:db8:',  # reserved for documentation and example code
+                                  'fc00:',  # IPv6 private block
+                                  'fe80:',  # link-local unicast
+                                  'ff00:',  # IPv6 multicast
+                           )

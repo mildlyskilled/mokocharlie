@@ -24,6 +24,9 @@ urlpatterns = patterns('',
                        # AJAX endpoint for comment form
                        url(r'^comments/new_form/$', NewCommentViewTemplate.as_view(), name='comment_form'),
                        url(r'^comments/$', CommentListViewTemplate.as_view(), name='comment_list'),
+                       # Favouriting photos
+                       #AJAX endpoint for favouriting a photo
+                       url(r'^photos/favourite/(?P<photo_id>\d+)/$', FavouritePhotoViewTemplate.as_view(), name='favourite_photo'),
                        # Admin endpoints
                        (r'^admin/', include(admin.site.urls)),
                        # Social logins

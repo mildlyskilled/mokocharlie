@@ -3,6 +3,8 @@ import logging
 from django.views.generic.base import TemplateView
 from django.views.generic.edit import CreateView
 from django.http import HttpResponseRedirect
+from django.contrib import messages
+from ipware.ip import get_real_ip, get_ip
 from moko.forms import CommentForm
 from moko.mixins.ajax import AjaxResponseMixin
 from common.models import *
@@ -34,11 +36,11 @@ class PhotosTemplate(TemplateView):
         if _order in _order_dict_unsorted:
             if _order == 'mostcomments':
                 from django.db.models.aggregates import Sum
+
                 images = Photo.objects.annotate(comment_count=Sum('comment')).order_by(
                     _order_dict_unsorted[_order][0]).all()
             else:
                 images = Photo.objects.distinct().order_by(_order_dict_unsorted[_order][0]).all()
-
 
         _order_dict = OrderedDict(sorted(_order_dict_unsorted.items()), key=lambda t: t[0], reverse=True)
         comments = Comment.objects.all().filter(comment_approved=1)[:12]
@@ -75,6 +77,12 @@ class PhotoViewTemplate(TemplateView):
         context["image"] = photo
         context['comments'] = photo.comment_set.filter(comment_approved=1)
         context["recent_images"] = Photo.objects.all()[:8]
+        if self.request.user.is_authenticated():
+            # get the favourite by user and image id
+            context["favourited"] = Favourite.objects.filter(user_id=self.request.user.id).filter(photo_id=image_id)
+        else:
+            ip = get_real_ip(self.request) or get_ip(self.request)
+            context["favourited"] = Favourite.objects.filter(client_ip=ip).filter(photo_id=image_id)
 
         context["total_photos"] = album_photos.count()
         context["next_image"] = album_photos[next_item]
@@ -85,7 +93,6 @@ class PhotoViewTemplate(TemplateView):
             form = CommentForm(self.request.POST)
             if form.is_valid():
                 form_data = form.cleaned_data
-                print form_data
         return context
 
 
@@ -149,3 +156,23 @@ class CommentListViewTemplate(TemplateView):
         context = super(CommentListViewTemplate, self).get_context_data()
         context['comments'] = comments
         return context
+
+
+class FavouritePhotoViewTemplate(AjaxResponseMixin, TemplateView):
+    def get(self, request, *args, **kwargs):
+        ip = get_real_ip(request) or get_ip(request)
+        image = kwargs['photo_id']
+        data = {'status': 'failed'}
+
+        f = Favourite.objects.filter(user_id=request.user.id).filter(photo_id=image)
+        if f:
+            data['message'] = 'You have already added this image to your favourites'
+        else:
+            try:
+                f1 = Favourite(photo_id=image, client_ip=ip, user_id=request.user.id)
+                f1.save()
+                data = {'status': 'success', 'photo': image, 'ip': ip, 'user': request.user.id}
+            except e:
+                data['message'] = e
+
+        return self.render_to_json_response(data)

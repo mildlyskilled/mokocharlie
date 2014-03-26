@@ -85,4 +85,20 @@ INSERT INTO photo_album (photo_id, album_id)
                      FROM user_image_library);
 
 DROP TABLE IF EXISTS user_image_library;
+
+# Favourites
+CREATE TABLE IF NOT EXISTS `favourite` (
+  `id` int(11) NOT NULL,
+  `photo_id` int(11) unsigned NOT NULL,
+  `user_id` int(11) DEFAULT NULL,
+  `created_at` datetime NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `photo_id` (`photo_id`),
+  KEY `user_id` (`user_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+ALTER TABLE `favourite`
+  ADD CONSTRAINT `favourite_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `common_mokouser` (`id`) ON DELETE SET NULL,
+  ADD CONSTRAINT `favourite_ibfk_1` FOREIGN KEY (`photo_id`) REFERENCES `photo` (`id`) ON DELETE CASCADE;
+
 COMMIT;
