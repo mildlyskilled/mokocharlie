@@ -1,0 +1,89 @@
+{% extends "master.html" %}
+{% load cloudinary %}
+{% load url from future %}
+{% block title %}
+    {{ image }}
+{% endblock %}
+{% block extrahead %}
+    <script src="{{ STATIC_URL }}js/main.js"></script>
+    <script src="{{ STATIC_URL }}js/photos.js"></script>
+{% endblock %}
+{% block content %}
+    <div class="col-lg-9">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <div class="row">
+                    <div class="col-lg-10">
+                        <h2>{{ story }}</h2>
+                    </div>
+                    <div class="col-lg-2">
+                        <button type="button" id="comment-trigger"
+                                class="btn btn-default btn-sm pull-right col-lg-offset-1"
+                                onclick="toggleCommentForm({{ image.id }})"
+                                data-toggle="tooltip" data-placement="top" title="Click here to post a comment">
+                            <span class="glyphicon glyphicon-comment"></span>
+                        </button>
+                        <button type="button" id="like-button" class="btn btn-default btn-sm pull-right"
+                                data-toggle="tooltip" data-placement="top" title="Click here to like this image"
+                                onclick="favouritePhoto({{ image.id }})">
+                            <span class="glyphicon glyphicon-heart{% if not favourited %}-empty{% endif %}"></span>
+                        </button>
+                    </div>
+                    <br/>
+                    <h6 class="pull-right" style="margin-right: 4px;">
+                        <small>
+                            <span class="glyphicon glyphicon-eye-open"></span> {{ image.times_viewed }} views
+                            <span class="glyphicon glyphicon-comment"></span> {{ comments.count }} comments
+                        </small>
+                    </h6>
+                </div>
+            </div>
+            <div class="panel-body">
+                <div class="text-center">
+                    <a href="/photos/view/{{ previous_image.id }}">
+                        {% cloudinary image.image_id|add:'.jpg' transformation="moko_resize_730_l" alt=image width=730 %}
+                    </a>
+                </div>
+            </div>
+            <div class="panel-footer">
+                <ul class="pager">
+                    <li class="previous">
+                        <a href="{% url 'story_view_with_image' story_id=story.story_id image_id=previous_image.id %}"><i
+                                class="glyphicon glyphicon-chevron-left"></i></a>
+                    </li>
+
+                    <li class="next">
+                        <a href="{% url 'story_view_with_image' story_id=story.story_id image_id=next_image.id %}"><i class="glyphicon glyphicon-chevron-right"></i></a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <hr/>
+
+        <div id="comment-list">
+
+        </div>
+
+        <hr/>
+        <div id="comment-form" style="display: none">
+        </div>
+    </div>
+    <div class="col-lg-3">
+        <div class="page-header">
+            <h5>About This Image</h5>
+        </div>
+        <div class="well well-sm">
+            {{ image.caption }}
+        </div>
+
+        <abbr title="You can upload your own images as well, just log in">Uploaded
+            by: {{ image.owner.get_full_name }}</abbr>
+    </div>
+    <script type="application/javascript">
+        window.onload = function () {
+            loadComments({{ image.id }}, 'image');
+            $('#comment-trigger').tooltip();
+            $('#like-button').tooltip();
+        }
+    </script>
+{% endblock %}

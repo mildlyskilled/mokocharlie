@@ -1,0 +1,30 @@
+{% extends "master.html" %}
+{% block title %}Organising Community Photos{% endblock %}
+{% block extrahead %}
+    <script src="{{ STATIC_URL }}js/main.js"></script>
+    <script src="{{ STATIC_URL }}js/photos.js"></script>
+{% endblock %}
+{% block content %}
+    <div class='row'>
+        <div class="col-lg-8">
+            {% for story in stories %}
+                {% include "partials/story_preview.html" %}
+            {% endfor %}
+        </div>
+        <div class="col-lg-4">
+            <div class="page-header">
+                <h5>Photo Story Comments</h5>
+            </div>
+            {% for comment in comments %}
+                {% include "partials/comment_preview.html" %}
+            {% endfor %}
+        </div>
+    </div>
+
+    <script type="application/javascript">
+        window.onload = function () {
+            endlessPaginatorStyleFix()
+        }
+    </script>
+
+{% endblock %}

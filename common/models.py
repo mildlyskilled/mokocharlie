@@ -10,6 +10,7 @@ from django.utils import timezone
 from django.utils.http import urlquote
 from moko import settings
 from django.utils.translation import ugettext_lazy as _
+from django.core.urlresolvers import reverse
 
 
 class Album(models.Model):
@@ -76,12 +77,14 @@ class Photo(models.Model):
         return self.name
 
     def get_absolute_url(self):
-        from django.core.urlresolvers import reverse
-
         return reverse('photo_view', args=[str(self.id)])
 
     def get_albums(self):
         return "<br />".join([a.label for a in self.albums.all()])
+
+    @property
+    def get_comments(self):
+        return Comment.objects.filter(image=self)
 
     get_albums.short_description = 'Image Appears In'
 
@@ -160,7 +163,7 @@ class PhotoStory(models.Model):
     story_description = models.TextField()
     story_album = models.ForeignKey(Album, db_column='story_album')
     date_added = models.DateTimeField()
-    published = models.IntegerField()
+    published = models.BooleanField()
 
     class Meta:
         db_table = 'photo_stories'
@@ -171,8 +174,7 @@ class PhotoStory(models.Model):
         return self.story_name
 
     def get_absolute_url(self):
-        #TODO: use reverse url lookup for this
-        return "/stories/view/{0}".format(self.story_id)
+        return reverse('story_view', args=[str(self.story_id)])
 
 
 class Promotion(models.Model):

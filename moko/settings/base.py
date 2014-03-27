@@ -241,3 +241,11 @@ IPWARE_PRIVATE_IP_PREFIX = (
                                   'fe80:',  # link-local unicast
                                   'ff00:',  # IPv6 multicast
                            )
+
+CLOUDINARY_TRANSFORMATIONS = [
+    ("LARGE_COMMENT_PREVIEW", "comment_image_pre"),
+    ("SMALL_COMMENT_PREVIEW", "comment_image_thumbnail"),
+    ("IMAGE_THUMBNAIL_PREVIEW", "image_preview"),
+    ("ALBUM_COVER_PREVIEW", "album_preview"),
+    ("MAIN_IMAGE_VIEW", "moko_resize_730_l")
+]
