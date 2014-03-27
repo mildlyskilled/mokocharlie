@@ -249,3 +249,10 @@ CLOUDINARY_TRANSFORMATIONS = [
     ("ALBUM_COVER_PREVIEW", "album_preview"),
     ("MAIN_IMAGE_VIEW", "moko_resize_730_l")
 ]
+
+YOUTUBE_AUTH_EMAIL = '118063279160-9qge7douhfnghrn3dk8qnthfiglp5thl@developer.gserviceaccount.com'
+YOUTUBE_AUTH_PASSWORD = 'q89dYpx3d5QZ4tsFnvNnMaUE'
+YOUTUBE_DEVELOPER_KEY = 'AI39si5h_BDa5OGCp_pKdm394xA0f2kwnwQrXVQL_fLI0bG78nUC0YgJvrCc-lrShyB5qsDBpmRa7WwZK1XbrLgGyeFHG4os8g'
+YOUTUBE_CLIENT_ID = '118063279160-9qge7douhfnghrn3dk8qnthfiglp5thl.apps.googleusercontent.com'
+YOUTUBE_UPLOAD_REDIRECT_URL = '/youtube/videos/'
+YOUTUBE_DELETE_REDIRECT_URL = '/video/'
