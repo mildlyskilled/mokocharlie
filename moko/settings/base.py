@@ -26,6 +26,7 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'haystack',
     'photos',
     'ipware',
     'cloudinary',
@@ -256,3 +257,11 @@ YOUTUBE_DEVELOPER_KEY = 'AI39si5h_BDa5OGCp_pKdm394xA0f2kwnwQrXVQL_fLI0bG78nUC0Yg
 YOUTUBE_CLIENT_ID = '118063279160-9qge7douhfnghrn3dk8qnthfiglp5thl.apps.googleusercontent.com'
 YOUTUBE_UPLOAD_REDIRECT_URL = '/youtube/videos/'
 YOUTUBE_DELETE_REDIRECT_URL = '/video/'
+
+HAYSTACK_CONNECTIONS = {
+    'default': {
+        'ENGINE': 'haystack.backends.elasticsearch_backend.ElasticsearchSearchEngine',
+        'URL': 'https://np2fdvyv:4m0v2p37cknwe7js@box-4649745.us-east-1.bonsai.io/',
+        'INDEX_NAME': 'mokocharlie',
+    },
+}

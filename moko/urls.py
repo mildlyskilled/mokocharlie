@@ -1,5 +1,7 @@
 from django.conf.urls import patterns, include, url
 from django.contrib import admin
+from haystack.views import (SearchView, search_view_factory)
+from moko.forms import GeneralSearchForm
 from photos.views import *
 from moko.views import *
 
@@ -37,4 +39,10 @@ urlpatterns = patterns('',
                        (r'^admin/', include(admin.site.urls)),
                        # Social logins
                        url(r'^social/', include('social.apps.django_app.urls', namespace='social')),
+                       # Search endpoints
+                       url(r'^search/$', search_view_factory(
+                           view_class=SearchView,
+                           template='search/search.html',
+                           form_class=GeneralSearchForm
+                       ), name='search'),
 )

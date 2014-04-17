@@ -6,6 +6,7 @@ from crispy_forms.layout import Submit, Layout, Fieldset
 from django.utils.translation import gettext as _
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 from common.models import MokoUser
+from haystack.forms import ModelSearchForm
 
 
 class CommentForm(ModelForm):
@@ -96,3 +97,9 @@ class CustomUserChangeForm(UserChangeForm):
 
     class Meta:
         model = MokoUser
+
+
+class GeneralSearchForm(ModelSearchForm):
+    """ A form for performing search across Photos, Albums and Comments
+    """
+

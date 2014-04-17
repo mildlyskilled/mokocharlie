@@ -1,0 +1,14 @@
+{% load cloudinary %}
+<div class="col-sm-5 col-md-3" style="min-height: 294px;">
+    <div class="thumbnail">
+        <a href="{{ image.get_absolute_url }}">
+            {% cloudinary image.image_id|add:'.jpg' transformation="search_crop" alt=image %}
+        </a>
+
+        <div class="caption">
+            <h4>{{ image }}</h4>
+
+            <p>{{ image.caption|truncatewords:9 }}</p>
+        </div>
+    </div>
+</div>
