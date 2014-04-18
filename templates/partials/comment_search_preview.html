@@ -1,0 +1,13 @@
+{% load cloudinary %}
+<div class="col-sm-5 col-md-3" style="min-height: 294px;">
+    <div class="thumbnail">
+        <a href="{{ comment.image.get_absolute_url }}#comment_{{ comment.comment_id }}">
+            {% cloudinary comment.image.image_id|add:'.jpg' transformation="search_crop" alt=comment.image %}
+        </a>
+
+        <div class="caption">
+            <h4>{{ comment.image.name|truncatewords:3 }} <small><span class="label label-default">Comment</span></small></h4>
+            <p>{{ comment.image_comment|truncatewords:9 }}</p>
+        </div>
+    </div>
+</div>

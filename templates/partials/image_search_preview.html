@@ -6,7 +6,7 @@
         </a>
 
         <div class="caption">
-            <h4>{{ image }}</h4>
+            <h4>{{ image|truncatewords:3 }}</h4>
 
             <p>{{ image.caption|truncatewords:9 }}</p>
         </div>

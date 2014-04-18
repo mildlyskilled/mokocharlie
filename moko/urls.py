@@ -44,5 +44,5 @@ urlpatterns = patterns('',
                            view_class=SearchView,
                            template='search/search.html',
                            form_class=GeneralSearchForm
-                       ), name='search'),
+                       ), name='haystack_search'),
 )

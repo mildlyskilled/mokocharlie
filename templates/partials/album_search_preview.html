@@ -1,0 +1,13 @@
+{% load cloudinary %}
+<div class="col-sm-5 col-md-3" style="min-height: 294px;">
+    <div class="thumbnail">
+        <a href="{{ album.get_absolute_url }}">
+            {% cloudinary album.album_cover.image_id|add:'.jpg' transformation="search_crop" alt=album %}
+        </a>
+
+        <div class="caption">
+            <h4>{{ album|truncatewords:3 }} <small><span class="label label-default">Album</span></small></h4>
+            <p>{{ album.description|truncatewords:9 }}</p>
+        </div>
+    </div>
+</div>

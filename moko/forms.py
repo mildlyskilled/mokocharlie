@@ -6,7 +6,7 @@ from crispy_forms.layout import Submit, Layout, Fieldset
 from django.utils.translation import gettext as _
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 from common.models import MokoUser
-from haystack.forms import ModelSearchForm
+from haystack.forms import SearchForm
 
 
 class CommentForm(ModelForm):
@@ -99,7 +99,14 @@ class CustomUserChangeForm(UserChangeForm):
         model = MokoUser
 
 
-class GeneralSearchForm(ModelSearchForm):
+class GeneralSearchForm(SearchForm):
     """ A form for performing search across Photos, Albums and Comments
     """
+    def __init__(self, *args, **kwargs):
+        super(GeneralSearchForm,self).__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.form_class = 'form-horizontal'
+        self.helper.label_class = 'col-lg-3'
+        self.helper.field_class = 'col-lg-7 login-fields'
+
 

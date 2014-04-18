@@ -19,23 +19,42 @@
         </table>
 
         {% if query %}
-            <h3>Results</h3>
+            <h3>Results for
+                <small>{{ request.GET.q }}</small>
+            </h3>
             <div class="row">
                 {% for result in page.object_list %}
-                    {% include "partials/image_search_preview.html" with image=result.object %}
+                    {% if result.content_type == "common.photo" %}
+                        {% include "partials/image_search_preview.html" with image=result.object %}
+                    {% elif result.content_type == "common.album" %}
+                        {% include "partials/album_search_preview.html" with album=result.object %}
+                    {% elif result.content_type == "common.comment" %}
+                        {% include "partials/comment_search_preview.html" with comment=result.object %}
+                    {% endif %}
                 {% empty %}
                     <p>No results found.</p>
                 {% endfor %}
             </div>
 
             {% if page.has_previous or page.has_next %}
-                <div>
-                    {% if page.has_previous %}
-                        <a href="?q={{ query }}&amp;page={{ page.previous_page_number }}">{% endif %}&laquo; Previous
-                    {% if page.has_previous %}</a>{% endif %}
-                    |
-                    {% if page.has_next %}<a href="?q={{ query }}&amp;page={{ page.next_page_number }}">{% endif %}
-                    Next &raquo;{% if page.has_next %}</a>{% endif %}
+                <div class="panel-footer">
+                    <ul class="pager">
+                        <li class="previous pull-left">
+                            {% if page.has_previous %}
+                                <a href="?q={{ query }}&amp;page={{ page.previous_page_number }}">{% endif %}
+                            <i class="glyphicon glyphicon-chevron-left"></i>
+
+                            {% if page.has_previous %}</a>{% endif %}
+                        </li>
+                        <li>&nbsp;</li>
+                        <li class="next pull-right">
+                            {% if page.has_next %}
+                                <a href="?q={{ query }}&amp;page={{ page.next_page_number }}">{% endif %}
+                            <i class="glyphicon glyphicon-chevron-right"></i>
+                            {% if page.has_next %}</a>{% endif %}
+
+                        </li>
+                    </ul>
                 </div>
             {% endif %}
         {% else %}
