@@ -45,4 +45,8 @@ urlpatterns = patterns('',
                            template='search/search.html',
                            form_class=GeneralSearchForm
                        ), name='haystack_search'),
+                       # Hospitality
+                       url(r'^hospitality/$', HospitalityTemplate.as_view(), name='hospitality_list'),
+                       url(r'^hospitality/(?P<hospitality_id>\d+)$', HospitalityViewTemplate.as_view(),
+                           name='hospitality_view'),
 )

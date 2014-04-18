@@ -1,0 +1,49 @@
+{% extends "master.html" %}
+{% block title %} Organising Community Photos {% endblock %}
+{% block extrahead %}
+    <script src="{{ STATIC_URL }}js/main.js"></script>
+{% endblock %}
+{% block content %}
+    <div class='row'>
+        <div class="col-lg-8">
+            <div class="row">
+                {% load endless %}
+                {% paginate limit hotels %}
+                <ul class="thumbnails">
+                    {% for hotel in hotels %}
+                        {% include "partials/hospitality_preview.html" with hospitality=hotel %}
+                    {% endfor %}
+                </ul>
+            </div>
+            <ul class="pagination">
+                {% show_pages %}
+            </ul>
+        </div>
+        <div class="col-lg-4">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    People and Places
+                </div>
+                <div class="panel-body">
+                    You can upload your own images to the People and Places album click on the button below to begin
+                </div>
+                <div class="panel-footer">
+                    <a href="/upload" class="btn btn-success btn-sm">Upload Your Images</a> | <a
+                        class="btn btn-default btn-sm"
+                        href="/albums/peopleandplaces">People and Places</a>
+                </div>
+            </div>
+            <div class="page-header">
+                <h5>Most Recent Comments</h5>
+            </div>
+            {% for comment in comments %}
+                {% include "partials/comment_preview.html" %}
+            {% endfor %}
+        </div>
+    </div>
+    <script type="application/javascript">
+        window.onload = function () {
+            endlessPaginatorStyleFix()
+        }
+    </script>
+{% endblock %}

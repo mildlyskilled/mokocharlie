@@ -106,6 +106,7 @@ class Hotel(models.Model):
 
     class Meta:
         db_table = 'hospitality'
+        ordering = ['-featured', '-date_added']
 
     def __unicode__(self):
         return self.name
@@ -113,7 +114,14 @@ class Hotel(models.Model):
     def get_albums(self):
         return "<br />".join([a.label for a in self.albums.all()])
 
+    @property
+    def get_album(self):
+        return Album.objects.filter(hotel_album=self)[0]
+
     get_albums.short_description = 'Album'
+
+    def get_absolute_url(self):
+        return reverse('hospitality_view', args=[str(self.id)])
 
 
 class HospitalityAlbum(models.Model):

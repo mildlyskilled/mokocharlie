@@ -1,0 +1,17 @@
+{% load cloudinary %}
+<div class="col-sm-6 col-md-4" style="height: 230px">
+    <div class="thumbnail">
+        <a href="{{ hospitality.get_absolute_url }}">
+            {% cloudinary hospitality.get_album.album_cover.image_id|add:'.jpg' transformation="album_preview_fill_face" alt=hospitality %}</a>
+
+        <div class="caption">
+            <h5>
+                <a href="{{ hospitality.get_absolute_url }}">
+                    {% if hospitality.featured %}
+                    <i class="glyphicon glyphicon-star"> </i>
+                {% endif %}
+                    {{ hospitality|truncatewords:3 }}
+                </a></h5>
+        </div>
+    </div>
+</div>
