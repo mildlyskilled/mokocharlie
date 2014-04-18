@@ -40,7 +40,12 @@
                     </ul>
                 {% endif %}
             </ul>
-
+            <form class="navbar-form navbar-right" role="search" action="/search">
+                <div class="form-group">
+                    <input type="text" class="form-control" name="q"
+                           placeholder="Search {{ photo_count }} images">
+                </div>
+            </form>
         </div>
         <!-- /.navbar-collapse -->
     </div>
