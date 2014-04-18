@@ -1,13 +1,13 @@
 {% load cloudinary %}
-<div class="col-sm-6 col-md-4" style="min-height: 290px">
+<div class="col-sm-6 col-md-4" style="height: 290px">
     <div class="thumbnail">
         <a href="{{ album.get_absolute_url }}">
-            {% cloudinary album.album_cover.image_id|add:'.jpg' transformation="album_preview" alt=album %}</a>
+            {% cloudinary album.album_cover.image_id|add:'.jpg' transformation="album_preview_fill_face" alt=album %}</a>
 
         <div class="caption">
             <h5>
                 <a href="{{ album.get_absolute_url }}">
-                {{ album.label|truncatewords:4 }}
+                {{ album.label|truncatewords:3 }}
             </a></h5>
             <p>
                 <small><i class="glyphicon glyphicon-plus"> </i>

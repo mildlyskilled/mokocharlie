@@ -20,7 +20,7 @@
 
         {% if query %}
             <h3>Results for
-                <small>{{ request.GET.q }}</small>
+                <small>{{ request.GET.q }} </small>
             </h3>
             <div class="row">
                 {% for result in page.object_list %}
@@ -46,7 +46,7 @@
 
                             {% if page.has_previous %}</a>{% endif %}
                         </li>
-                        <li>&nbsp;</li>
+                        <li>{{ page }}</li>
                         <li class="next pull-right">
                             {% if page.has_next %}
                                 <a href="?q={{ query }}&amp;page={{ page.next_page_number }}">{% endif %}

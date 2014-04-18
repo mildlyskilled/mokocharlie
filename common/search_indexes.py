@@ -7,6 +7,7 @@ class PhotoIndex(indexes.SearchIndex, indexes.Indexable):
     text = indexes.CharField(document=True, use_template=True)
     author = indexes.CharField(model_attr='owner')
     pub_date = indexes.DateTimeField(model_attr='created_at')
+    content_auto = indexes.EdgeNgramField(model_attr="name")
 
     def get_model(self):
         return Photo
@@ -19,6 +20,7 @@ class PhotoIndex(indexes.SearchIndex, indexes.Indexable):
 class AlbumIndex(indexes.SearchIndex, indexes.Indexable):
     text = indexes.CharField(document=True, use_template=True)
     pub_date = indexes.DateTimeField(model_attr='created_at')
+    content_auto = indexes.EdgeNgramField(model_attr="label")
 
     def get_model(self):
         return Album

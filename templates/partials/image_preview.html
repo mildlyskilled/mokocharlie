@@ -2,6 +2,6 @@
 
 <div class="thumbnail">
     <a href="{{ image.get_absolute_url }}">
-        {% cloudinary image.image_id|add:'.jpg' transformation="image_preview" alt=image %}</a>
+        {% cloudinary image.image_id|add:'.jpg' transformation="image_preview_fill_face" alt=image %}</a>
 </div>
 

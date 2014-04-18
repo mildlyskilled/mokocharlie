@@ -4,3 +4,4 @@ from profile_view import *
 from home_view import *
 from story_view import *
 from search_view import *
+from hospitality_view import *
