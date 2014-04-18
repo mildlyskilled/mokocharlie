@@ -260,12 +260,12 @@ YOUTUBE_UPLOAD_REDIRECT_URL = '/youtube/videos/'
 YOUTUBE_DELETE_REDIRECT_URL = '/video/'
 
 if 'SEARCHBOX_SSL_URL' in os.environ:
-    search_box_elastic_search_url = urlparse.urlparse(os.environ['SEARCHBOX_SSL_URL'])
+    search_box_elastic_search_url = os.environ['SEARCHBOX_SSL_URL']
 else:
     search_box_elastic_search_url = 'https://paas:d4b18f626b95e75fdac571b738cbb402@dwalin-us-east-1.searchly.com'
 
 if 'BONSAI_URL' in os.environ:
-    bonsai_url = urlparse.urlparse(os.environ['BONSAI_URL'])
+    bonsai_url = os.environ['BONSAI_URL']
 else:
     bonsai_url = 'https://np2fdvyv:4m0v2p37cknwe7js@box-4649745.us-east-1.bonsai.io/'
 
