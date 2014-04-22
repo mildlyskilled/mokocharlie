@@ -90,9 +90,17 @@ class Photo(models.Model):
 
 
 class Hotel(models.Model):
+    HOTEL = 'HOTEL'
+    RESORT = 'RESORT'
+
+    HOTEL_TYPE_CHOICES = (
+        (HOTEL, 'Hotel'),
+        (RESORT, 'Resort')
+    )
+
     id = models.IntegerField(primary_key=True)
     featured = models.BooleanField()
-    hospitality_type = models.CharField(max_length=20)
+    hospitality_type = models.CharField(max_length=20, choices=HOTEL_TYPE_CHOICES, default=HOTEL)
     name = models.TextField()
     description = models.TextField()
     address = models.TextField()
@@ -100,9 +108,7 @@ class Hotel(models.Model):
     website = models.TextField()
     date_added = models.DateTimeField()
     published = models.BooleanField()
-    albums = models.ManyToManyField('Album', through='HospitalityAlbum', blank=True, null=True,
-                                    related_name='hotel_album',
-                                    db_column='hospitality_id')
+    albums = models.ManyToManyField('Album', through='HospitalityAlbum', related_name='hotel_album')
 
     class Meta:
         db_table = 'hospitality'
@@ -114,11 +120,19 @@ class Hotel(models.Model):
     def get_albums(self):
         return "<br />".join([a.label for a in self.albums.all()])
 
+    get_albums.short_description = 'Album(s)'
+
+    @property
+    def all_albums(self):
+        return self.albums.all()
+
     @property
     def get_album(self):
-        return Album.objects.filter(hotel_album=self)[0]
+        if len(self.albums.all()) > 0:
+            return self.albums.all()[0]
 
-    get_albums.short_description = 'Album'
+        return None
+
 
     def get_absolute_url(self):
         return reverse('hospitality_view', args=[str(self.id)])

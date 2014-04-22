@@ -22,14 +22,29 @@ class AlbumForm(ModelForm):
 class AlbumAdmin(admin.ModelAdmin):
     form = AlbumForm
     list_display = ['label', 'created_at', 'album_images', 'published']
+    list_filter = ['published']
 
 
 class CommentsAdmin(admin.ModelAdmin):
     list_display = ['image', 'comment_author', 'comment_date', 'comment_approved', 'comment_reported']
+    list_filter = ['comment_reported', 'comment_approved']
 
+    def approve_comment(CommentsAdmin, request, queryset):
+        queryset.update(comment_approved=1)
+    approve_comment.short_description = "Mark selected comments as approved"
+
+    actions = [approve_comment]
 
 class HotelAdmin(admin.ModelAdmin):
-    list_display = ['name', 'hospitality_type', 'get_albums']
+    list_display = ['name', 'hospitality_type', 'get_albums', 'featured', 'published']
+    list_display_links = ('name', 'get_albums')
+    select_related = True
+    list_filter = ['published', 'featured']
+
+    def formfield_for_manytomany(self, db_field, request, **kwargs):
+        if db_field.name == "albums":
+            kwargs["queryset"] = Album.objects.all()
+        return super(HotelAdmin, self).formfield_for_manytomany(db_field, request, **kwargs)
 
 
 class MokoUserAdmin(UserAdmin):

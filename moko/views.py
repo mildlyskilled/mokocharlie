@@ -6,14 +6,16 @@ from django.contrib.auth import logout
 from django.shortcuts import redirect, resolve_url
 from django.contrib.auth import authenticate, login
 from django.contrib import messages
-
+from common.models import *
 from moko.forms import LoginForm
 
 class HomeViewTemplate(TemplateView):
     template_name = "home/index.html"
     def get_context_data(self, **kwargs):
+        recent_albums = Album.objects.exclude(label='People and Places')
         context = super(HomeViewTemplate, self).get_context_data()
         context["home"] = "El Homie"
+        context['recent_albums'] = recent_albums
         return context
 
 
