@@ -16,6 +16,7 @@ TEMPLATE_DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
+SITE_ID = 1
 
 # Application definition
 
@@ -26,6 +27,7 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.sites',
     'debug_toolbar',
     'haystack',
     'photos',
@@ -35,6 +37,9 @@ INSTALLED_APPS = (
     'django_gravatar',
     'social.apps.django_app.default',
     'endless_pagination',
+    'cmsplugin_bootstrap',
+    'cms',
+    'mptt',
     'south',
     'common'
 )
@@ -74,7 +79,6 @@ try:
 
     if 'DATABASES' not in locals():
         DATABASES = {}
-
     if 'DATABASE_URL' in os.environ:
         url = urlparse.urlparse(os.environ['DATABASE_URL'])
 
@@ -227,7 +231,8 @@ IPWARE_META_PRECEDENCE_LIST = (
 # including IPWARE_PRIVATE_IP_PREFIX in your setting.py
 # IPs that start with items listed below are ignored
 # and are not considered a `real` IP address
-IPWARE_PRIVATE_IP_PREFIX = (
+IPWARE_PRIVATE_IP_PREFIX = ('cmsplugin_bootstrap',
+    'cms',
                                '0.', '1.', '2.',  # externally non-routable
                                '10.',  # class A private block
                                '169.254.',  # link-local block

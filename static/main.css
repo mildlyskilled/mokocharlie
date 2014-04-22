@@ -99,3 +99,10 @@ Usage:
 .dissociate {
     background-color: #777777;
 }
+
+.home-nav{
+    color: #000000;
+    position: relative;
+    padding: 10px;
+    z-index: 10000;
+}

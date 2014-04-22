@@ -1,20 +1,24 @@
 {% extends "base.html" %}
+{% load cloudinary %}
 {% block title %}Organising Community Photos{% endblock %}
 {% block content %}
-    <header>
+    <div class="row">
         <img src="{{ STATIC_URL }}img/logo_slogan.png"/>
 
-        <form class="navbar-form navbar-right" role="search" action="/search">
+        <form class="pull-right col-lg-5 form-inline" role="search" action="/search" style="margin-top: 10px;">
             <div class="form-group">
-                <input type="text" class="form-control" name="q"
-                       placeholder="Search {{ photo_count }} images">
-                <input type="submit" value="Go" class="btn">
+                <input type="text" class="form-control float-left" name="q"
+                       placeholder="Search {{ photo_count }} images" style="width: 370px;">
+                <input type="submit" value="Go" class="btn btn-primary float-left">
             </div>
         </form>
-    </header>
+    </div>
+    <div class="row home-nav text-center">
+    ALBUMS | PHOTOS | HOTELS &amp; RESORTS | STORIES | UPLOAD
+    </div>
     <div class="row">
         {% for a in recent_albums %}
-            {{ a }}
+            {% cloudinary a.cover.image_id|add:'.jpg' transformation="moko_resize_730_l" alt=image width=730 %}<br />
         {% endfor %}
     </div>
 {% endblock %}
