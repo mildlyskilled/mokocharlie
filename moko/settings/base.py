@@ -37,9 +37,6 @@ INSTALLED_APPS = (
     'django_gravatar',
     'social.apps.django_app.default',
     'endless_pagination',
-    'cmsplugin_bootstrap',
-    'cms',
-    'mptt',
     'south',
     'common'
 )

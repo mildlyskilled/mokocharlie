@@ -1,0 +1,39 @@
+{% load cloudinary %}
+<div id="carousel-moko" class="carousel slide" data-ride="carousel">
+    <div class="carousel-inner">
+        {% for a in featured_albums %}
+            <div class="item {% if a == featured_albums.0 %}active{% endif %}">
+                {% cloudinary a.cover.image_id|add:'.jpg' transformation="home_carousel_850" alt=a %}
+                <div class="carousel-caption">
+                    {{ a.description }}
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+<style type="text/css">
+    .carousel .item {
+        -webkit-transition: opacity 3s;
+        -moz-transition: opacity 3s;
+        -ms-transition: opacity 3s;
+        -o-transition: opacity 3s;
+        transition: opacity 3s;
+    }
+
+    .carousel .active.left {
+        left: 0;
+        opacity: 0;
+        z-index: 2;
+    }
+
+    .carousel .next {
+        left: 0;
+        opacity: 1;
+        z-index: 1;
+    }
+</style>
+<script type="application/javascript">
+    $('.carousel').carousel({
+        interval: 8000
+    })
+</script>

@@ -1,3 +1,8 @@
+a:hover{
+    color: orange; ! important
+    decoration: none; ! important
+}
+
 .login-fields {
 
 }
@@ -105,4 +110,13 @@ Usage:
     position: relative;
     padding: 10px;
     z-index: 10000;
+}
+
+.home-nav a{
+    color: #000000;
+}
+
+.home-nav a:hover{
+    color: orange;
+    text-decoration: none;
 }

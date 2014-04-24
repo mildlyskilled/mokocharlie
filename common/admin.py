@@ -21,8 +21,8 @@ class AlbumForm(ModelForm):
 
 class AlbumAdmin(admin.ModelAdmin):
     form = AlbumForm
-    list_display = ['label', 'created_at', 'album_images', 'published']
-    list_filter = ['published']
+    list_display = ['label', 'created_at', 'album_images', 'featured', 'published']
+    list_filter = ['published', 'featured']
 
 
 class CommentsAdmin(admin.ModelAdmin):

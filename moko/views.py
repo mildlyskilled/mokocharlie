@@ -12,10 +12,10 @@ from moko.forms import LoginForm
 class HomeViewTemplate(TemplateView):
     template_name = "home/index.html"
     def get_context_data(self, **kwargs):
-        recent_albums = Album.objects.exclude(label='People and Places')[:5]
+        recent_albums = Album.objects.filter(featured=1)[:5]
         context = super(HomeViewTemplate, self).get_context_data()
         context["home"] = "El Homie"
-        context['recent_albums'] = recent_albums
+        context['featured_albums'] = recent_albums
         return context
 
 

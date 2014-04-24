@@ -22,6 +22,7 @@ class Album(models.Model):
     created_at = models.DateTimeField()
     updated_at = models.DateTimeField()
     published = models.BooleanField()
+    featured = models.BooleanField(default=False)
     photos = models.ManyToManyField('Photo', through='PhotoAlbum')
 
     class Meta:
@@ -107,7 +108,7 @@ class Hotel(models.Model):
     telephone = models.TextField()
     website = models.TextField()
     date_added = models.DateTimeField()
-    published = models.BooleanField()
+    published = models.BooleanField(default=False)
     albums = models.ManyToManyField('Album', through='HospitalityAlbum', related_name='hotel_album')
 
     class Meta:
@@ -338,3 +339,9 @@ class Favourite(models.Model):
 
     class Meta:
         db_table = 'favourite'
+
+
+class Collections(models.Model):
+    name = models.CharField(max_length=25, default='Collection')
+    albums = models.ManyToManyField('Album')
+    featured = models.BooleanField(default=False)
