@@ -89,7 +89,7 @@ DROP TABLE IF EXISTS user_image_library;
 # Favourites
 CREATE TABLE IF NOT EXISTS `favourite` (
   `id` int(11) NOT NULL,
-  `photo_id` int(11) unsigned NOT NULL,
+  `photo_id` int(11) NOT NULL,
   `user_id` int(11) DEFAULT NULL,
   `created_at` datetime NOT NULL,
   PRIMARY KEY (`id`),
@@ -98,7 +98,7 @@ CREATE TABLE IF NOT EXISTS `favourite` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 ALTER TABLE `favourite`
-  ADD CONSTRAINT `favourite_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `common_mokouser` (`id`) ON DELETE SET NULL,
+  ADD CONSTRAINT `favourite_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `common_mokouser` (`id`) ON DELETE CASCADE,
   ADD CONSTRAINT `favourite_ibfk_1` FOREIGN KEY (`photo_id`) REFERENCES `photo` (`id`) ON DELETE CASCADE;
 
 COMMIT;

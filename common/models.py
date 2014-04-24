@@ -145,7 +145,7 @@ class HospitalityAlbum(models.Model):
     album = models.ForeignKey(Album)
 
     class Meta:
-        db_table = 'hospitality_albums'
+        db_table = 'hospitality_album'
 
 
 class Comment(models.Model):
@@ -345,3 +345,9 @@ class Collections(models.Model):
     name = models.CharField(max_length=25, default='Collection')
     albums = models.ManyToManyField('Album')
     featured = models.BooleanField(default=False)
+
+    class Meta:
+        db_table = 'collection'
+
+    def __unicode__(self):
+        return self.name
