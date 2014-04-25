@@ -9,7 +9,7 @@ LOGGER = logging.getLogger(__name__)
 
 
 class CollectionViewTemplate(TemplateView):
-    template_name = "collections/view.html"
+    template_name = "collections/index.html"
     default_limit = 12
     default_page = 1
 
@@ -20,12 +20,12 @@ class CollectionViewTemplate(TemplateView):
         collection = Collections.objects.get(id=collection_id)
 
         # Get comments
-        collection_comments = Comment.objects.filter(image__album__collection=collection_id).filter(comment_approved=1).order_by(
-            '-comment_date')
+        collection_comments = Comment.objects.filter(image__album__collections=collection_id).filter(comment_approved=1).order_by(
+            '-comment_date')[:12]
         # Prepare context
-        context = super(AlbumViewTemplate, self).get_context_data()
-        context["albums"] = Collections.albums.all()
+        context = super(CollectionViewTemplate, self).get_context_data()
         context["collection"] = collection
-        context["album_comments"] = collection_comments
+        context["collection_albums"] = collection.albums.all()
+        context["collection_comments"] = collection_comments
         context["limit"] = _limit
         return context
