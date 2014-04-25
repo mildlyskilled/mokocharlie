@@ -64,6 +64,7 @@ urlpatterns = patterns('',
                            name='collection_view'),
 )
 
+from django.conf import settings
 if settings.DEBUG:
     import debug_toolbar
     urlpatterns += patterns('',
