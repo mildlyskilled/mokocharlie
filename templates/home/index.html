@@ -36,9 +36,9 @@
             </div>
         </div>
         <div class="col-lg-4">
-            <div class="page-header">
-                <h3>Classifieds</h3>
-            </div>
+            {% for classified in classifieds %}
+                {% include "partials/classified_preview.html" %}
+            {% endfor %}
         </div>
     </div>
 {% endblock %}

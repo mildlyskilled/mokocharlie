@@ -366,3 +366,33 @@ class Collections(models.Model):
 
     def get_absolute_url(self):
         return reverse('collection_view', args=[str(self.id)])
+
+
+class ClassifiedType(models.Model):
+    name = models.CharField(max_length=25)
+
+    def __unicode__(self):
+        return self.name
+
+
+class Classified(models.Model):
+    title = models.CharField(max_length=25)
+    types = models.ManyToManyField('ClassifiedType')
+    description = models.TextField()
+    created_at = models.DateTimeField(default=timezone.now())
+    updated_at = models.DateTimeField(default=timezone.now())
+    published = models.BooleanField(default=False)
+    published_date = models.DateTimeField(null=True)
+    unpublish_date = models.DateTimeField(null=True)
+    owner = models.ForeignKey('MokoUser')
+    featured = models.BooleanField(default=False)
+    contact_email = models.EmailField(null=True)
+
+    def __unicode__(self):
+        return self.title
+
+    def get_contact(self):
+        if self.contact_email is None:
+            return self.owner.email
+
+        return self.contact_email

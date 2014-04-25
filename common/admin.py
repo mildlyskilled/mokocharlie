@@ -2,8 +2,8 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 from django.forms import ModelForm
 from moko.forms import CustomUserChangeForm, CustomUserCreationForm
-from common.models import Photo, Album, Comment, Hotel, PhotoStory, Promotion, MokoUser, Collections
 from django.utils.translation import ugettext_lazy as _
+from common.models import *
 
 
 class PhotoAdmin(admin.ModelAdmin):
@@ -140,6 +140,17 @@ class CollectionAdmin(admin.ModelAdmin):
 
     actions = [publish_collection, unpublish_collection, feature_collection, unfeature_collection]
 
+class ClassifiedAdminForm(ModelForm):
+    def __init__(self, *args, **kwargs):
+        super(ClassifiedAdminForm, self).__init__(*args, **kwargs)
+        from django.db.models import Q
+        advertisers = Group.objects.get(name="Advertisers")
+        self.fields['owner'].queryset = advertisers.user_set.all()
+
+class ClassifiedAdmin(admin.ModelAdmin):
+    #form =  ClassifiedAdminForm
+    list_display = ['title', 'owner', 'featured', 'published', 'published_date', 'unpublish_date']
+    list_filter = ['featured', 'published']
 
 admin.site.register(MokoUser, MokoUserAdmin)
 admin.site.register(Photo, PhotoAdmin)
@@ -149,3 +160,5 @@ admin.site.register(Hotel, HotelAdmin)
 admin.site.register(PhotoStory)
 admin.site.register(Promotion)
 admin.site.register(Collections, CollectionAdmin)
+admin.site.register(Classified, ClassifiedAdmin)
+admin.site.register(ClassifiedType)
