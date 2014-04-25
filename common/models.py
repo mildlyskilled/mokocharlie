@@ -61,8 +61,8 @@ class Photo(models.Model):
     caption = models.TextField()
     video = models.CharField(max_length=15, blank=True)
     times_viewed = models.IntegerField()
-    created_at = models.DateTimeField()
-    updated_at = models.DateTimeField()
+    created_at = models.DateTimeField(verbose_name="Date Uploaded")
+    updated_at = models.DateTimeField(verbose_name="Date Modified")
     owner = models.ForeignKey('MokoUser', related_name='photo_owner', db_column='owner')
     total_rating = models.BigIntegerField()
     times_rated = models.IntegerField()
@@ -107,6 +107,7 @@ class Hotel(models.Model):
     address = models.TextField()
     telephone = models.TextField()
     website = models.TextField()
+    contact_email = models.EmailField(default="hotelinquiry@mokocharlie.com")
     date_added = models.DateTimeField()
     published = models.BooleanField(default=False)
     albums = models.ManyToManyField('Album', through='HospitalityAlbum', related_name='hotel_album')
@@ -133,7 +134,6 @@ class Hotel(models.Model):
             return self.albums.all()[0]
 
         return None
-
 
     def get_absolute_url(self):
         return reverse('hospitality_view', args=[str(self.id)])
@@ -291,7 +291,6 @@ class MokoUser(AbstractBaseUser, PermissionsMixin):
         verbose_name = _('user')
         verbose_name_plural = _('users')
 
-
     def get_absolute_url(self):
         return "/users/%s/" % urlquote(self.email)
 
@@ -345,9 +344,25 @@ class Collections(models.Model):
     name = models.CharField(max_length=25, default='Collection')
     albums = models.ManyToManyField('Album')
     featured = models.BooleanField(default=False)
+    published = models.BooleanField(default=False)
+    created_at = models.DateTimeField(default=timezone.now())
+    updated_at = models.DateTimeField(default=timezone.now())
+    description = models.TextField(null=True)
+    cover_album = models.ForeignKey('Album', related_name='cover_album', null=True)
+
+    def get_albums(self):
+        return "<br />".join([a.label for a in self.albums.all()])
+
+    get_albums.short_description = 'Album(s)'
+    get_albums.allow_tags = True
 
     class Meta:
         db_table = 'collection'
+        verbose_name = _('collection')
+        verbose_name_plural = _('collections')
 
     def __unicode__(self):
         return self.name
+
+    def get_absolute_url(self):
+        return reverse('collection_view', args=[str(self.id)])

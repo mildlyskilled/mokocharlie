@@ -1,0 +1,57 @@
+{% extends "master.html" %}
+{% load cloudinary %}
+{% block title %}
+    {{ collection }}
+{% endblock %}
+{% block extrahead %}
+    <script src="{{ STATIC_URL }}js/main.js"></script>
+{% endblock %}
+{% block content %}
+    <div class="col-lg-8">
+        <div class="well">
+            <div class="page-header">
+                <h2>{{ collection }}</h2>
+            </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="center-block">
+                        {% cloudinary collection.cover_album.album_cover.image_id|add:'.jpg' transformation="moko_resize_680" alt=collection class="thumbnail" %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <hr/>
+
+        <hr/>
+        <div class="row" id="albumimages">
+            {% load endless %}
+            {% paginate limit collection_albums %}
+            {% for album in collection_albums %}
+                {% include "partials/album_preview.html" %}
+            {% endfor %}
+            <hr/>
+
+        </div>
+        <ul class="pagination">
+            {% show_pages %}
+        </ul>
+    </div>
+
+    <div class="col-lg-4">
+        <div class="page-header">
+            <h5>About this collection</h5>
+        </div>
+        {{ collection.description }}
+        <div class="page-header">
+            <h5>Most Recent Comments</h5>
+        </div>
+        {% for comment in collection_comments %}
+            {% include "partials/comment_preview.html" %}
+        {% endfor %}
+    </div>
+    <script type="application/javascript">
+        window.onload = function () {
+            endlessPaginatorStyleFix()
+        }
+    </script>
+{% endblock %}

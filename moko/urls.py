@@ -49,4 +49,6 @@ urlpatterns = patterns('',
                        url(r'^hospitality/$', HospitalityTemplate.as_view(), name='hospitality_list'),
                        url(r'^hospitality/(?P<hospitality_id>\d+)$', HospitalityViewTemplate.as_view(),
                            name='hospitality_view'),
+                       url(r'^collection/(?P<collection_id>\d+)$', CollectionViewTemplate.as_view(),
+                           name='collection_view'),
 )

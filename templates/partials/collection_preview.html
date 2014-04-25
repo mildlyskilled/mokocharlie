@@ -1,0 +1,28 @@
+{% load cloudinary %}
+<div class="collection pull-left">
+    {% cloudinary collection.cover_album.album_cover.image_id|add:'.jpg' transformation="collection_preview_home_f" alt=collection %}
+    <h2><span><a href="{{ collection.get_absolute_url }}">{{ collection }}</a></span></h2>
+</div>
+
+<style type="text/css">
+    .collection {
+        position: relative;
+        margin: 5px;
+    }
+
+    .collection h2 {
+        position: absolute;
+        top: 120px;
+        left: 0;
+        width: 100%;
+    }
+
+    .collection h2 span {
+        color: white;
+        font: bold 24px/45px Helvetica, Sans-Serif;
+        letter-spacing: -1px;
+        background: rgb(0, 0, 0); /* fallback color */
+        background: rgba(0, 0, 0, 0.7);
+        padding: 10px;
+    }
+</style>
