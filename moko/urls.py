@@ -63,3 +63,9 @@ urlpatterns = patterns('',
                        url(r'^collection/(?P<collection_id>\d+)$', CollectionViewTemplate.as_view(),
                            name='collection_view'),
 )
+
+if settings.DEBUG:
+    import debug_toolbar
+    urlpatterns += patterns('',
+        url(r'^__debug__/', include(debug_toolbar.urls)),
+    )

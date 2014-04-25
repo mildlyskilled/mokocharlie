@@ -278,3 +278,5 @@ HAYSTACK_CONNECTIONS = {
         'INDEX_NAME': 'mokocharlie',
     },
 }
+
+DEBUG_TOOLBAR_PATCH_SETTINGS = False
