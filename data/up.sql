@@ -108,7 +108,8 @@ SET cover_id = (SELECT
                   id
                 FROM photo
                 WHERE image_id = cover_id);
-ALTER TABLE `album` CHANGE `cover_id` `cover_id` INT(11)  NULL;
+
+ALTER TABLE `album` CHANGE `cover_id` `cover_id` INT(11) NULL;
 
 ALTER TABLE `album` ADD FOREIGN KEY (`cover_id`) REFERENCES `photo` (`id`)
   ON DELETE SET NULL
@@ -176,7 +177,7 @@ ALTER TABLE `hospitality_album_lookup` ADD FOREIGN KEY (`album_id`) REFERENCES `
   ON DELETE CASCADE
   ON UPDATE CASCADE;
 
-RENAME TABLE hospitality_album_lookup TO hospitality_album
+RENAME TABLE hospitality_album_lookup TO hospitality_album;
 
 # UPDATE photo story lookup
 ALTER TABLE `photo_stories` ENGINE = INNODB;

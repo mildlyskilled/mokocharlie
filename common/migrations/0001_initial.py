@@ -18,6 +18,7 @@ class Migration(SchemaMigration):
             ('created_at', self.gf('django.db.models.fields.DateTimeField')()),
             ('updated_at', self.gf('django.db.models.fields.DateTimeField')()),
             ('published', self.gf('django.db.models.fields.BooleanField')()),
+            ('featured', self.gf('django.db.models.fields.BooleanField')(default=False)),
         ))
         db.send_create_signal(u'common', ['Album'])
 
@@ -50,6 +51,7 @@ class Migration(SchemaMigration):
             ('address', self.gf('django.db.models.fields.TextField')()),
             ('telephone', self.gf('django.db.models.fields.TextField')()),
             ('website', self.gf('django.db.models.fields.TextField')()),
+            ('contact_email', self.gf('django.db.models.fields.EmailField')(default=u'hotelinquiry@mokocharlie.com', max_length=75)),
             ('date_added', self.gf('django.db.models.fields.DateTimeField')()),
             ('published', self.gf('django.db.models.fields.BooleanField')(default=False)),
         ))
@@ -150,9 +152,63 @@ class Migration(SchemaMigration):
             ('photo', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['common.Photo'])),
             ('user', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['common.MokoUser'])),
             ('client_ip', self.gf('django.db.models.fields.CharField')(max_length=13, null=True)),
-            ('created_at', self.gf('django.db.models.fields.DateTimeField')(default=datetime.datetime(2014, 4, 25, 0, 0))),
+            ('created_at', self.gf('django.db.models.fields.DateTimeField')(default=datetime.datetime(2014, 4, 26, 0, 0))),
         ))
         db.send_create_signal(u'common', ['Favourite'])
+
+        # Adding model 'Collections'
+        db.create_table(u'collection', (
+            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('name', self.gf('django.db.models.fields.CharField')(default=u'Collection', max_length=25)),
+            ('featured', self.gf('django.db.models.fields.BooleanField')(default=False)),
+            ('published', self.gf('django.db.models.fields.BooleanField')(default=False)),
+            ('created_at', self.gf('django.db.models.fields.DateTimeField')(default=datetime.datetime(2014, 4, 26, 0, 0))),
+            ('updated_at', self.gf('django.db.models.fields.DateTimeField')(default=datetime.datetime(2014, 4, 26, 0, 0))),
+            ('description', self.gf('django.db.models.fields.TextField')(null=True)),
+            ('cover_album', self.gf('django.db.models.fields.related.ForeignKey')(related_name=u'cover_album', null=True, to=orm['common.Album'])),
+        ))
+        db.send_create_signal(u'common', ['Collections'])
+
+        # Adding M2M table for field albums on 'Collections'
+        m2m_table_name = db.shorten_name(u'collection_albums')
+        db.create_table(m2m_table_name, (
+            ('id', models.AutoField(verbose_name='ID', primary_key=True, auto_created=True)),
+            ('collections', models.ForeignKey(orm[u'common.collections'], null=False)),
+            ('album', models.ForeignKey(orm[u'common.album'], null=False))
+        ))
+        db.create_unique(m2m_table_name, ['collections_id', 'album_id'])
+
+        # Adding model 'ClassifiedType'
+        db.create_table(u'common_classifiedtype', (
+            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('name', self.gf('django.db.models.fields.CharField')(max_length=25)),
+        ))
+        db.send_create_signal(u'common', ['ClassifiedType'])
+
+        # Adding model 'Classified'
+        db.create_table(u'common_classified', (
+            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('title', self.gf('django.db.models.fields.CharField')(max_length=25)),
+            ('description', self.gf('django.db.models.fields.TextField')()),
+            ('created_at', self.gf('django.db.models.fields.DateTimeField')(default=datetime.datetime(2014, 4, 26, 0, 0))),
+            ('updated_at', self.gf('django.db.models.fields.DateTimeField')(default=datetime.datetime(2014, 4, 26, 0, 0))),
+            ('published', self.gf('django.db.models.fields.BooleanField')(default=False)),
+            ('published_date', self.gf('django.db.models.fields.DateTimeField')(null=True)),
+            ('unpublish_date', self.gf('django.db.models.fields.DateTimeField')(null=True)),
+            ('owner', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['common.MokoUser'])),
+            ('featured', self.gf('django.db.models.fields.BooleanField')(default=False)),
+            ('contact_email', self.gf('django.db.models.fields.EmailField')(max_length=75, null=True)),
+        ))
+        db.send_create_signal(u'common', ['Classified'])
+
+        # Adding M2M table for field types on 'Classified'
+        m2m_table_name = db.shorten_name(u'common_classified_types')
+        db.create_table(m2m_table_name, (
+            ('id', models.AutoField(verbose_name='ID', primary_key=True, auto_created=True)),
+            ('classified', models.ForeignKey(orm[u'common.classified'], null=False)),
+            ('classifiedtype', models.ForeignKey(orm[u'common.classifiedtype'], null=False))
+        ))
+        db.create_unique(m2m_table_name, ['classified_id', 'classifiedtype_id'])
 
 
     def backwards(self, orm):
@@ -192,6 +248,21 @@ class Migration(SchemaMigration):
         # Deleting model 'Favourite'
         db.delete_table(u'favourite')
 
+        # Deleting model 'Collections'
+        db.delete_table(u'collection')
+
+        # Removing M2M table for field albums on 'Collections'
+        db.delete_table(db.shorten_name(u'collection_albums'))
+
+        # Deleting model 'ClassifiedType'
+        db.delete_table(u'common_classifiedtype')
+
+        # Deleting model 'Classified'
+        db.delete_table(u'common_classified')
+
+        # Removing M2M table for field types on 'Classified'
+        db.delete_table(db.shorten_name(u'common_classified_types'))
+
 
     models = {
         u'auth.group': {
@@ -213,11 +284,44 @@ class Migration(SchemaMigration):
             'cover': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "u'cover_photo'", 'null': 'True', 'to': u"orm['common.Photo']"}),
             'created_at': ('django.db.models.fields.DateTimeField', [], {}),
             'description': ('django.db.models.fields.TextField', [], {'blank': 'True'}),
+            'featured': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             'id': ('django.db.models.fields.IntegerField', [], {'primary_key': 'True'}),
             'label': ('django.db.models.fields.CharField', [], {'max_length': '150'}),
             'photos': ('django.db.models.fields.related.ManyToManyField', [], {'to': u"orm['common.Photo']", 'through': u"orm['common.PhotoAlbum']", 'symmetrical': 'False'}),
             'published': ('django.db.models.fields.BooleanField', [], {}),
             'updated_at': ('django.db.models.fields.DateTimeField', [], {})
+        },
+        u'common.classified': {
+            'Meta': {'object_name': 'Classified'},
+            'contact_email': ('django.db.models.fields.EmailField', [], {'max_length': '75', 'null': 'True'}),
+            'created_at': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(2014, 4, 26, 0, 0)'}),
+            'description': ('django.db.models.fields.TextField', [], {}),
+            'featured': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
+            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'owner': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['common.MokoUser']"}),
+            'published': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
+            'published_date': ('django.db.models.fields.DateTimeField', [], {'null': 'True'}),
+            'title': ('django.db.models.fields.CharField', [], {'max_length': '25'}),
+            'types': ('django.db.models.fields.related.ManyToManyField', [], {'to': u"orm['common.ClassifiedType']", 'symmetrical': 'False'}),
+            'unpublish_date': ('django.db.models.fields.DateTimeField', [], {'null': 'True'}),
+            'updated_at': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(2014, 4, 26, 0, 0)'})
+        },
+        u'common.classifiedtype': {
+            'Meta': {'object_name': 'ClassifiedType'},
+            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'name': ('django.db.models.fields.CharField', [], {'max_length': '25'})
+        },
+        u'common.collections': {
+            'Meta': {'object_name': 'Collections', 'db_table': "u'collection'"},
+            'albums': ('django.db.models.fields.related.ManyToManyField', [], {'to': u"orm['common.Album']", 'symmetrical': 'False'}),
+            'cover_album': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "u'cover_album'", 'null': 'True', 'to': u"orm['common.Album']"}),
+            'created_at': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(2014, 4, 26, 0, 0)'}),
+            'description': ('django.db.models.fields.TextField', [], {'null': 'True'}),
+            'featured': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
+            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'name': ('django.db.models.fields.CharField', [], {'default': "u'Collection'", 'max_length': '25'}),
+            'published': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
+            'updated_at': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(2014, 4, 26, 0, 0)'})
         },
         u'common.comment': {
             'Meta': {'ordering': "(u'-comment_date',)", 'object_name': 'Comment', 'db_table': "u'image_comments'"},
@@ -234,7 +338,7 @@ class Migration(SchemaMigration):
         u'common.favourite': {
             'Meta': {'object_name': 'Favourite', 'db_table': "u'favourite'"},
             'client_ip': ('django.db.models.fields.CharField', [], {'max_length': '13', 'null': 'True'}),
-            'created_at': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(2014, 4, 25, 0, 0)'}),
+            'created_at': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(2014, 4, 26, 0, 0)'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'photo': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['common.Photo']"}),
             'user': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['common.MokoUser']"})
@@ -249,6 +353,7 @@ class Migration(SchemaMigration):
             'Meta': {'ordering': "[u'-featured', u'-date_added']", 'object_name': 'Hotel', 'db_table': "u'hospitality'"},
             'address': ('django.db.models.fields.TextField', [], {}),
             'albums': ('django.db.models.fields.related.ManyToManyField', [], {'related_name': "u'hotel_album'", 'symmetrical': 'False', 'through': u"orm['common.HospitalityAlbum']", 'to': u"orm['common.Album']"}),
+            'contact_email': ('django.db.models.fields.EmailField', [], {'default': "u'hotelinquiry@mokocharlie.com'", 'max_length': '75'}),
             'date_added': ('django.db.models.fields.DateTimeField', [], {}),
             'description': ('django.db.models.fields.TextField', [], {}),
             'featured': ('django.db.models.fields.BooleanField', [], {}),
