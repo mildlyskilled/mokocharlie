@@ -27,9 +27,19 @@
                             <span class="glyphicon glyphicon-comment"></span>
                         </button>
                         <button type="button" id="like-button" class="btn btn-default btn-sm pull-right"
-                                data-toggle="tooltip" data-placement="top" title="Click here to like this image"
-                                onclick="favouritePhoto({{ image.id }})">
-                            <span class="glyphicon glyphicon-heart{% if not favourited %}-empty{% endif %}"></span>
+                                data-toggle="tooltip" data-placement="top"
+                                {% if not favourited %}
+                                title="Click here to add this image to your favourites"
+                                {% else %}
+                                title="Click here to remove this image to your favourites"
+                                {% endif %}
+                                {% if not favourited %}
+                                onclick="favouritePhoto({{ image.id }})"
+                                {% else %}
+                                onclick="unfavouritePhoto({{ image.id }})"
+                                {% endif %}
+                        ">
+                        <span class="glyphicon glyphicon-heart{% if not favourited %}-empty{% endif %}"></span>
                         </button>
                     </div>
                     <br/>
@@ -77,10 +87,11 @@
             <h5>About This Image</h5>
         </div>
         <div class="well well-sm">
-        {{ image.caption }}
+            {{ image.caption }}
         </div>
 
-        <abbr title="You can upload your own images as well, just log in">Uploaded by: {{ image.owner.get_full_name }}</abbr>
+        <abbr title="You can upload your own images as well, just log in">Uploaded
+            by: {{ image.owner.get_full_name }}</abbr>
 
         <div class="page-header">
             <h5>Most Recent Images</h5>

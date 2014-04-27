@@ -1,20 +1,20 @@
 BEGIN;
 
 CREATE TABLE IF NOT EXISTS `photo` (
-  `id`           INT(11) NOT NULL AUTO_INCREMENT,
-  `image_id`     VARCHAR(20)      NOT NULL,
-  `name`         VARCHAR(250)     NOT NULL DEFAULT '',
-  `path`         VARCHAR(150)     NOT NULL DEFAULT '',
-  `caption`      MEDIUMTEXT       NOT NULL,
-  `video`        VARCHAR(15)      NULL DEFAULT NULL,
-  `times_viewed` INT(30)          NOT NULL,
-  `created_at`   TIMESTAMP        NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `updated_at`   TIMESTAMP        NOT NULL,
-  `owner`        VARCHAR(41)      NOT NULL DEFAULT 'admin',
-  `total_rating` BIGINT(20)       NOT NULL DEFAULT '0',
-  `times_rated`  MEDIUMINT(9)     NOT NULL DEFAULT '0',
-  `published`    TINYINT(1)       NOT NULL DEFAULT '0',
-  `deleted_at`   DATETIME         NULL DEFAULT NULL,
+  `id`           INT(11)      NOT NULL AUTO_INCREMENT,
+  `image_id`     VARCHAR(20)  NOT NULL,
+  `name`         VARCHAR(250) NOT NULL DEFAULT '',
+  `path`         VARCHAR(150) NOT NULL DEFAULT '',
+  `caption`      MEDIUMTEXT   NOT NULL,
+  `video`        VARCHAR(15)  NULL DEFAULT NULL,
+  `times_viewed` INT(30)      NOT NULL,
+  `created_at`   TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at`   TIMESTAMP    NOT NULL,
+  `owner`        VARCHAR(41)  NOT NULL DEFAULT 'admin',
+  `total_rating` BIGINT(20)   NOT NULL DEFAULT '0',
+  `times_rated`  MEDIUMINT(9) NOT NULL DEFAULT '0',
+  `published`    TINYINT(1)   NOT NULL DEFAULT '0',
+  `deleted_at`   DATETIME     NULL DEFAULT NULL,
   PRIMARY KEY (`id`))
   ENGINE = InnoDB
   DEFAULT CHARSET = utf8;
@@ -52,14 +52,15 @@ INSERT INTO `photo` (`image_id`,
 
 # albums
 CREATE TABLE IF NOT EXISTS `album` (
-  `id`          INT(11) NOT NULL AUTO_INCREMENT,
+  `id`          INT(11)      NOT NULL AUTO_INCREMENT,
   `album_id`    MEDIUMINT(9),
-  `label`       VARCHAR(150)     NOT NULL DEFAULT '',
+  `label`       VARCHAR(150) NOT NULL DEFAULT '',
   `description` LONGTEXT,
-  `cover_id`    VARCHAR(15)      NULL DEFAULT NULL,
-  `created_at`  TIMESTAMP        NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `updated_at`  TIMESTAMP        NOT NULL,
-  `published`   TINYINT(1)       NOT NULL DEFAULT '1',
+  `cover_id`    VARCHAR(15)  NULL DEFAULT NULL,
+  `created_at`  TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at`  TIMESTAMP    NOT NULL,
+  `featured`    TINYINT(1)   NOT NULL DEFAULT '0',
+  `published`   TINYINT(1)   NOT NULL DEFAULT '1',
   PRIMARY KEY (`id`))
   ENGINE = InnoDB
   DEFAULT CHARSET = utf8;
@@ -88,9 +89,9 @@ INSERT INTO `album` (
 # Many to many pivot
 DROP TABLE IF EXISTS `photo_album`;
 CREATE TABLE `photo_album` (
-  `id`       INT(11)  NOT NULL AUTO_INCREMENT,
-  `photo_id` INT(11)  NOT NULL,
-  `album_id` INT(11)  NOT NULL,
+  `id`       INT(11) NOT NULL AUTO_INCREMENT,
+  `photo_id` INT(11) NOT NULL,
+  `album_id` INT(11) NOT NULL,
   PRIMARY KEY (`id`),
   FOREIGN KEY (`photo_id`) REFERENCES `photo` (`id`)
     ON UPDATE CASCADE
@@ -144,7 +145,7 @@ DELETE FROM image_comments
 WHERE image_id NOT IN (SELECT
                          id
                        FROM photo) OR image_id = '';
-ALTER TABLE `image_comments` CHANGE `image_id`  `image_id` INT(11)  NOT NULL;
+ALTER TABLE `image_comments` CHANGE `image_id`  `image_id` INT(11) NOT NULL;
 ALTER TABLE `image_comments` ENGINE = INNODB
 DEFAULT CHARACTER SET utf8
 COLLATE utf8_general_ci;
@@ -159,10 +160,12 @@ ALTER TABLE `image_comments` CHANGE `comment_reported`  `comment_reported` TINYI
 
 # UPDATE HOSPITALITY TABLE
 
-
-ALTER TABLE `hospitality` CHANGE `id`  `id` INT(11)  NOT NULL AUTO_INCREMENT;
+ALTER TABLE `moko`.`hospitality`
+ADD COLUMN `contact_email` VARCHAR(45) NULL DEFAULT NULL
+AFTER `published`;
+ALTER TABLE `hospitality` CHANGE `id`  `id` INT(11) NOT NULL AUTO_INCREMENT;
 ALTER TABLE `hospitality_album_lookup` CHANGE `hospitality_id`  `hospitality_id` INT(11) NOT NULL;
-ALTER TABLE `hospitality_album_lookup` CHANGE `album_id`  `album_id` INT(11)  NOT NULL;
+ALTER TABLE `hospitality_album_lookup` CHANGE `album_id`  `album_id` INT(11) NOT NULL;
 
 UPDATE hospitality_album_lookup
 SET album_id = (SELECT
@@ -181,7 +184,7 @@ RENAME TABLE hospitality_album_lookup TO hospitality_album;
 
 # UPDATE photo story lookup
 ALTER TABLE `photo_stories` ENGINE = INNODB;
-ALTER TABLE `photo_stories` CHANGE `story_album`  `story_album` INT(11)  NOT NULL;
+ALTER TABLE `photo_stories` CHANGE `story_album`  `story_album` INT(11) NOT NULL;
 UPDATE photo_stories
 SET story_album = (SELECT
                      album.id
@@ -197,7 +200,7 @@ ALTER TABLE `photo_stories` ADD FOREIGN KEY (`story_album`) REFERENCES `album` (
 ALTER TABLE user_image_library DROP INDEX image_name;
 ALTER TABLE `user_image_library` ENGINE = INNODB;
 ALTER TABLE user_image_library DROP PRIMARY KEY;
-ALTER TABLE `user_image_library` ADD `id` INT(11)  NOT NULL AUTO_INCREMENT PRIMARY KEY
+ALTER TABLE `user_image_library` ADD `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY
 FIRST;
 
 # START CLEAN UP

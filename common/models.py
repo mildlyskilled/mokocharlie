@@ -1,14 +1,12 @@
 from __future__ import unicode_literals
-import uuid
-from django.contrib.auth import login
-from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseUserManager, Group
-from django.contrib.sites.models import Site
+import datetime
+
+from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseUserManager
 from django.core.mail import send_mail
+
 from django.db import models
-from django.template.loader import render_to_string
 from django.utils import timezone
 from django.utils.http import urlquote
-from moko import settings
 from django.utils.translation import ugettext_lazy as _
 from django.core.urlresolvers import reverse
 
@@ -379,14 +377,14 @@ class Classified(models.Model):
     title = models.CharField(max_length=25)
     types = models.ManyToManyField('ClassifiedType')
     description = models.TextField()
-    created_at = models.DateTimeField(default=timezone.now())
-    updated_at = models.DateTimeField(default=timezone.now())
+    created_at = models.DateTimeField(default=datetime.datetime.now)
+    updated_at = models.DateTimeField(default=datetime.datetime.now)
     published = models.BooleanField(default=False)
-    published_date = models.DateTimeField(null=True)
-    unpublish_date = models.DateTimeField(null=True)
+    published_date = models.DateTimeField(null=True, blank=True, default=datetime.datetime.now)
+    unpublish_date = models.DateTimeField(null=True, blank=True, default=datetime.datetime.today()+datetime.timedelta(days=7))
     owner = models.ForeignKey('MokoUser')
     featured = models.BooleanField(default=False)
-    contact_email = models.EmailField(null=True)
+    contact_email = models.EmailField(null=True, blank=True)
 
     def __unicode__(self):
         return self.title

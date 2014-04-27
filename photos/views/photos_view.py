@@ -1,3 +1,4 @@
+import json
 import logging
 
 from django.views.generic.base import TemplateView
@@ -172,7 +173,28 @@ class FavouritePhotoViewTemplate(AjaxResponseMixin, TemplateView):
                 f1 = Favourite(photo_id=image, client_ip=ip, user_id=request.user.id)
                 f1.save()
                 data = {'status': 'success', 'photo': image, 'ip': ip, 'user': request.user.id}
-            except e:
-                data['message'] = e
+            except ValueError:
+                data['message'] = "Could not add this photo to favourites"
 
-        return self.render_to_json_response(data)
+        return self.render_to_json_response(json.dumps(data))
+
+
+class UnFavouritePhotoViewTemplate(AjaxResponseMixin, TemplateView):
+    def get(self, request, *args, **kwargs):
+        ip = get_real_ip(request) or get_ip(request)
+        image = kwargs['photo_id']
+        data = {'status': 'failed'}
+
+        f = Favourite.objects.filter(user_id=request.user.id).filter(photo_id=image)
+        if f:
+            f.delete()
+            data = {'status': 'success', 'photo': image, 'ip': ip, 'user': request.user.id}
+        else:
+            try:
+                f = Favourite.objects.filter(photo_id=image, client_ip=ip)
+                f.delete()
+                data = {'status': 'success', 'photo': image, 'ip': ip}
+            except ValueError:
+                data['message'] = "Could not add this photo to favourites"
+
+        return self.render_to_json_response(json.dumps(data))

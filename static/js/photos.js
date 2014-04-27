@@ -63,7 +63,11 @@ function favouritePhoto(id) {
         },
         success: function (data) {
             $('#like-button').html('<span class="glyphicon glyphicon-heart"></span>');
-            var obj = $.parseJSON(data.responseText)
+            $('#like-button').attr('title', 'Click here to remove this image to your favourites');
+            $('#like-button').attr('data-original-title', 'Click here to remove this image to your favourites');
+            $('#like-button').attr('onclick', "unfavouritePhoto("+id+")");
+            $('#like-button').tooltip();
+            var obj = $.parseJSON(data)
             if (obj.status == 'failed') {
                 alert(obj.message)
             } else {
@@ -72,6 +76,32 @@ function favouritePhoto(id) {
         },
         error: function (data) {
             $('#like-button').html('<span class="glyphicon glyphicon-heart-empty"></span>');
+        }
+    });
+}
+
+function unfavouritePhoto(id) {
+    $.ajax({
+        type: 'GET',
+        cache: false,
+        url: '/photos/unfavourite/' + id,
+        beforeSend: function () {
+            $('#like-button').html('<img src="/static/img/ajax-loader-small.gif"/>');
+        },
+        success: function (data) {
+            $('#like-button').html('<span class="glyphicon glyphicon-heart-empty"></span>');
+            $('#like-button').attr('title', 'Click here to add this image to your favourites');
+            $('#like-button').attr('data-original-title', 'Click here to add this image to your favourites');
+            $('#like-button').attr('onclick', "favouritePhoto("+id+")");
+            var obj = $.parseJSON(data)
+            if (obj.status == 'failed') {
+                alert(obj.message)
+            } else {
+                $('#like-button').html('<span class="glyphicon glyphicon-heart-empty"></span>');
+            }
+        },
+        error: function (data) {
+            $('#like-button').html('<span class="glyphicon glyphicon-heart"></span>');
         }
     });
 }

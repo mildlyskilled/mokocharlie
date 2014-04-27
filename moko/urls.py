@@ -41,6 +41,9 @@ urlpatterns = patterns('',
                        #AJAX endpoint for favouriting a photo
                        url(r'^photos/favourite/(?P<photo_id>\d+)/$', FavouritePhotoViewTemplate.as_view(),
                            name='favourite_photo'),
+                       url(r'^photos/unfavourite/(?P<photo_id>\d+)/$', UnFavouritePhotoViewTemplate.as_view(),
+                           name='unfavourite_photo'),
+
                        # Admin endpoints
                        (r'^admin/', include(admin.site.urls)),
 

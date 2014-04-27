@@ -1,25 +1,29 @@
-{% extends "base.html" %}
+{% extends "master.html" %}
 {% load cloudinary %}
 {% block title %}Organising Community Photos{% endblock %}
-{% block content %}
-    <div class="row">
-        <img src="{{ STATIC_URL }}img/logo_slogan.png"/>
+{% block navigation %}
+       <div id="header">
+        <div class="container">
+            <img src="{{ STATIC_URL }}img/logo_slogan.png"/>
 
-        <form class="pull-right col-lg-5 form-inline" role="search" action="/search" style="margin-top: 10px;">
-            <div class="form-group">
-                <input type="text" class="form-control float-left" name="q"
-                       placeholder="Search {{ photo_count }} images" style="width: 370px;">
-                <input type="submit" value="Go" class="btn btn-primary float-left">
-            </div>
-        </form>
+            <form class="pull-right col-lg-5 form-inline" role="search" action="/search" style="margin-top: 10px;">
+                <div class="form-group">
+                    <input type="text" class="form-control float-left" name="q"
+                           placeholder="Search {{ photo_count }} images" style="width: 370px;">
+                    <input type="submit" value="Go" class="btn btn-primary float-left">
+                </div>
+            </form>
+        </div>
+        <div class="row home-nav text-center" style="margin-bottom: 10px; margin-top: 10px;">
+            <a href="{% url 'album_list' %}">ALBUMS</a> |
+            <a href="{% url 'photo_list' %}">PHOTOS</a> |
+            <a href="{% url 'hospitality_list' %}">HOTELS &amp; RESORTS</a> |
+            <a href="{% url 'story_list' %}">STORIES</a> |
+            <a href="{% url 'story_list' %}">UPLOAD</a>
+        </div>
     </div>
-    <div class="row home-nav text-center" style="margin-bottom: 10px; margin-top: 10px;">
-        <a href="{% url 'album_list' %}">ALBUMS</a> |
-        <a href="{% url 'photo_list' %}">PHOTOS</a> |
-        <a href="{% url 'hospitality_list' %}">HOTELS &amp; RESORTS</a> |
-        <a href="{% url 'story_list' %}">STORIES</a> |
-        <a href="{% url 'story_list' %}">UPLOAD</a>
-    </div>
+{% endblock %}
+{% block content %}
     <div class="row">
         <div class="col-lg-8">
             <div class="row">

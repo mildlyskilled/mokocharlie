@@ -152,7 +152,7 @@ class Migration(SchemaMigration):
             ('photo', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['common.Photo'])),
             ('user', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['common.MokoUser'])),
             ('client_ip', self.gf('django.db.models.fields.CharField')(max_length=13, null=True)),
-            ('created_at', self.gf('django.db.models.fields.DateTimeField')(default=datetime.datetime(2014, 4, 26, 0, 0))),
+            ('created_at', self.gf('django.db.models.fields.DateTimeField')(default=datetime.datetime(2014, 4, 27, 0, 0))),
         ))
         db.send_create_signal(u'common', ['Favourite'])
 
@@ -162,8 +162,8 @@ class Migration(SchemaMigration):
             ('name', self.gf('django.db.models.fields.CharField')(default=u'Collection', max_length=25)),
             ('featured', self.gf('django.db.models.fields.BooleanField')(default=False)),
             ('published', self.gf('django.db.models.fields.BooleanField')(default=False)),
-            ('created_at', self.gf('django.db.models.fields.DateTimeField')(default=datetime.datetime(2014, 4, 26, 0, 0))),
-            ('updated_at', self.gf('django.db.models.fields.DateTimeField')(default=datetime.datetime(2014, 4, 26, 0, 0))),
+            ('created_at', self.gf('django.db.models.fields.DateTimeField')(default=datetime.datetime(2014, 4, 27, 0, 0))),
+            ('updated_at', self.gf('django.db.models.fields.DateTimeField')(default=datetime.datetime(2014, 4, 27, 0, 0))),
             ('description', self.gf('django.db.models.fields.TextField')(null=True)),
             ('cover_album', self.gf('django.db.models.fields.related.ForeignKey')(related_name=u'cover_album', null=True, to=orm['common.Album'])),
         ))
@@ -190,8 +190,8 @@ class Migration(SchemaMigration):
             (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('title', self.gf('django.db.models.fields.CharField')(max_length=25)),
             ('description', self.gf('django.db.models.fields.TextField')()),
-            ('created_at', self.gf('django.db.models.fields.DateTimeField')(default=datetime.datetime(2014, 4, 26, 0, 0))),
-            ('updated_at', self.gf('django.db.models.fields.DateTimeField')(default=datetime.datetime(2014, 4, 26, 0, 0))),
+            ('created_at', self.gf('django.db.models.fields.DateTimeField')(default=datetime.datetime(2014, 4, 27, 0, 0))),
+            ('updated_at', self.gf('django.db.models.fields.DateTimeField')(default=datetime.datetime(2014, 4, 27, 0, 0))),
             ('published', self.gf('django.db.models.fields.BooleanField')(default=False)),
             ('published_date', self.gf('django.db.models.fields.DateTimeField')(null=True)),
             ('unpublish_date', self.gf('django.db.models.fields.DateTimeField')(null=True)),
@@ -294,7 +294,7 @@ class Migration(SchemaMigration):
         u'common.classified': {
             'Meta': {'object_name': 'Classified'},
             'contact_email': ('django.db.models.fields.EmailField', [], {'max_length': '75', 'null': 'True'}),
-            'created_at': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(2014, 4, 26, 0, 0)'}),
+            'created_at': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(2014, 4, 27, 0, 0)'}),
             'description': ('django.db.models.fields.TextField', [], {}),
             'featured': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
@@ -304,7 +304,7 @@ class Migration(SchemaMigration):
             'title': ('django.db.models.fields.CharField', [], {'max_length': '25'}),
             'types': ('django.db.models.fields.related.ManyToManyField', [], {'to': u"orm['common.ClassifiedType']", 'symmetrical': 'False'}),
             'unpublish_date': ('django.db.models.fields.DateTimeField', [], {'null': 'True'}),
-            'updated_at': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(2014, 4, 26, 0, 0)'})
+            'updated_at': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(2014, 4, 27, 0, 0)'})
         },
         u'common.classifiedtype': {
             'Meta': {'object_name': 'ClassifiedType'},
@@ -315,13 +315,13 @@ class Migration(SchemaMigration):
             'Meta': {'object_name': 'Collections', 'db_table': "u'collection'"},
             'albums': ('django.db.models.fields.related.ManyToManyField', [], {'to': u"orm['common.Album']", 'symmetrical': 'False'}),
             'cover_album': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "u'cover_album'", 'null': 'True', 'to': u"orm['common.Album']"}),
-            'created_at': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(2014, 4, 26, 0, 0)'}),
+            'created_at': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(2014, 4, 27, 0, 0)'}),
             'description': ('django.db.models.fields.TextField', [], {'null': 'True'}),
             'featured': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'default': "u'Collection'", 'max_length': '25'}),
             'published': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
-            'updated_at': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(2014, 4, 26, 0, 0)'})
+            'updated_at': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(2014, 4, 27, 0, 0)'})
         },
         u'common.comment': {
             'Meta': {'ordering': "(u'-comment_date',)", 'object_name': 'Comment', 'db_table': "u'image_comments'"},
@@ -338,7 +338,7 @@ class Migration(SchemaMigration):
         u'common.favourite': {
             'Meta': {'object_name': 'Favourite', 'db_table': "u'favourite'"},
             'client_ip': ('django.db.models.fields.CharField', [], {'max_length': '13', 'null': 'True'}),
-            'created_at': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(2014, 4, 26, 0, 0)'}),
+            'created_at': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(2014, 4, 27, 0, 0)'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'photo': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['common.Photo']"}),
             'user': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['common.MokoUser']"})

@@ -7,18 +7,20 @@ from django.shortcuts import redirect, resolve_url
 from django.contrib.auth import authenticate, login
 from django.contrib import messages
 from common.models import *
-from datetime import datetime
-from django.utils.timezone import utc
 from moko.forms import LoginForm
+import datetime
+
 
 class HomeViewTemplate(TemplateView):
     template_name = "home/index.html"
+
     def get_context_data(self, **kwargs):
         recent_albums = Album.objects.filter(published=1).filter(featured=1)[:5]
         featured_collections = Collections.objects.filter(published=1).filter(featured=1)[:6]
-        classifieds = Classified.objects.filter(published=1).filter(published_date__lte=datetime.utcnow().replace(tzinfo=utc))
+        classifieds = Classified.objects.filter(published=1).filter(featured=1) \
+            .filter(published_date__lte=datetime.datetime.now) \
+            .filter(unpublish_date__gte=datetime.datetime.now)
         context = super(HomeViewTemplate, self).get_context_data()
-        context["home"] = "El Homie"
         context['featured_albums'] = recent_albums
         context['featured_collections'] = featured_collections
         context['classifieds'] = classifieds

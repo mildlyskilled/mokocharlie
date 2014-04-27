@@ -1,24 +1,26 @@
 {% load crispy_forms_tags %}
 {% load gravatar %}
-<div class="col-lg-8">
-    <div class="col-lg-3">
-        {% if user %}
+<div class="col-lg-{% if user == None %}8{% else %}12{% endif %}">
+    {% if user %}
+        <div class="col-lg-3">
             {% gravatar user.email %}
-        {% endif %}
-    </div>
+        </div>
+    {% endif %}
     <div class="col-lg-9">
         {% crispy form %}
     </div>
 </div>
-<div class="col-lg-4">
-    <div class="page-header">
-        <h4>Posting a comment</h4>
+{% if user == None %}
+    <div class="col-lg-4">
+        <div class="page-header">
+            <h4>Posting a comment</h4>
+        </div>
+        <ul>
+            <li>Comments you post while logged in will be approved immediately. If you post a comment while you are not
+                logged in you will have to wait for it to get approved.
+            </li>
+            <li>Oh and you can log in with your facebook account as well so you do not have to register.</li>
+        </ul>
+        <a href="/login" class="btn btn-primary btn-xs pull-right">Login now</a>
     </div>
-    <ul>
-        <li>Comments you post while logged in will be approved immediately. If you post a comment while you are not
-            logged in you will have to wait for it to get approved.
-        </li>
-        <li>Oh and you can log in with your facebook account as well so you do not have to register.</li>
-    </ul>
-    <a href="/login" class="btn btn-primary btn-xs pull-right">Login now</a>
-</div>
+{% endif %}
