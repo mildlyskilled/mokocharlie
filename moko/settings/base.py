@@ -96,7 +96,13 @@ try:
 except Exception:
     print 'Unexpected error:', sys.exc_info()
 
+# Test database
 
+if 'test' in sys.argv:
+    DATABASES['default'] = {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': 'test.db'
+    }
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.6/topics/i18n/
