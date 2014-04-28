@@ -11,7 +11,7 @@ from moko.forms import LoginForm
 import datetime
 
 
-class HomeViewTemplate(TemplateView):
+class HomeTemplateView(TemplateView):
     template_name = "home/index.html"
 
     def get_context_data(self, **kwargs):
@@ -20,7 +20,7 @@ class HomeViewTemplate(TemplateView):
         classifieds = Classified.objects.filter(published=1).filter(featured=1) \
             .filter(published_date__lte=datetime.datetime.now) \
             .filter(unpublish_date__gte=datetime.datetime.now)[:8]
-        context = super(HomeViewTemplate, self).get_context_data()
+        context = super(HomeTemplateView, self).get_context_data()
         context['featured_albums'] = recent_albums
         context['featured_collections'] = featured_collections
         context['classifieds'] = classifieds

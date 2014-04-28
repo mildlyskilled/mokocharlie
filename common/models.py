@@ -1,9 +1,8 @@
 from __future__ import unicode_literals
 import datetime
-
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseUserManager
 from django.core.mail import send_mail
-
+from cloudinary.models import CloudinaryField
 from django.db import models
 from django.utils import timezone
 from django.utils.http import urlquote
@@ -67,6 +66,7 @@ class Photo(models.Model):
     published = models.BooleanField(default=False)
     deleted_at = models.DateTimeField(blank=True, null=True)
     albums = models.ManyToManyField('Album', through='PhotoAlbum', related_name='photo_albums')
+    cloud_image = CloudinaryField('image')
 
     class Meta:
         db_table = 'photo'

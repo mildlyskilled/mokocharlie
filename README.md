@@ -9,3 +9,7 @@ MIGRATING DATA FOR NEW PLATFORM
 * Run ./manage.py schemamigration common --initial
 * Run ./manage.py migrate common 0001 --fake
 * Run ./manage.py migrate common
+
+Foreman
+-----------
+This project also has a Procfile for a foreman deploy

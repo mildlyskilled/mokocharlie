@@ -7,6 +7,13 @@ from django.utils.translation import ugettext_lazy as _
 from common.models import *
 
 
+
+from cloudinary.models import CloudinaryField
+
+class PhotoForm(ModelForm):
+  image = CloudinaryField('image')
+
+
 class PhotoAdmin(admin.ModelAdmin):
     list_display = ['name', 'get_albums', 'get_owner', 'published', 'times_viewed', 'created_at']
     search_fields = ['name', 'description']

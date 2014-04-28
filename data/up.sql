@@ -5,6 +5,7 @@ CREATE TABLE IF NOT EXISTS `photo` (
   `image_id`     VARCHAR(20)  NOT NULL,
   `name`         VARCHAR(250) NOT NULL DEFAULT '',
   `path`         VARCHAR(150) NOT NULL DEFAULT '',
+  `cloud_image`  VARCHAR (100) NULL DEFAULT '',
   `caption`      MEDIUMTEXT   NOT NULL,
   `video`        VARCHAR(15)  NULL DEFAULT NULL,
   `times_viewed` INT(30)      NOT NULL,

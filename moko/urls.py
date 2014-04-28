@@ -8,7 +8,7 @@ from moko.views import *
 admin.autodiscover()
 
 urlpatterns = patterns('',
-                       url(r'^$', HomeViewTemplate.as_view(), name='home'),
+                       url(r'^$', HomeTemplateView.as_view(), name='home'),
 
                        # Authentication
                        url(r'^login/$', LoginViewTemplate.as_view(), name='login'),
