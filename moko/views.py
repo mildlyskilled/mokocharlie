@@ -19,7 +19,7 @@ class HomeViewTemplate(TemplateView):
         featured_collections = Collections.objects.filter(published=1).filter(featured=1)[:6]
         classifieds = Classified.objects.filter(published=1).filter(featured=1) \
             .filter(published_date__lte=datetime.datetime.now) \
-            .filter(unpublish_date__gte=datetime.datetime.now)
+            .filter(unpublish_date__gte=datetime.datetime.now)[:8]
         context = super(HomeViewTemplate, self).get_context_data()
         context['featured_albums'] = recent_albums
         context['featured_collections'] = featured_collections

@@ -1,11 +1,11 @@
-from common.models import MokoUser
+from common.models import MokoUser, Comment, Classified
 from django.shortcuts import redirect
 from django.views.generic.base import TemplateView
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
-from common.models import Comment
 from moko.forms import CustomUserCreationForm
 from django.views.generic.edit import FormView
+import datetime
 
 
 class ProfileViewTemplate(TemplateView):
@@ -25,7 +25,10 @@ class ProfileViewTemplate(TemplateView):
             user = self.request.user
             context = super(ProfileViewTemplate, self).get_context_data()
             photo_comments = Comment.objects.filter(image__owner=user.id)
+            classifieds = Classified.objects.filter(owner=user)
             context['photo_comments'] = photo_comments
+            context['classifieds'] = classifieds
+            context['today'] = datetime.datetime.now()
             return context
 
     def get_object(self, queryset=None):

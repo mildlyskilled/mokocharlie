@@ -1,0 +1,47 @@
+<div class="page-header">
+    <h3>Classifieds you have posted</h3>
+</div>
+{% if classifieds %}
+    {% load endless %}
+    {% paginate 30 classifieds %}
+    <div class="row">
+
+        <div class="col-xs-4">
+            <div class="page-header">
+                <h3>Published Classifieds</h3>
+            </div>
+            {% for p_classified in classifieds %}
+                {% if p_classified.published %}
+                    {% include "partials/classified_preview.html" with classified=p_classified %}
+                {% endif %}
+            {% endfor %}
+        </div>
+
+        <div class="col-xs-4">
+            <div class="page-header">
+                <h3>Unpublished Classifieds</h3>
+            </div>
+            {% for u_classified in classifieds %}
+                {% if not u_classified.published %}
+                    {% include "partials/classified_preview.html" with classified=u_classified %}
+                {% endif %}
+            {% endfor %}
+        </div>
+
+        <div class="col-xs-4">
+            <div class="page-header">
+                <h3>Expired Classifieds</h3>
+            </div>
+            {% for a_classified in classifieds %}
+                {% if a_classified.unpublish_date.date < today.date %}
+                    {% include "partials/classified_preview.html" with classified=a_classified %}
+                {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+    <div class="row">
+        <ul class="pagination">
+            {% show_pages %}
+        </ul>
+    </div>
+{% endif %}

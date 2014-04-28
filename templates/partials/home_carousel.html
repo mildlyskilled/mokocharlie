@@ -4,9 +4,6 @@
         {% for a in featured_albums %}
             <div class="item {% if a == featured_albums.0 %}active{% endif %}">
                 {% cloudinary a.cover.image_id|add:'.jpg' transformation="home_carousel_850_crop" alt=a %}
-                <div class="carousel-caption">
-                    {{ a.description }}
-                </div>
             </div>
         {% endfor %}
     </div>

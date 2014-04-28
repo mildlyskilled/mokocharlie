@@ -1,4 +1,5 @@
 {% load cloudinary %}
+{% load humanize %}
 <div class="col-sm-6 col-md-4" style="height: 290px">
     <div class="thumbnail">
         <a href="{{ album.get_absolute_url }}">
@@ -11,7 +12,7 @@
             </a></h5>
             <p>
                 <small><i class="glyphicon glyphicon-plus"> </i>
-                    {{ album.created_at|date:"D d M Y P" }}<br>
+                    {{ album.created_at|naturaltime }}<br>
                     <a class="label label-info" href="{{ album.get_absolute_url }}">
                         {{ album.photos.all.count }}
                         images</a>
