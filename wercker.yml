@@ -15,7 +15,10 @@ build:
 
     # A step that executes `pip install` command.
     - pip-install
-    - python manage.py test
+    - script:
+      name: run django tests
+      code: |
+        python manage.py test
 
     # # This pip-install clears the local wheel cache
     # - pip-install:
