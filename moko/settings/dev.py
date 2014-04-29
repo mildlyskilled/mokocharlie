@@ -10,9 +10,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'moko',
         'USER': 'root',
-        'PASSWORD': 'root',
-        'HOST': '',
-        'PORT': '',
+        'PASSWORD': 'root'
     }
 }
 
@@ -34,7 +32,7 @@ LOGGING = {
             'filename': os.path.join(BASE_DIR, 'log/moko.log'),
             'formatter': 'simple',
         },
-        'request_handler':{
+        'request_handler': {
             'level': 'DEBUG',
             'class': 'logging.handlers.RotatingFileHandler',
             'filename': os.path.join(BASE_DIR, 'log/requests.log'),
@@ -42,9 +40,9 @@ LOGGING = {
         }
     },
     'loggers': {
-        '':{
-          'handlers': ['default'],
-          'level': 'DEBUG',
+        '': {
+            'handlers': ['default'],
+            'level': 'DEBUG',
         },
         'django.request': {
             'handlers': ['request_handler'],
@@ -58,3 +56,9 @@ LOGGING = {
 
 SOCIAL_AUTH_FACEBOOK_KEY = "376334572402987"
 SOCIAL_AUTH_FACEBOOK_SECRET = "5ebd62c909c9d9f9d3b512b8e7078d53"
+
+DEBUG_TOOLBAR_PATCH_SETTINGS = False
+TEMPLATE_DEBUG = True
+INSTALLED_APPS += (
+    'debug_toolbar',
+)

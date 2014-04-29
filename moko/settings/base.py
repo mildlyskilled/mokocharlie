@@ -12,8 +12,6 @@ SECRET_KEY = 'pqu+!+4e==a0#=n(z$1b21iyalhh^5#%axb#$e!ga61*-8w!(l'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-TEMPLATE_DEBUG = True
-
 ALLOWED_HOSTS = ['*']
 
 SITE_ID = 1
@@ -28,7 +26,6 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.humanize',
-    'debug_toolbar',
     'haystack',
     'photos',
     'ipware',
@@ -38,7 +35,7 @@ INSTALLED_APPS = (
     'social.apps.django_app.default',
     'endless_pagination',
     'south',
-    'common'
+    'common',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -151,6 +148,11 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'common.context_processors.photo_count',
 )
 
+TEMPLATE_LOADERS = (
+    'django.template.loaders.filesystem.Loader',
+    'django.template.loaders.app_directories.Loader'
+)
+
 SOCIAL_AUTH_STORAGE = 'social.apps.django_app.default.models.DjangoStorage'
 
 SOCIAL_AUTH_TWITTER_KEY = "bqOTvdYoySztq1ylQFqzw"
@@ -234,8 +236,7 @@ IPWARE_META_PRECEDENCE_LIST = (
 # including IPWARE_PRIVATE_IP_PREFIX in your setting.py
 # IPs that start with items listed below are ignored
 # and are not considered a `real` IP address
-IPWARE_PRIVATE_IP_PREFIX = ('cmsplugin_bootstrap',
-    'cms',
+IPWARE_PRIVATE_IP_PREFIX = (
                                '0.', '1.', '2.',  # externally non-routable
                                '10.',  # class A private block
                                '169.254.',  # link-local block
@@ -285,5 +286,3 @@ HAYSTACK_CONNECTIONS = {
         'INDEX_NAME': 'mokocharlie',
     },
 }
-
-DEBUG_TOOLBAR_PATCH_SETTINGS = False

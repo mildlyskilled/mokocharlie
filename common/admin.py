@@ -10,9 +10,6 @@ from common.models import *
 
 from cloudinary.models import CloudinaryField
 
-class PhotoForm(ModelForm):
-  image = CloudinaryField('image')
-
 
 class PhotoAdmin(admin.ModelAdmin):
     list_display = ['name', 'get_albums', 'get_owner', 'published', 'times_viewed', 'created_at']
@@ -72,8 +69,8 @@ class AlbumAdmin(admin.ModelAdmin):
 
 
 class CommentsAdmin(admin.ModelAdmin):
-    list_display = ['image', 'comment_author', 'comment_date', 'comment_approved', 'comment_reported']
-    list_filter = ['comment_reported', 'comment_approved']
+    list_display = ['image', 'comment_author', 'comment_date', 'comment_approved']
+    list_filter = [ 'comment_approved']
 
     def approve_comment(self, request, queryset):
         queryset.update(comment_approved=1)
