@@ -76,7 +76,7 @@ class Photo(models.Model):
         return reverse('photo_view', args=[str(self.id)])
 
     def get_albums(self):
-        return "<br />".join([a.label for a in self.albums.all()])
+        return "<br />".join([a.label for a in Album.objects.filter(photos=self.id)])
 
     @property
     def get_comments(self):
@@ -193,6 +193,9 @@ class Video(models.Model):
     )
     external_id = models.CharField(max_length=150, blank=True)
     external_source = models.CharField(max_length=50, choices=SERVICE_CHOICES, default=YT)
+
+    def __unicode__(self):
+        return "{0} {1}".format(self.external_source, self.external_id)
 
 
 class MokoUserManager(BaseUserManager):

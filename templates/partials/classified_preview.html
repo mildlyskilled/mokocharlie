@@ -6,7 +6,7 @@
 
         <div class="media-body">
             <h5 class="media-heading">{{ classified }}</h5>
-            {{ classified.description }}
+            {{ classified.description|truncatewords_html:30 }}
         </div>
     </div>
 </div>

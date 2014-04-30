@@ -2,6 +2,7 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.models import Group
 from django.forms import ModelForm
+from django.http import request
 from moko.forms import CustomUserChangeForm, CustomUserCreationForm
 from django.utils.translation import ugettext_lazy as _
 from common.models import *
@@ -148,16 +149,7 @@ class CollectionAdmin(admin.ModelAdmin):
     actions = [publish_collection, unpublish_collection, feature_collection, unfeature_collection]
 
 
-class ClassifiedAdminForm(ModelForm):
-    def __init__(self, *args, **kwargs):
-        super(ClassifiedAdminForm, self).__init__(*args, **kwargs)
-
-        advertisers = Group.objects.get(name="Advertisers")
-        self.fields['owner'].queryset = advertisers.user_set.all()
-
-
 class ClassifiedAdmin(admin.ModelAdmin):
-    #form =  ClassifiedAdminForm
     list_display = ['title', 'get_owner', 'featured', 'published', 'published_date', 'unpublish_date']
     list_filter = ['featured', 'published']
     list_display_links = ['title', 'get_owner']
