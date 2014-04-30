@@ -45,7 +45,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'common.middleware.moko_social.MokoSocialMiddleWare',
+    #'common.middleware.moko_social.MokoSocialMiddleWare',
 )
 
 ROOT_URLCONF = 'moko.urls'

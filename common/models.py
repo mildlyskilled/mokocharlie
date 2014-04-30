@@ -54,7 +54,8 @@ class Photo(models.Model):
     name = models.CharField(max_length=250)
     path = models.CharField(max_length=150, null=True, blank=True)
     caption = models.TextField()
-    video = models.CharField(max_length=15, null=True, blank=True)
+    video = models.ManyToManyField('Video')
+    yt_video = models.CharField(max_length=15, null=True)
     times_viewed = models.IntegerField(default=0)
     created_at = models.DateTimeField(verbose_name="Date Uploaded")
     updated_at = models.DateTimeField(verbose_name="Date Modified")
@@ -154,7 +155,7 @@ class Comment(models.Model):
 class PhotoStory(models.Model):
     name = models.CharField(max_length=150)
     description = models.TextField()
-    album = models.ForeignKey(Album, db_column='story_album')
+    album = models.ForeignKey(Album)
     created_at = models.DateTimeField(default=timezone.now())
     published = models.BooleanField()
 
@@ -163,10 +164,10 @@ class PhotoStory(models.Model):
         verbose_name_plural = "Photo Stories"
 
     def __unicode__(self):
-        return self.story_name
+        return self.name
 
     def get_absolute_url(self):
-        return reverse('story_view', args=[str(self.story_id)])
+        return reverse('story_view', args=[str(self.id)])
 
 
 class Promotion(models.Model):

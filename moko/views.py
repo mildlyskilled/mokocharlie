@@ -16,7 +16,7 @@ class HomeTemplateView(TemplateView):
 
     def get_context_data(self, **kwargs):
         recent_albums = Album.objects.filter(published=1).filter(featured=1)[:5]
-        featured_collections = Collections.objects.filter(published=1).filter(featured=1)[:6]
+        featured_collections = Collection.objects.filter(published=1).filter(featured=1)[:6]
         classifieds = Classified.objects.filter(published=1).filter(featured=1) \
             .filter(published_date__lte=datetime.datetime.now) \
             .filter(unpublish_date__gte=datetime.datetime.now)[:8]

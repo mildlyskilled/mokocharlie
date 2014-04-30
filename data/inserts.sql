@@ -29,7 +29,7 @@ INSERT INTO `common_photo` (`image_id`,
                             `name`,
                             `path`,
                             `caption`,
-                            `video`,
+                            `yt_video`,
                             `times_viewed`,
                             `created_at`,
                             `updated_at`,
@@ -44,11 +44,11 @@ INSERT INTO `common_photo` (`image_id`,
     `image_name`,
     `image_path`,
     `image_caption`,
-    (SELECT video_id FROM video_library WHERE video_id = `image_video`),
+    `image_video`,
     `times_viewed`,
     `date_added`,
     `date_added`,
-    (SELECT cu.id FROM common_mokouser AS cu LEFT JOIN mc_users AS u ON cu.email = u.email  LEFT JOIN image_library AS i ON i.added_by = u.user_id),
+    (SELECT cu.id FROM common_mokouser AS cu WHERE cu.email = 'kwakuchintoh@gmail.com') AS owner,
     `total_rating`,
     `times_rated`,
     `published`,
@@ -95,26 +95,28 @@ INSERT INTO `common_album` (
   `cover_id`,
   `created_at`,
   `updated_at`,
-  `published`
+  `published`,
+    `featured`
 )
   SELECT
     album_id,
     album_label,
     album_description,
-    album_cover,
+    (SELECT id FROM common_photo WHERE image_id = album_cover) AS cover,
     date_added,
     date_added,
-    published
+    published,
+    0
   FROM album_data;
 
 # CREATE AN ALBUM FOR public images
 
-INSERT INTO common_album (label, description, published)
-VALUES ('People and Places', "Photos uploaded by various members of the public", 1);
+INSERT INTO common_album (label, description, published, created_at, featured)
+VALUES ('People and Places', "Photos uploaded by various members of the public", 1, NOW(), 0);
 
 # HOTELS AND RESORTS - Populate hospitality table with old hospitality data
 INSERT INTO common_hospitality (
-  featured, name, hospitality_type, description, address, telephone, website, date_added, published
+  featured, name, hospitality_type, description, address, telephone, website, date_added, published, contact_email
 )
   SELECT
     featured,
@@ -125,14 +127,15 @@ INSERT INTO common_hospitality (
     telephone,
     website,
     date_added,
-    published
+    published,
+    'hotelinfo@mokocharlie.com'
   FROM hospitality;
 
 # purge comments where we do not have images
 DELETE FROM image_comments
 WHERE image_id NOT IN (SELECT
-                         id
-                       FROM common_photo) OR image_id = '';
+                         image_id
+                       FROM common_photo) OR image_id = '' OR image_id = NULL;
 
 
 #COMMENTS
@@ -151,12 +154,12 @@ INSERT INTO common_comment (comment_id, image_id, image_comment, comment_author,
 
 
 # PHOTO STORIES
-INSERT INTO common_photostory (id, `name`, description, album, created_at, published)
+INSERT INTO common_photostory (id, `name`, description, album_id, created_at, published)
   SELECT
     story_id,
     story_name,
     story_description,
-    (SELECT id FROM album WHERE album_id = story_album),
+    (SELECT id FROM common_album WHERE common_album.album_id = story_album),
     date_added,
     published
   FROM photo_stories;

@@ -16,7 +16,7 @@
                     <div class="col-lg-10">
                         <h3>{{ image }}</h3>
                         Appears in:
-                        {% for album in image.albums.all %}
+                        {% for album in image.album.all %}
                             <a href="{{ album.get_absolute_url }}">{{ album }}</a>
                         {% endfor %}
                     </div>

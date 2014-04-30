@@ -10,37 +10,17 @@ INSERT INTO common_album_photos (photo_id, album_id)
                                    AND oi.image_album != ''
     INNER JOIN common_album AS a ON a.album_id = oa.album_id;
 
-#fix album covers
-UPDATE common_album
-SET cover_id = (SELECT
-                  id
-                FROM common_photo
-                WHERE image_id = cover_id);
-
 
 -- POPULATE HOSPITALITY PIVOT TABLE
 INSERT INTO common_hospitality_albums (album_id, hospitality_id)
   SELECT
-    (
-      (SELECT
-         id
-       FROM common_album
-       WHERE album_id = hospitality_album_lookup.album_id),
-      (SELECT
-         id
-       FROM hospitality)
-    );
+    (SELECT id FROM common_album WHERE album_id = hospitality_album_lookup.album_id) AS album_id,
+    hospitality_id FROM hospitality_album_lookup;
 
-
-UPDATE common_photostory
-SET album = (SELECT
-               album.id
-             FROM album
-             WHERE album.album_id = story_album);
 
 
 # Merge user images in
-INSERT INTO photo (image_id,
+INSERT INTO common_photo (image_id,
                    name,
                    path,
                    caption,
@@ -70,26 +50,22 @@ INSERT INTO photo (image_id,
 
 
 # put those photos in an album lookup as well
-INSERT INTO photo_album (photo_id, album_id)
+INSERT INTO common_album_photos (photo_id, album_id)
   SELECT
     id                                  AS photo_id,
     (SELECT
     id
-     FROM album
+     FROM common_album
      WHERE label = 'People and Places') AS album_id
-  FROM photo
+  FROM common_photo
   WHERE image_id IN (SELECT
                        image_id
                      FROM user_image_library);
 
 
-# assign image ownership to images so that we can merge user contributed images to the same table
-UPDATE `common_photo`
-SET owner = (SELECT
-               id
-             FROM common_mokouser
-             WHERE email = "kwakuchintoh@gmail.com");
-
+INSERT INTO common_photo_video(photo_id, video_id)
+  SELECT p.id, v.id FROM common_video AS v
+    JOIN common_photo AS p ON p.yt_video = v.external_id;
 
 COMMIT ;
 

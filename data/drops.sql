@@ -14,4 +14,14 @@ DROP TABLE IF EXISTS play_evolutions;
 DROP TABLE IF EXISTS search_data;
 DROP TABLE IF EXISTS image_library;
 DROP TABLE IF EXISTS album_data;
+DROP TABLE IF EXISTS photo_stories;
+DROP TABLE IF EXISTS video_library;
+DROP TABLE IF EXISTS promotions;
+DROP TABLE IF EXISTS hospitality_album_lookup;
+DROP TABLE IF EXISTS hospitality;
+DROP TABLE IF EXISTS image_comments;
+DROP TABLE IF EXISTS app_properties;
+DROP TABLE IF EXISTS app_property_definitions;
+DROP TABLE IF EXISTS app_data;
+
 COMMIT;
