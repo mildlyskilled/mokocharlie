@@ -8,22 +8,21 @@ from django.utils import timezone
 from django.utils.http import urlquote
 from django.utils.translation import ugettext_lazy as _
 from django.core.urlresolvers import reverse
+import uuid
 
 
 class Album(models.Model):
-    id = models.IntegerField(primary_key=True)
     album_id = models.IntegerField(blank=True, null=True)
     label = models.CharField(max_length=150)
     description = models.TextField(blank=True)
     cover = models.ForeignKey('Photo', blank=True, null=True, related_name='cover_photo')
-    created_at = models.DateTimeField()
-    updated_at = models.DateTimeField()
-    published = models.BooleanField()
+    created_at = models.DateTimeField(default=timezone.now())
+    updated_at = models.DateTimeField(default=timezone.now(), null=True)
+    published = models.BooleanField(default=True)
     featured = models.BooleanField(default=False)
-    photos = models.ManyToManyField('Photo', through='PhotoAlbum')
+    photos = models.ManyToManyField('Photo')
 
     class Meta:
-        db_table = 'album'
         ordering = ('-created_at', )
 
     def __unicode__(self):
@@ -51,13 +50,13 @@ class Album(models.Model):
 
 
 class Photo(models.Model):
-    id = models.IntegerField(primary_key=True)
-    image_id = models.CharField(max_length=20)
+    image_id = models.CharField(max_length=40, default=uuid.uuid1())
     name = models.CharField(max_length=250)
-    path = models.CharField(max_length=150)
+    path = models.CharField(max_length=150, null=True, blank=True)
     caption = models.TextField()
-    video = models.CharField(max_length=15, blank=True)
-    times_viewed = models.IntegerField()
+    video = models.ManyToManyField('Video')
+    yt_video = models.CharField(max_length=15, null=True)
+    times_viewed = models.IntegerField(default=0)
     created_at = models.DateTimeField(verbose_name="Date Uploaded")
     updated_at = models.DateTimeField(verbose_name="Date Modified")
     owner = models.ForeignKey('MokoUser', related_name='photo_owner', db_column='owner')
@@ -65,11 +64,9 @@ class Photo(models.Model):
     times_rated = models.IntegerField()
     published = models.BooleanField(default=False)
     deleted_at = models.DateTimeField(blank=True, null=True)
-    albums = models.ManyToManyField('Album', through='PhotoAlbum', related_name='photo_albums')
-    cloud_image = CloudinaryField('image')
+    cloud_image = CloudinaryField(null=True)
 
     class Meta:
-        db_table = 'photo'
         ordering = ('-created_at', )
 
     def __unicode__(self):
@@ -79,7 +76,7 @@ class Photo(models.Model):
         return reverse('photo_view', args=[str(self.id)])
 
     def get_albums(self):
-        return "<br />".join([a.label for a in self.albums.all()])
+        return "<br />".join([a.label for a in Album.objects.filter(photos=self.id)])
 
     @property
     def get_comments(self):
@@ -88,7 +85,7 @@ class Photo(models.Model):
     get_albums.short_description = 'Image Appears In'
 
 
-class Hotel(models.Model):
+class Hospitality(models.Model):
     HOTEL = 'HOTEL'
     RESORT = 'RESORT'
 
@@ -97,7 +94,6 @@ class Hotel(models.Model):
         (RESORT, 'Resort')
     )
 
-    id = models.IntegerField(primary_key=True)
     featured = models.BooleanField()
     hospitality_type = models.CharField(max_length=20, choices=HOTEL_TYPE_CHOICES, default=HOTEL)
     name = models.TextField()
@@ -108,11 +104,12 @@ class Hotel(models.Model):
     contact_email = models.EmailField(default="hotelinquiry@mokocharlie.com")
     date_added = models.DateTimeField()
     published = models.BooleanField(default=False)
-    albums = models.ManyToManyField('Album', through='HospitalityAlbum', related_name='hotel_album')
+    albums = models.ManyToManyField('Album')
 
     class Meta:
-        db_table = 'hospitality'
         ordering = ['-featured', '-date_added']
+        verbose_name_plural = 'Hospitality Provider'
+        verbose_name_plural = 'Hospitality Providers'
 
     def __unicode__(self):
         return self.name
@@ -137,28 +134,15 @@ class Hotel(models.Model):
         return reverse('hospitality_view', args=[str(self.id)])
 
 
-class HospitalityAlbum(models.Model):
-    id = models.BigIntegerField(primary_key=True)
-    hospitality = models.ForeignKey(Hotel)
-    album = models.ForeignKey(Album)
-
-    class Meta:
-        db_table = 'hospitality_album'
-
-
 class Comment(models.Model):
-    comment_id = models.BigIntegerField(primary_key=True)
+    comment_id = models.AutoField(primary_key=True)
     image = models.ForeignKey('Photo')
     image_comment = models.TextField()
     comment_author = models.CharField(max_length=150)
     comment_date = models.DateTimeField()
     comment_approved = models.BooleanField()
-    comment_reported = models.BooleanField()
-    comment_report_type = models.IntegerField()
-    report_comments = models.TextField(blank=True)
 
     class Meta:
-        db_table = 'image_comments'
         ordering = ('-comment_date',)
 
     def __unicode__(self):
@@ -168,38 +152,25 @@ class Comment(models.Model):
         return '/photos/view/{0}/#comment_{1}'.format(self.image.id, self.comment_id)
 
 
-class PhotoAlbum(models.Model):
-    id = models.IntegerField(primary_key=True)
-    photo = models.ForeignKey(Photo)
-    album = models.ForeignKey(Album)
-
-    class Meta:
-        managed = False
-        db_table = 'photo_album'
-
-
 class PhotoStory(models.Model):
-    story_id = models.IntegerField(primary_key=True)
-    story_name = models.CharField(max_length=150)
-    story_description = models.TextField()
-    story_album = models.ForeignKey(Album, db_column='story_album')
-    date_added = models.DateTimeField()
+    name = models.CharField(max_length=150)
+    description = models.TextField()
+    album = models.ForeignKey(Album)
+    created_at = models.DateTimeField(default=timezone.now())
     published = models.BooleanField()
 
     class Meta:
-        db_table = 'photo_stories'
-        ordering = ('-date_added', )
+        ordering = ('-created_at', )
         verbose_name_plural = "Photo Stories"
 
     def __unicode__(self):
-        return self.story_name
+        return self.name
 
     def get_absolute_url(self):
-        return reverse('story_view', args=[str(self.story_id)])
+        return reverse('story_view', args=[str(self.id)])
 
 
 class Promotion(models.Model):
-    promo_id = models.IntegerField(primary_key=True)
     promo_handle = models.CharField(max_length=50, blank=True)
     promo_type = models.CharField(max_length=20)
     promo_name = models.CharField(max_length=150)
@@ -211,28 +182,20 @@ class Promotion(models.Model):
     featured = models.IntegerField()
     published = models.IntegerField()
 
-    class Meta:
-        db_table = 'promotions'
 
+class Video(models.Model):
+    YT = 'YOUTUBE'
+    V = 'VIMEO'
 
-class SearchData(models.Model):
-    search_id = models.CharField(primary_key=True, max_length=15)
-    keywords = models.TextField()
-    searcher_ip_address = models.CharField(max_length=16)
-
-    class Meta:
-        managed = False
-        db_table = 'search_data'
-        verbose_name_plural = "Search Data"
-
-
-class VideoLibrary(models.Model):
-    video_id = models.IntegerField(primary_key=True)
+    SERVICE_CHOICES = (
+        (YT, 'Youtube Video'),
+        (V, 'Vimeo Video')
+    )
     external_id = models.CharField(max_length=150, blank=True)
+    external_source = models.CharField(max_length=25, default=YT)
 
-    class Meta:
-        db_table = 'video_library'
-        verbose_name_plural = "Video Library"
+    def __unicode__(self):
+        return "{0} {1}".format(self.external_source, self.external_id)
 
 
 class MokoUserManager(BaseUserManager):
@@ -334,11 +297,8 @@ class Favourite(models.Model):
     client_ip = models.CharField(max_length=13, null=True)
     created_at = models.DateTimeField(default=timezone.now())
 
-    class Meta:
-        db_table = 'favourite'
 
-
-class Collections(models.Model):
+class Collection(models.Model):
     name = models.CharField(max_length=25, default='Collection')
     albums = models.ManyToManyField('Album')
     featured = models.BooleanField(default=False)
@@ -355,8 +315,6 @@ class Collections(models.Model):
     get_albums.allow_tags = True
 
     class Meta:
-        db_table = 'collection'
-        verbose_name = _('collection')
         verbose_name_plural = _('collections')
 
     def __unicode__(self):
@@ -367,10 +325,10 @@ class Collections(models.Model):
 
 
 class ContactDetail(models.Model):
-    first_name = models.CharField(max_length=30)
-    last_name = models.CharField(max_length=30)
+    first_name = models.CharField(max_length=50)
+    last_name = models.CharField(max_length=50)
     email = models.EmailField()
-    phone = models.CharField(max_length=50)
+    telephone = models.CharField(max_length=50)
 
     def __unicode__(self):
         return "{0} {1}".format(self.first_name, self.last_name)

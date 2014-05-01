@@ -61,7 +61,7 @@ class PhotoViewTemplate(TemplateView):
         context = super(PhotoViewTemplate, self).get_context_data()
         photo = Photo.objects.get(id=image_id)
 
-        album_photos = Photo.objects.filter(albums__photos__id__exact=image_id).order_by('created_at').all()
+        album_photos = Photo.objects.filter(album__photos__id__exact=image_id).order_by('created_at').all()
 
         # find current key to get next and previous images
         current = [p for p in album_photos].index(photo)

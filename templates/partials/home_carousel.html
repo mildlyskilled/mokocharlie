@@ -4,6 +4,7 @@
         {% for a in featured_albums %}
             <div class="item {% if a == featured_albums.0 %}active{% endif %}">
                 {% cloudinary a.cover.image_id|add:'.jpg' transformation="home_carousel_850_crop" alt=a %}
+                <h2><span><a href="{{ a.get_absolute_url }}">{{ a }}</a></span></h2>
             </div>
         {% endfor %}
     </div>
@@ -27,6 +28,29 @@
         left: 0;
         opacity: 1;
         z-index: 1;
+    }
+    .carousel .item h2 {
+        position: absolute;
+        top: 300px;
+        left: 0;
+        width: 100%;
+    }
+
+    .carousel .item h2 span {
+        color: #000000;
+        font: bold 20px/41px Helvetica, Sans-Serif;
+        letter-spacing: -1px;
+        background: rgb(255, 255, 255); /* fallback color */
+        background: rgba(255, 255, 255, 0.70);
+        padding: 10px;
+    }
+
+    .carousel .item a {
+        color: #000000;
+    }
+    .carousel .item a:hover {
+        text-decoration: none;
+        color: #6495ed;
     }
 </style>
 <script type="application/javascript">

@@ -48,12 +48,12 @@
             <div class="panel-footer">
                 <ul class="pager">
                     <li class="previous">
-                        <a href="{% url 'story_view_with_image' story_id=story.story_id image_id=previous_image.id %}"><i
+                        <a href="{% url 'story_view_with_image' story_id=story.id image_id=previous_image.id %}"><i
                                 class="glyphicon glyphicon-chevron-left"></i></a>
                     </li>
 
                     <li class="next">
-                        <a href="{% url 'story_view_with_image' story_id=story.story_id image_id=next_image.id %}"><i class="glyphicon glyphicon-chevron-right"></i></a>
+                        <a href="{% url 'story_view_with_image' story_id=story.id image_id=next_image.id %}"><i class="glyphicon glyphicon-chevron-right"></i></a>
                     </li>
                 </ul>
             </div>

@@ -17,10 +17,10 @@ class CollectionViewTemplate(TemplateView):
         collection_id = self.kwargs.get('collection_id')
         _limit = self.request.GET.get('limit', self.default_limit)
         _page = self.request.GET.get('page', self.default_page)
-        collection = Collections.objects.get(id=collection_id)
+        collection = Collection.objects.get(id=collection_id)
 
         # Get comments
-        collection_comments = Comment.objects.filter(image__album__collections=collection_id).filter(comment_approved=1).order_by(
+        collection_comments = Comment.objects.filter(image__album__collection=collection_id).filter(comment_approved=1).order_by(
             '-comment_date')[:12]
         # Prepare context
         context = super(CollectionViewTemplate, self).get_context_data()

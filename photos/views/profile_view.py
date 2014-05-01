@@ -1,4 +1,5 @@
-from common.models import MokoUser, Comment, Classified
+from common.models import MokoUser, Comment
+from classifieds.models import *
 from django.shortcuts import redirect
 from django.views.generic.base import TemplateView
 from django.utils.decorators import method_decorator
@@ -25,7 +26,7 @@ class ProfileViewTemplate(TemplateView):
             user = self.request.user
             context = super(ProfileViewTemplate, self).get_context_data()
             photo_comments = Comment.objects.filter(image__owner=user.id)
-            classifieds = Classified.objects.filter(owner=user)
+            classifieds = Job.objects.filter(owner=user)
             context['photo_comments'] = photo_comments
             context['classifieds'] = classifieds
             context['today'] = datetime.datetime.now()

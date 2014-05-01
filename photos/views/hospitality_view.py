@@ -14,7 +14,7 @@ class HospitalityTemplate(TemplateView):
     default_order = 'recent'
 
     def get_context_data(self, **kwargs):
-        hotels = Hotel.objects.filter(published=1)
+        hotels = Hospitality.objects.filter(published=1)
         # Get comments
         comments = Comment.objects.all().filter(comment_approved=1)[:8]
         #context
@@ -33,7 +33,7 @@ class HospitalityViewTemplate(TemplateView):
         _limit = self.request.GET.get('limit', self.default_limit)
         _page = self.request.GET.get('page', self.default_page)
         hospitality_id = self.kwargs.get('hospitality_id')
-        hospitality = Hotel.objects.get(id=hospitality_id)
+        hospitality = Hospitality.objects.get(id=hospitality_id)
 
         # Get images for this hotel/resort
         albums = Album.objects.filter(hospitalityalbum=hospitality)

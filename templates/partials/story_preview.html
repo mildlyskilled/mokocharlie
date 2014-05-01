@@ -1,19 +1,20 @@
 {% load cloudinary %}
+{% load humanize %}
 <div class="col-sm-6 col-md-4" style="min-height: 290px">
     <div class="thumbnail">
         <a href="{{ story.get_absolute_url }}">
-            {% cloudinary story.story_album.album_cover.image_id|add:'.jpg' transformation="album_preview" alt=album %}</a>
+            {% cloudinary story.album.album_cover.image_id|add:'.jpg' transformation="album_preview" alt=album %}</a>
 
         <div class="caption">
             <h5>
                 <a href="{{ album.get_absolute_url }}">
-                {{ story.story_album.label|truncatewords:4 }}
+                {{ story.album.label|truncatewords:4 }}
             </a></h5>
             <p>
                 <small><i class="glyphicon glyphicon-plus"> </i>
-                    {{ story.date_added }}<br>
+                    {{ story.created_at|naturaltime }}<br>
                     <a class="label label-info" href="{{ story.get_absolute_url }}">
-                        {{ story.story_album.photos.all.count }}
+                        {{ story.album.photos.all.count }}
                         images</a>
                 </small>
             </p>

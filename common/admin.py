@@ -72,8 +72,8 @@ class AlbumAdmin(admin.ModelAdmin):
 
 
 class CommentsAdmin(admin.ModelAdmin):
-    list_display = ['image', 'comment_author', 'comment_date', 'comment_approved', 'comment_reported']
-    list_filter = ['comment_reported', 'comment_approved']
+    list_display = ['image', 'comment_author', 'comment_date', 'comment_approved']
+    list_filter = [ 'comment_approved']
 
     def approve_comment(self, request, queryset):
         queryset.update(comment_approved=1)
@@ -87,7 +87,7 @@ class CommentsAdmin(admin.ModelAdmin):
     actions = [approve_comment, disapprove_comment]
 
 
-class HotelAdmin(admin.ModelAdmin):
+class HospitalityAdmin(admin.ModelAdmin):
     list_display = ['name', 'hospitality_type', 'get_albums', 'featured', 'published']
     list_display_links = ('name', 'get_albums')
     select_related = True
@@ -123,7 +123,7 @@ class MokoUserAdmin(UserAdmin):
 class CollectionForm(ModelForm):
     def __init__(self, *args, **kwargs):
         super(CollectionForm, self).__init__(*args, **kwargs)
-        self.fields['cover_album'].queryset = Album.objects.filter(collections=self.instance.pk)
+        self.fields['cover_album'].queryset = Album.objects.filter(collection=self.instance.pk)
 
 
 class CollectionAdmin(admin.ModelAdmin):
@@ -150,20 +150,11 @@ class CollectionAdmin(admin.ModelAdmin):
 
     actions = [publish_collection, unpublish_collection, feature_collection, unfeature_collection]
 
-
-class ClassifiedAdminForm(ModelForm):
-    def __init__(self, *args, **kwargs):
-        super(ClassifiedAdminForm, self).__init__(*args, **kwargs)
-
-        advertisers = Group.objects.get(name="Advertisers")
-        self.fields['owner'].queryset = advertisers.user_set.all()
-
-
 admin.site.register(MokoUser, MokoUserAdmin)
 admin.site.register(Photo, PhotoAdmin)
 admin.site.register(Album, AlbumAdmin)
 admin.site.register(Comment, CommentsAdmin)
-admin.site.register(Hotel, HotelAdmin)
+admin.site.register(Hospitality, HospitalityAdmin)
 admin.site.register(PhotoStory)
 admin.site.register(Promotion)
-admin.site.register(Collections, CollectionAdmin)
+admin.site.register(Collection, CollectionAdmin)

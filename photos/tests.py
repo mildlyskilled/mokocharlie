@@ -22,14 +22,14 @@ class HomepageTest(TestCase):
     def test_homepage_has_album_covers(self):
         """Homepage returns has non-empty featured albums in context"""
         self.assertIn('featured_albums', self.home.context)
-        self.assertGreater(len(self.home.context['featured_albums']), 0)
+        self.assertGreater(len(self.home.context['featured_albums']), 0, "The Homepage does not have any featured albums")
 
     def test_homepage_has_collections(self):
         """Homepage returns has non-empty featured collection of albums in context"""
         self.assertIn('featured_collections', self.home.context)
-        self.assertGreater(len(self.home.context['featured_collections']), 0)
+        self.assertGreater(len(self.home.context['featured_collections']), 0, "The Homepage has no collections")
 
     def test_homepage_has_classifieds(self):
         """Homepage returns has non-empty classifieds in context"""
         self.assertIn('classifieds', self.home.context)
-        self.assertGreater(len(self.home.context['classifieds']), 0)
+        self.assertGreater(len(self.home.context['classifieds']), 0, "The Homepage has no classifieds")
