@@ -38,7 +38,8 @@ INSTALLED_APPS = (
     'social.apps.django_app.default',
     'endless_pagination',
     'south',
-    'common'
+    'common',
+    'classifieds',
 )
 
 MIDDLEWARE_CLASSES = (

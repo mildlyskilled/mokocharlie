@@ -159,19 +159,6 @@ class ClassifiedAdminForm(ModelForm):
         self.fields['owner'].queryset = advertisers.user_set.all()
 
 
-class ClassifiedAdmin(admin.ModelAdmin):
-    #form =  ClassifiedAdminForm
-    list_display = ['title', 'get_owner', 'featured', 'published', 'published_date', 'unpublish_date']
-    list_filter = ['featured', 'published']
-    list_display_links = ['title', 'get_owner']
-
-    def get_owner(self, obj):
-        return '<a href="/admin/common/mokouser/{0}">{1}</a>'.format(obj.owner.id, obj.owner.get_full_name())
-
-    get_owner.allow_tags = True
-    get_owner.short_description = "Posted By"
-
-
 admin.site.register(MokoUser, MokoUserAdmin)
 admin.site.register(Photo, PhotoAdmin)
 admin.site.register(Album, AlbumAdmin)
@@ -180,5 +167,3 @@ admin.site.register(Hotel, HotelAdmin)
 admin.site.register(PhotoStory)
 admin.site.register(Promotion)
 admin.site.register(Collections, CollectionAdmin)
-admin.site.register(Classified, ClassifiedAdmin)
-admin.site.register(ClassifiedType)

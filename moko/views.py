@@ -7,6 +7,7 @@ from django.shortcuts import redirect, resolve_url
 from django.contrib.auth import authenticate, login
 from django.contrib import messages
 from common.models import *
+from classifieds.models import *
 from moko.forms import LoginForm
 import datetime
 
@@ -17,9 +18,7 @@ class HomeTemplateView(TemplateView):
     def get_context_data(self, **kwargs):
         recent_albums = Album.objects.filter(published=1).filter(featured=1)[:5]
         featured_collections = Collections.objects.filter(published=1).filter(featured=1)[:6]
-        classifieds = Classified.objects.filter(published=1).filter(featured=1) \
-            .filter(published_date__lte=datetime.datetime.now) \
-            .filter(unpublish_date__gte=datetime.datetime.now)[:8]
+        classifieds = get_featured_classifieds(8)
         context = super(HomeTemplateView, self).get_context_data()
         context['featured_albums'] = recent_albums
         context['featured_collections'] = featured_collections
