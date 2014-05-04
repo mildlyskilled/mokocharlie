@@ -43,7 +43,7 @@ class Album(models.Model):
         return self.photos.order_by('?')[0]
 
     def album_images(self):
-        return self.photos.count()
+        return self.photo_set.count()
 
     album_images.short_description = "Images in Album"
 
@@ -73,7 +73,7 @@ class Photo(models.Model):
         return reverse('photo_view', args=[str(self.id)])
 
     def get_albums(self):
-        return "<br />".join([a.label for a in Album.objects.filter(photos=self.id)])
+        return "<br />".join([a.label for a in Album.objects.filter(photo=self.id)])
 
     @property
     def get_comments(self):

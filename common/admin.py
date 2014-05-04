@@ -42,7 +42,7 @@ class PhotoAdmin(admin.ModelAdmin):
 class AlbumForm(ModelForm):
     def __init__(self, *args, **kwargs):
         super(AlbumForm, self).__init__(*args, **kwargs)
-        self.fields['cover'].queryset = Photo.objects.filter(album=self.instance.pk)
+        self.fields['cover'].queryset = Photo.objects.filter(albums=self.instance.pk)
 
 
 class AlbumAdmin(admin.ModelAdmin):

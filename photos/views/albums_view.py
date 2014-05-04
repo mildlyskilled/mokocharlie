@@ -20,9 +20,10 @@ class AlbumTemplate(TemplateView):
         _page = self.request.GET.get('page', self.default_page)
         _order = self.request.GET.get('order', self.default_order)
         from collections import OrderedDict
+
         _order_dict_unsorted = {'alpha': ['label', 'Alphabetical'],
-                       'recent': ['-created_at', 'Most Recent'],
-                       'popular': ['-average_views', 'Most Popular']}
+                                'recent': ['-created_at', 'Most Recent'],
+                                'popular': ['-average_views', 'Most Popular']}
 
         if _order in _order_dict_unsorted:
             if _order == 'popular':
@@ -58,11 +59,11 @@ class AlbumViewTemplate(TemplateView):
         album = Album.objects.get(id=album_id)
 
         # Get comments
-        album_comments = Comment.objects.filter(image__album=album_id).filter(comment_approved=1).order_by(
+        album_comments = Comment.objects.filter(image__albums=album_id).filter(comment_approved=1).order_by(
             '-comment_date')
         # Prepare context
         context = super(AlbumViewTemplate, self).get_context_data()
-        context["album_images"] = album.photos.all()
+        context["album_images"] = album.photo_set.all()
         context["album"] = album
         context["album_comments"] = album_comments
         context["limit"] = _limit
