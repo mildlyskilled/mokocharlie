@@ -23,7 +23,7 @@ INSERT INTO common_mokouser (password,
     NOW()
   FROM mc_users;
 
-
+ALTER TABLE `common_photo` ADD column yt_video VARCHAR (15) NULL ;
 # PHOTOS - Populate our photo table with old images
 INSERT INTO `common_photo` (`image_id`,
                             `name`,
@@ -34,8 +34,6 @@ INSERT INTO `common_photo` (`image_id`,
                             `created_at`,
                             `updated_at`,
                             `owner`,
-                            `total_rating`,
-                            `times_rated`,
                             `published`,
                             `deleted_at`
 )
@@ -49,8 +47,6 @@ INSERT INTO `common_photo` (`image_id`,
     `date_added`,
     `date_added`,
     (SELECT cu.id FROM common_mokouser AS cu WHERE cu.email = 'kwakuchintoh@gmail.com') AS owner,
-    `total_rating`,
-    `times_rated`,
     `published`,
     `date_deleted`
   FROM image_library;
@@ -65,8 +61,6 @@ INSERT INTO common_photo (image_id,
                    times_viewed,
                    created_at,
                    updated_at,
-                   total_rating,
-                   times_rated,
                    published
 )
 
@@ -79,8 +73,6 @@ INSERT INTO common_photo (image_id,
     times_viewed,
     date_added,
     date_added,
-    total_rating,
-    times_rated,
     published
   FROM user_image_library
     JOIN common_mokouser AS u ON uploader_email = u.email;

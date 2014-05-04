@@ -20,7 +20,6 @@ class Album(models.Model):
     updated_at = models.DateTimeField(default=timezone.now(), null=True)
     published = models.BooleanField(default=True)
     featured = models.BooleanField(default=False)
-    photos = models.ManyToManyField('Photo')
 
     class Meta:
         ordering = ('-created_at', )
@@ -55,16 +54,14 @@ class Photo(models.Model):
     path = models.CharField(max_length=150, null=True, blank=True)
     caption = models.TextField()
     video = models.ManyToManyField('Video')
-    yt_video = models.CharField(max_length=15, null=True)
     times_viewed = models.IntegerField(default=0)
-    created_at = models.DateTimeField(verbose_name="Date Uploaded")
-    updated_at = models.DateTimeField(verbose_name="Date Modified")
+    created_at = models.DateTimeField(verbose_name="Date Uploaded", default=datetime.datetime.now())
+    updated_at = models.DateTimeField(verbose_name="Date Modified", default=datetime.datetime.now())
     owner = models.ForeignKey('MokoUser', related_name='photo_owner', db_column='owner')
-    total_rating = models.BigIntegerField()
-    times_rated = models.IntegerField()
     published = models.BooleanField(default=False)
     deleted_at = models.DateTimeField(blank=True, null=True)
     cloud_image = CloudinaryField(null=True)
+    albums = models.ManyToManyField(Album)
 
     class Meta:
         ordering = ('-created_at', )

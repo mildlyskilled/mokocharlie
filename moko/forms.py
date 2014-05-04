@@ -1,18 +1,19 @@
+from cloudinary.models import CloudinaryField
 from django import forms
-from django.forms import ModelForm, Textarea, TextInput, HiddenInput
-from common.models import Comment
+from django.forms import ModelForm, Textarea, TextInput, HiddenInput, Select
+from common.models import Comment, Album
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Submit, Layout, Fieldset
 from django.utils.translation import gettext as _
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
-from common.models import MokoUser
+from common.models import MokoUser, Photo
 from haystack.forms import SearchForm
+from cloudinary.forms import CloudinaryJsFileField, CloudinaryFileField
 
 
 class CommentForm(ModelForm):
     class Meta:
         model = Comment
-        fields = ('image_comment', 'comment_author', 'image')
         labels = {
             'image_comment': _('Your Comment'),
             'comment_author': _('Your Name'),
@@ -102,11 +103,58 @@ class CustomUserChangeForm(UserChangeForm):
 class GeneralSearchForm(SearchForm):
     """ A form for performing search across Photos, Albums and Comments
     """
+
     def __init__(self, *args, **kwargs):
-        super(GeneralSearchForm,self).__init__(*args, **kwargs)
+        super(GeneralSearchForm, self).__init__(*args, **kwargs)
         self.helper = FormHelper()
         self.helper.form_class = 'form-horizontal'
         self.helper.label_class = 'col-lg-3'
         self.helper.field_class = 'col-lg-7 login-fields'
 
 
+class PhotoUploadForm(ModelForm):
+    class Meta:
+        model = Photo
+        fields = ['name', 'caption', 'owner', 'image_id', 'cloud_image', 'albums']
+        widgets = {
+            'name': TextInput(attrs={'class': 'col-lg-12'}),
+            'caption': Textarea(attrs={'cols': 40, 'rows': 5}),
+            #'times_viewed': HiddenInput(),
+            #'published': HiddenInput(),
+            'owner': HiddenInput(),
+            #'deleted_at': HiddenInput(),
+            #'created_at': HiddenInput(),
+            #'updated_at': HiddenInput(),
+            'image_id': HiddenInput()
+        }
+
+    def __init__(self, *args, **kwargs):
+        super(PhotoUploadForm, self).__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.form_class = 'form-horizontal'
+        self.helper.form_method = 'post'
+        self.helper.form_action = 'upload_photos'
+        self.helper.label_class = 'col-lg-3'
+        self.helper.field_class = 'col-lg-7 login-fields'
+        self.helper.add_input(Submit('submit', 'Submit', css_class='pull-right'))
+        self.helper.layout = Layout(
+            Fieldset(
+                'Please describe your photo',
+                # BEGIN HIDDEN FIELDS
+                #'times_viewed',
+                'published',
+                #'deleted_at',
+                #'created_at',
+                #'updated_at',
+                'owner',
+                'image_id',
+                # END HIDDEN FIELDS
+                'name',
+                'caption',
+                'cloud_image',
+                'albums'
+            )
+        )
+        self.fields['albums'].queryset = Album.objects.filter(label='People and Places')
+
+    cloud_image = CloudinaryFileField()

@@ -1,12 +1,13 @@
 import json
 import logging
 
+from cloudinary.forms import cl_init_js_callbacks
+from django.contrib import messages
 from django.views.generic.base import TemplateView
 from django.views.generic.edit import CreateView
 from django.http import HttpResponseRedirect
-from django.contrib import messages
 from ipware.ip import get_real_ip, get_ip
-from moko.forms import CommentForm
+from moko.forms import CommentForm, PhotoUploadForm
 from moko.mixins.ajax import AjaxResponseMixin
 from common.models import *
 
@@ -61,7 +62,7 @@ class PhotoViewTemplate(TemplateView):
         context = super(PhotoViewTemplate, self).get_context_data()
         photo = Photo.objects.get(id=image_id)
 
-        album_photos = Photo.objects.filter(album__photos__id__exact=image_id).order_by('created_at').all()
+        album_photos = Photo.objects.filter(albums__photos__id__exact=image_id).order_by('created_at').all()
 
         # find current key to get next and previous images
         current = [p for p in album_photos].index(photo)
@@ -89,11 +90,6 @@ class PhotoViewTemplate(TemplateView):
         context["next_image"] = album_photos[next_item]
         context["previous_image"] = album_photos[previous_item]
         context["current_image_number"] = current + 1
-
-        if self.request.method == 'POST':
-            form = CommentForm(self.request.POST)
-            if form.is_valid():
-                form_data = form.cleaned_data
         return context
 
 
@@ -138,8 +134,6 @@ class CommentListViewTemplate(TemplateView):
     template_name = "partials/comment_list.html"
 
     def get_context_data(self, **kwargs):
-
-
         if self.request.GET.get('image_id') is not None:
             #get comments on an image
             image_id = self.request.GET.get('image_id')
@@ -198,3 +192,44 @@ class UnFavouritePhotoViewTemplate(AjaxResponseMixin, TemplateView):
                 data['message'] = "Could not add this photo to favourites"
 
         return self.render_to_json_response(json.dumps(data))
+
+
+class UploadPhotoTemplate(CreateView):
+    template_name = "upload/index.html"
+    model = Photo
+    form_class = PhotoUploadForm
+    object = Photo
+
+    def get_form_kwargs(self):
+        import uuid
+        owner = self.request.user
+        kwargs = super(CreateView, self).get_form_kwargs()
+        kwargs['initial'] = {'owner': owner, 'created_at': datetime.datetime.now(),
+                             'updated_at': datetime.datetime.now(), 'image_id': uuid.uuid1()}
+
+        return kwargs
+
+    def get(self, request, *args, **kwargs):
+        return super(UploadPhotoTemplate, self).get(request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        form = PhotoUploadForm(request.POST, request.FILES)
+        if form.is_valid():
+            p = form.save(commit=False)
+            published = 0
+            if request.user.is_staff:
+                published = 1
+            p.published = published
+            public_id = p.cloud_image.public_id
+            p.image_id = public_id
+            p.save()
+            form.save_m2m()
+            messages.add_message(self.request, messages.SUCCESS,
+                                 'Successfully uploaded your image to the Mokocharlie Cloud')
+        else:
+            print form
+            messages.add_message(self.request, messages.ERROR,
+                                 'There was a problem uploading you photo')
+            return self.form_invalid(form)
+
+        return HttpResponseRedirect(reverse('upload_photos'))

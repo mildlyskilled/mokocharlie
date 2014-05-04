@@ -4,6 +4,7 @@ from haystack.views import (SearchView, search_view_factory)
 from moko.forms import GeneralSearchForm
 from photos.views import *
 from moko.views import *
+from classifieds.views import *
 
 admin.autodiscover()
 
@@ -44,18 +45,20 @@ urlpatterns = patterns('',
                        url(r'^photos/unfavourite/(?P<photo_id>\d+)/$', UnFavouritePhotoViewTemplate.as_view(),
                            name='unfavourite_photo'),
 
+                       # uploading images
+                       url(r'^upload',  login_required(UploadPhotoTemplate.as_view()), name='upload_photos'),
+
                        # Admin endpoints
                        (r'^admin/', include(admin.site.urls)),
 
-                       # Social logins
+                       # Social log ins
                        url(r'^social/', include('social.apps.django_app.urls', namespace='social')),
 
                        # Search endpoints
                        url(r'^search/$', search_view_factory(
                            view_class=SearchView,
                            template='search/search.html',
-                           form_class=GeneralSearchForm
-                       ), name='haystack_search'),
+                           form_class=GeneralSearchForm), name='haystack_search'),
 
                        # Hospitality
                        url(r'^hospitality/$', HospitalityTemplate.as_view(), name='hospitality_list'),
@@ -65,11 +68,23 @@ urlpatterns = patterns('',
                        # collections
                        url(r'^collection/(?P<collection_id>\d+)$', CollectionViewTemplate.as_view(),
                            name='collection_view'),
+
+                       # classifieds
+                       url(r'^classifieds', ClassifiedsTemplate.as_view(), name="classifieds_list"),
+                       # types of classifieds
+                       url(r'^classifieds/(?P<type>\s+)$', ClassifiedsTypeListTemplate.as_view(),
+                           name="classifieds_type_list"),
+                       # ID and type
+                       url(r'^classifieds/(?P<type>\s+)/(?P<classified_id>\d+)/$',
+                           ClassifiedsSingleViewTemplate.as_view(),
+                           name="classifieds_view"),
 )
 
 from django.conf import settings
+
 if settings.DEBUG:
     import debug_toolbar
+
     urlpatterns += patterns('',
-        url(r'^__debug__/', include(debug_toolbar.urls)),
+                            url(r'^__debug__/', include(debug_toolbar.urls)),
     )

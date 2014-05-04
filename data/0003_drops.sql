@@ -23,5 +23,5 @@ DROP TABLE IF EXISTS image_comments;
 DROP TABLE IF EXISTS app_properties;
 DROP TABLE IF EXISTS app_property_definitions;
 DROP TABLE IF EXISTS app_data;
-
+ALTER TABLE common_photo DROP yt_video;
 COMMIT;

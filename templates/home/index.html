@@ -19,7 +19,7 @@
             <a href="{% url 'photo_list' %}">PHOTOS</a> |
             <a href="{% url 'hospitality_list' %}">HOTELS &amp; RESORTS</a> |
             <a href="{% url 'story_list' %}">STORIES</a> |
-            <a href="{% url 'story_list' %}">UPLOAD</a>
+            <a href="{% url 'upload_photos' %}">UPLOAD</a>
         </div>
     </div>
 {% endblock %}
@@ -43,6 +43,7 @@
             {% for classified in classifieds %}
                 {% include "partials/classified_preview.html" %}
             {% endfor %}
+        <a href="{% url 'classifieds_list' %}">More Classifieds</a>
         </div>
     </div>
 {% endblock %}

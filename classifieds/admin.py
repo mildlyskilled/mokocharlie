@@ -16,5 +16,7 @@ class JobAdmin(admin.ModelAdmin):
 
 admin.site.register(Job, JobAdmin)
 admin.site.register(Company)
+admin.site.register(General)
 admin.site.register(ContactDetail)
 admin.site.register(JobRequirement)
+admin.site.register(Taxonomy)

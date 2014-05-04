@@ -1,0 +1,15 @@
+{% extends "master.html" %}
+{% load crispy_forms_tags %}
+{% block title %}Upload an image{% endblock %}
+{% block content %}
+    <div class="row" style="margin-bottom: 20px;">
+        <div class="col-xs-8">
+            {% crispy form form.helper %}
+        </div>
+        <div class="col-xs-4">
+            <h4>Upload Instructions</h4>
+            You can upload your images here one at a time using this form. It will appear in the mokocharlie photo
+            gallery as soon as it is approved.
+        </div>
+    </div>
+{% endblock %}

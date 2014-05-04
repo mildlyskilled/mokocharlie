@@ -44,6 +44,7 @@ class Company(models.Model):
     location = models.CharField(max_length=150)
     country = models.CharField(max_length=50)
     description = models.TextField(null=True, blank=True)
+    category = models.ForeignKey('Taxonomy')
     published = models.BooleanField(default=True)
 
     def __unicode__(self):
@@ -53,7 +54,37 @@ class Company(models.Model):
         verbose_name_plural = 'companies'
 
 
+class General(models.Model):
+    name = models.CharField(max_length=150)
+    description = models.TextField()
+    contact = models.ForeignKey(ContactDetail)
+    publish_date = models.DateTimeField(default=datetime.datetime.now())
+    remove_date = models.DateTimeField(default=datetime.datetime.now() + datetime.timedelta(days=7))
+    published = models.BooleanField(default=True)
+    featured = models.BooleanField(default=False)
+
+    class Meta:
+        verbose_name = 'General Classified Item'
+        verbose_name_plural = 'General Classified Items'
+
+    def __unicode__(self):
+        return self.name
+
+
+class Taxonomy(models.Model):
+    name = models.CharField(max_length=50, default="Category")
+    parent = models.ForeignKey('Taxonomy', blank=True, null=True)
+    published = models.BooleanField(default=True)
+
+    class Meta:
+        verbose_name = 'Category'
+        verbose_name_plural = 'Categories'
+
+    def __unicode__(self):
+        return self.name
+
+
 def get_featured_classifieds(limit=8):
-    Job.objects.filter(published=1).filter(featured=1) \
+    return Job.objects.filter(published=1).filter(featured=1) \
         .filter(published_date__lte=datetime.datetime.now) \
         .filter(remove_date__gte=datetime.datetime.now)[:limit]

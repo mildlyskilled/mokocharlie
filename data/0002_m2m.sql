@@ -1,6 +1,6 @@
 BEGIN;
 
-INSERT INTO common_album_photos (photo_id, album_id)
+INSERT INTO common_photo_albums (photo_id, album_id)
   SELECT
     i.id AS new_image_id,
     a.id AS new_album_id
@@ -18,39 +18,8 @@ INSERT INTO common_hospitality_albums (album_id, hospitality_id)
     hospitality_id FROM hospitality_album_lookup;
 
 
-
-# Merge user images in
-INSERT INTO common_photo (image_id,
-                   name,
-                   path,
-                   caption,
-                   owner,
-                   times_viewed,
-                   created_at,
-                   updated_at,
-                   total_rating,
-                   times_rated,
-                   published
-)
-
-  SELECT
-    image_id,
-    image_name,
-    image_path,
-    image_caption,
-    u.id,
-    times_viewed,
-    date_added,
-    date_added,
-    total_rating,
-    times_rated,
-    published
-  FROM user_image_library
-    JOIN common_mokouser AS u ON uploader_email = u.email;
-
-
 # put those photos in an album lookup as well
-INSERT INTO common_album_photos (photo_id, album_id)
+INSERT INTO common_photo_albums (photo_id, album_id)
   SELECT
     id                                  AS photo_id,
     (SELECT
