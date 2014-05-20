@@ -8,6 +8,7 @@ from django.utils import timezone
 from django.utils.http import urlquote
 from django.utils.translation import ugettext_lazy as _
 from django.core.urlresolvers import reverse
+from jsonfield import JSONField
 import uuid
 
 
@@ -80,7 +81,8 @@ class Photo(models.Model):
         return Comment.objects.filter(image=self)
 
     get_albums.short_description = 'Image Appears In'
-
+    from south.modelsinspector import add_introspection_rules
+    add_introspection_rules([], ["^cloudinary\.models\.CloudinaryField"])
 
 class Hospitality(models.Model):
     HOTEL = 'HOTEL'
@@ -321,7 +323,7 @@ class Collection(models.Model):
         return reverse('collection_view', args=[str(self.id)])
 
 
-class ContactDetail(models.Model):
+class Contact(models.Model):
     first_name = models.CharField(max_length=50)
     last_name = models.CharField(max_length=50)
     email = models.EmailField()
@@ -329,3 +331,19 @@ class ContactDetail(models.Model):
 
     def __unicode__(self):
         return "{0} {1}".format(self.first_name, self.last_name)
+
+
+class Classified(models.Model):
+    title = models.CharField(max_length=100)
+    description = models.TextField()
+    contact = models.ForeignKey(Contact)
+    published = models.BooleanField(default=False)
+    created_at = models.DateTimeField(default=timezone.now())
+    updated_at = models.DateTimeField(default=timezone.now())
+    meta_data = JSONField()
+
+    def get_absolute_url(self):
+        return reverse('classified_view', args=[str(self.id)])
+
+    def __unicode__(self):
+        return self.title

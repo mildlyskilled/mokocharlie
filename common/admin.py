@@ -1,17 +1,15 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
-from django.contrib.auth.models import Group
 from django.forms import ModelForm
 from moko.forms import CustomUserChangeForm, CustomUserCreationForm
 from django.utils.translation import ugettext_lazy as _
 from common.models import *
 
-
-
 from cloudinary.models import CloudinaryField
 
+
 class PhotoForm(ModelForm):
-  image = CloudinaryField('image')
+    image = CloudinaryField('image')
 
 
 class PhotoAdmin(admin.ModelAdmin):
@@ -23,10 +21,8 @@ class PhotoAdmin(admin.ModelAdmin):
     def get_owner(self, obj):
         return '<a href="/admin/common/mokouser/{0}">{1}</a>'.format(obj.owner.id, obj.owner.get_full_name())
 
-
     def unpublish_photo(self, request, queryset):
         queryset.update(published=0)
-
 
     def publish_photo(self, request, queryset):
         queryset.update(published=1)
@@ -59,7 +55,6 @@ class AlbumAdmin(admin.ModelAdmin):
     def unpublish_album(self, request, queryset):
         queryset.update(published=0)
 
-
     def publish_album(self, request, queryset):
         queryset.update(published=1)
 
@@ -73,7 +68,7 @@ class AlbumAdmin(admin.ModelAdmin):
 
 class CommentsAdmin(admin.ModelAdmin):
     list_display = ['image', 'comment_author', 'comment_date', 'comment_approved']
-    list_filter = [ 'comment_approved']
+    list_filter = ['comment_approved']
 
     def approve_comment(self, request, queryset):
         queryset.update(comment_approved=1)
@@ -149,6 +144,7 @@ class CollectionAdmin(admin.ModelAdmin):
     unfeature_collection.short_description = "Unfeature Selected Collections"
 
     actions = [publish_collection, unpublish_collection, feature_collection, unfeature_collection]
+
 
 admin.site.register(MokoUser, MokoUserAdmin)
 admin.site.register(Photo, PhotoAdmin)

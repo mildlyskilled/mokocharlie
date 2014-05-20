@@ -4,7 +4,6 @@ from haystack.views import (SearchView, search_view_factory)
 from moko.forms import GeneralSearchForm
 from photos.views import *
 from moko.views import *
-from classifieds.views import *
 
 admin.autodiscover()
 

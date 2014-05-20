@@ -5,3 +5,4 @@ from story_view import *
 from search_view import *
 from hospitality_view import *
 from collection_view import *
+from classfieds_view import *

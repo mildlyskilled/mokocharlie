@@ -37,7 +37,6 @@ INSTALLED_APPS = (
     'south',
     'common',
     'common',
-    'classifieds',
 )
 
 MIDDLEWARE_CLASSES = (
