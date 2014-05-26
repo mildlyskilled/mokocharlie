@@ -1,14 +1,15 @@
-from common.models import MokoUser, Comment, Classified
+from common.models import MokoUser, Comment, Classified, Contact
+from django.http import HttpResponseRedirect
 from django.shortcuts import redirect
-from django.views.generic.base import TemplateView
+from django.views.generic import DetailView
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
-from moko.forms import CustomUserCreationForm
-from django.views.generic.edit import FormView
+from moko.forms import CustomUserCreationForm, ClassifiedForm, CustomUserChangeForm
+from django.views.generic.edit import FormView, FormMixin
 import datetime
 
 
-class ProfileViewTemplate(TemplateView):
+class ProfileViewTemplate(FormMixin, DetailView):
     """ Provides a simple view containing a users' profile details """
     model = MokoUser
     template_name = "profile/view.html"
@@ -20,15 +21,31 @@ class ProfileViewTemplate(TemplateView):
         else:
             return super(ProfileViewTemplate, self).get(request, *args, **kwargs)
 
+    @method_decorator(login_required)
+    def post(self, request, *args, **kwargs):
+        form = CustomUserChangeForm(request.POST, instance=request.user)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect(request.path)
+        else:
+            return self.form_invalid(form)
+
     def get_context_data(self, **kwargs):
         if self.request.user.is_authenticated():
             user = self.request.user
+            edit_tab = self.request.GET.get('state')
             context = super(ProfileViewTemplate, self).get_context_data()
             photo_comments = Comment.objects.filter(image__owner=user.id)
             classifieds = Classified.objects.filter(owner=user)
             context['photo_comments'] = photo_comments
             context['classifieds'] = classifieds
             context['today'] = datetime.datetime.now()
+            classified_form_object = ClassifiedForm(instance=Classified())
+            classified_form_object.fields['owner'].queryset = Contact.objects.filter(owner=self.request.user)
+            context['classified_form'] = classified_form_object
+            if edit_tab is not None:
+                context['edit_form'] = CustomUserChangeForm(instance=self.request.user)
+
             return context
 
     def get_object(self, queryset=None):

@@ -1,7 +1,12 @@
-import logging
+from django.contrib.auth.decorators import login_required
+from django.http import HttpResponseRedirect
+from django.shortcuts import redirect
+from django.utils.decorators import method_decorator
 from django.views.generic import ListView, DetailView
 from django.views.generic.base import TemplateView
 from common.models import *
+from django.views.generic.edit import CreateView
+from moko.forms import ClassifiedForm
 
 
 class ClassifiedsTemplate(TemplateView):
@@ -20,3 +25,36 @@ class ClassifiedsSingleViewTemplate(DetailView):
     def get_context_data(self, **kwargs):
         context = super(ClassifiedsSingleViewTemplate, self).get_context_data()
         return context
+
+
+class NewClassifiedsTemplate(CreateView):
+    """ Create new classifieds item but users need to be logged in first """
+    template_name = "classifieds/view.html"
+    form_class = ClassifiedForm
+    object = Classified
+    model = Classified
+
+    def get_form_kwargs(self):
+        now = datetime.datetime.now()
+        print now
+        kwargs = super(CreateView, self).get_form_kwargs()
+        kwargs['initial'] = {'owner': self.request.user.id, 'created_at': now, 'updated_at': now,
+                             'published': self.request.user.is_staff}
+        return kwargs
+
+    @method_decorator(login_required)
+    def get(self, request, *args, **kwargs):
+        if self.request.GET.get('next'):
+            return redirect(self.request.GET.get('next'))
+        else:
+            return super(NewClassifiedsTemplate, self).get(request, *args, **kwargs)
+
+    @method_decorator(login_required)
+    def post(self, request, *args, **kwargs):
+        form = ClassifiedForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect(request.path)
+        else:
+            print form
+            return self.form_invalid(form)

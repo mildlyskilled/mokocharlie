@@ -29,6 +29,7 @@ class HospitalityViewTemplate(TemplateView):
     template_name = "hospitality/view.html"
     default_limit = 21
     default_page = 1
+
     def get_context_data(self, **kwargs):
         _limit = self.request.GET.get('limit', self.default_limit)
         _page = self.request.GET.get('page', self.default_page)
@@ -36,10 +37,10 @@ class HospitalityViewTemplate(TemplateView):
         hospitality = Hospitality.objects.get(id=hospitality_id)
 
         # Get images for this hotel/resort
-        albums = Album.objects.filter(hospitalityalbum=hospitality)
+        albums = hospitality.albums.all()
         images = Photo.objects.filter(albums__in=albums)
         image_ids = [i.id for i in images]
-        album_comments = Comment.objects.filter(image__album__in=albums).filter(comment_approved=1).order_by(
+        album_comments = Comment.objects.filter(image__albums__in=albums).filter(comment_approved=1).order_by(
             '-comment_date')
 
         context = super(HospitalityViewTemplate, self).get_context_data()

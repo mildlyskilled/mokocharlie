@@ -82,7 +82,9 @@ class Photo(models.Model):
 
     get_albums.short_description = 'Image Appears In'
     from south.modelsinspector import add_introspection_rules
+
     add_introspection_rules([], ["^cloudinary\.models\.CloudinaryField"])
+
 
 class Hospitality(models.Model):
     HOTEL = 'HOTEL'
@@ -328,6 +330,7 @@ class Contact(models.Model):
     last_name = models.CharField(max_length=50)
     email = models.EmailField()
     telephone = models.CharField(max_length=50)
+    owner = models.ForeignKey(MokoUser)
 
     def __unicode__(self):
         return "{0} {1}".format(self.first_name, self.last_name)
@@ -340,10 +343,11 @@ class Classified(models.Model):
     published = models.BooleanField(default=False)
     created_at = models.DateTimeField(default=timezone.now())
     updated_at = models.DateTimeField(default=timezone.now())
+    owner = models.ForeignKey(MokoUser)
     meta_data = JSONField()
 
     def get_absolute_url(self):
-        return reverse('classified_view', args=[str(self.id)])
+        return reverse('classifieds_view', args=[str(self.id)])
 
     def __unicode__(self):
         return self.title

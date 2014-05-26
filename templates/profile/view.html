@@ -37,13 +37,17 @@
     </div>
     <script type="application/javascript">
         $(function () {
-            $('#profileTabs a[href="#profile"]').tab('show');
+            var hash = window.location.hash;
+            if (hash == '') {
+                $('#profileTabs a[href="#profile"]').tab('show');
+            }else{
+                $('#profileTabs a[href="'+hash+'"]').tab('show');
+            }
             endlessPaginatorStyleFix();
         });
-
         $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
             e.target // activated tab
             e.relatedTarget // previous tab
-        })
+        });
     </script>
 {% endblock %}

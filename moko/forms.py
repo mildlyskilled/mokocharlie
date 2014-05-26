@@ -1,14 +1,13 @@
-from cloudinary.models import CloudinaryField
 from django import forms
-from django.forms import ModelForm, Textarea, TextInput, HiddenInput, Select
-from common.models import Comment, Album
+from django.forms import ModelForm, Textarea, TextInput, HiddenInput, DecimalField
+from common.models import Comment, Album, Classified, Contact
 from crispy_forms.helper import FormHelper
-from crispy_forms.layout import Submit, Layout, Fieldset
+from crispy_forms.layout import Submit, Layout, Fieldset, Button
 from django.utils.translation import gettext as _
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 from common.models import MokoUser, Photo
 from haystack.forms import SearchForm
-from cloudinary.forms import CloudinaryJsFileField, CloudinaryFileField
+from cloudinary.forms import CloudinaryFileField
 
 
 class CommentForm(ModelForm):
@@ -80,7 +79,6 @@ class CustomUserCreationForm(UserCreationForm):
         self.helper.field_class = 'col-lg-7 login-fields'
         self.helper.add_input(Submit('submit', 'Save'))
 
-
     class Meta:
         model = MokoUser
         fields = ("email", "first_name", "last_name")
@@ -94,10 +92,40 @@ class CustomUserChangeForm(UserChangeForm):
 
     def __init__(self, *args, **kargs):
         super(CustomUserChangeForm, self).__init__(*args, **kargs)
+        self.helper = FormHelper()
+        self.helper.form_class = 'form-horizontal'
+        self.helper.label_class = 'col-xs-2'
+        self.helper.field_class = 'col-xs-7'
+        self.helper.add_input(
+            Submit('submit', 'Save Changes', css_class="btn btn-success pull-right"))
+        self.helper.add_input(
+            Button("button", "Cancel", css_class="btn btn-danger"))
+        self.helper.layout = Layout(
+            Fieldset(
+                '',
+                'first_name',
+                'last_name',
+                'email',
+                'last_login',
+                'date_joined',
+                'is_active',
+                'is_superuser',
+            )
+        )
         del self.fields['username']
+        del self.fields['password']
+        del self.fields['is_staff']
+        del self.fields['is_superuser']
 
     class Meta:
         model = MokoUser
+        widgets = {
+            'last_login': HiddenInput(),
+            'date_joined': HiddenInput(),
+        }
+        help_texts = {
+            'is_active': _('Should your account stay active?')
+        }
 
 
 class GeneralSearchForm(SearchForm):
@@ -158,3 +186,44 @@ class PhotoUploadForm(ModelForm):
         self.fields['albums'].queryset = Album.objects.filter(label='People and Places')
 
     cloud_image = CloudinaryFileField()
+
+
+class ClassifiedForm(ModelForm):
+    class Meta:
+        model = Classified
+        widgets = {
+            'owner': HiddenInput(),
+            'created_at': HiddenInput(),
+            'updated_at': HiddenInput(),
+        }
+
+    def __init__(self, *args, **kwargs):
+        super(ClassifiedForm, self).__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.form_class = 'form-horizontal'
+        self.helper.form_method = 'post'
+        self.helper.label_class = 'col-lg-3'
+        self.helper.field_class = 'col-lg-7 login-fields'
+        self.helper.add_input(Submit('submit', 'Save Changes', css_class='pull-right'))
+        self.helper.layout = Layout(
+            Fieldset(
+                'Create a classified',
+                'title',
+                'description',
+                'contact',
+                'meta_data',
+                'owner',
+                'created_at',
+                'updated_at'
+            )
+        )
+
+
+class DbContactForm(ModelForm):
+    class Meta:
+        model = Contact
+
+
+class JobMetaForm(forms.Form):
+    salary = DecimalField()
+    location = Textarea()

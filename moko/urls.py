@@ -1,7 +1,6 @@
 from django.conf.urls import patterns, include, url
 from django.contrib import admin
-from haystack.views import (SearchView, search_view_factory)
-from moko.forms import GeneralSearchForm
+from haystack.views import SearchView, search_view_factory
 from photos.views import *
 from moko.views import *
 
@@ -17,6 +16,7 @@ urlpatterns = patterns('',
                        # Accounts
                        url(r'^profile/$', ProfileViewTemplate.as_view(), name='profile'),
                        url(r'^profile/new$', ExtraDetailsViewTemplate.as_view(), name='new_profile'),
+                       url(r'^profile/edit/', ProfileViewTemplate.as_view(), name='edit_profile'),
 
                        # Photo Endpoints
                        url(r'^photos/$', PhotosTemplate.as_view(), name="photo_list"),
@@ -69,13 +69,14 @@ urlpatterns = patterns('',
                            name='collection_view'),
 
                        # classifieds
-                       url(r'^classifieds', ClassifiedsTemplate.as_view(), name="classifieds_list"),
+                       url(r'^classifieds/$', ClassifiedsTemplate.as_view(), name="classifieds_list"),
+                       # create classifieds
+                       url(r'^classifieds/new/$', NewClassifiedsTemplate.as_view(), name="new_classifieds"),
                        # types of classifieds
-                       url(r'^classifieds/(?P<type>\s+)$', ClassifiedsTypeListTemplate.as_view(),
-                           name="classifieds_type_list"),
+                       #url(r'^classifieds/list/(?P<type>\s+)$', ClassifiedsTypeListTemplate.as_view(),
+                       #    name="classifieds_type_list"),
                        # ID and type
-                       url(r'^classifieds/(?P<type>\s+)/(?P<classified_id>\d+)/$',
-                           ClassifiedsSingleViewTemplate.as_view(),
+                       url(r'^classifieds/(?P<classified_id>\d+)/$', ClassifiedsSingleViewTemplate.as_view(),
                            name="classifieds_view"),
 )
 
