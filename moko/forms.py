@@ -92,6 +92,20 @@ class CustomUserChangeForm(UserChangeForm):
 
     def __init__(self, *args, **kargs):
         super(CustomUserChangeForm, self).__init__(*args, **kargs)
+        del self.fields['username']
+
+    class Meta:
+        model = MokoUser
+
+
+class MokoUserChangeForm(UserChangeForm):
+    """A form for updating users. Includes all the fields on
+    the user, but replaces the password field with admin's
+    password hash display field.
+    """
+
+    def __init__(self, *args, **kargs):
+        super(MokoUserChangeForm, self).__init__(*args, **kargs)
         self.helper = FormHelper()
         self.helper.form_class = 'form-horizontal'
         self.helper.label_class = 'col-xs-2'
@@ -106,23 +120,14 @@ class CustomUserChangeForm(UserChangeForm):
                 'first_name',
                 'last_name',
                 'email',
-                'last_login',
-                'date_joined',
-                'is_active',
-                'is_superuser',
             )
         )
-        del self.fields['username']
         del self.fields['password']
-        del self.fields['is_staff']
-        del self.fields['is_superuser']
+        del self.fields['username']
 
     class Meta:
         model = MokoUser
-        widgets = {
-            'last_login': HiddenInput(),
-            'date_joined': HiddenInput(),
-        }
+        fields = ("email", "first_name", "last_name")
         help_texts = {
             'is_active': _('Should your account stay active?')
         }

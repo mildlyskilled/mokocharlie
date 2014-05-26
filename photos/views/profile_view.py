@@ -1,15 +1,16 @@
 from common.models import MokoUser, Comment, Classified, Contact
+from django.contrib import messages
 from django.http import HttpResponseRedirect
 from django.shortcuts import redirect
-from django.views.generic import DetailView
+from django.views.generic import DetailView, TemplateView
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
-from moko.forms import CustomUserCreationForm, ClassifiedForm, CustomUserChangeForm
+from moko.forms import CustomUserCreationForm, ClassifiedForm, MokoUserChangeForm
 from django.views.generic.edit import FormView, FormMixin
 import datetime
 
 
-class ProfileViewTemplate(FormMixin, DetailView):
+class ProfileViewTemplate(FormMixin, TemplateView):
     """ Provides a simple view containing a users' profile details """
     model = MokoUser
     template_name = "profile/view.html"
@@ -23,9 +24,10 @@ class ProfileViewTemplate(FormMixin, DetailView):
 
     @method_decorator(login_required)
     def post(self, request, *args, **kwargs):
-        form = CustomUserChangeForm(request.POST, instance=request.user)
+        form = MokoUserChangeForm(request.POST, instance=request.user)
         if form.is_valid():
             form.save()
+            messages.add_message(self.request, messages.SUCCESS, 'You have successfully updated your profile')
             return HttpResponseRedirect(request.path)
         else:
             return self.form_invalid(form)
@@ -44,7 +46,7 @@ class ProfileViewTemplate(FormMixin, DetailView):
             classified_form_object.fields['owner'].queryset = Contact.objects.filter(owner=self.request.user)
             context['classified_form'] = classified_form_object
             if edit_tab is not None:
-                context['edit_form'] = CustomUserChangeForm(instance=self.request.user)
+                context['edit_form'] = MokoUserChangeForm(instance=self.request.user)
 
             return context
 
