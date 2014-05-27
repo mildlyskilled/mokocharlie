@@ -29,14 +29,13 @@ class ClassifiedsSingleViewTemplate(DetailView):
 
 class NewClassifiedsTemplate(CreateView):
     """ Create new classifieds item but users need to be logged in first """
-    template_name = "classifieds/view.html"
+    template_name = "classifieds/new.html"
     form_class = ClassifiedForm
     object = Classified
     model = Classified
 
     def get_form_kwargs(self):
         now = datetime.datetime.now()
-        print now
         kwargs = super(CreateView, self).get_form_kwargs()
         kwargs['initial'] = {'owner': self.request.user.id, 'created_at': now, 'updated_at': now,
                              'published': self.request.user.is_staff}
@@ -52,9 +51,10 @@ class NewClassifiedsTemplate(CreateView):
     @method_decorator(login_required)
     def post(self, request, *args, **kwargs):
         form = ClassifiedForm(request.POST)
+        print request.POST
+
         if form.is_valid():
             form.save()
             return HttpResponseRedirect(request.path)
         else:
-            print form
             return self.form_invalid(form)

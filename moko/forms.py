@@ -2,7 +2,7 @@ from django import forms
 from django.forms import ModelForm, Textarea, TextInput, HiddenInput, DecimalField
 from common.models import Comment, Album, Classified, Contact
 from crispy_forms.helper import FormHelper
-from crispy_forms.layout import Submit, Layout, Fieldset, Button
+from crispy_forms.layout import Submit, Layout, Fieldset, Button, Field, Div
 from django.utils.translation import gettext as _
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 from common.models import MokoUser, Photo
@@ -196,11 +196,7 @@ class PhotoUploadForm(ModelForm):
 class ClassifiedForm(ModelForm):
     class Meta:
         model = Classified
-        widgets = {
-            'owner': HiddenInput(),
-            'created_at': HiddenInput(),
-            'updated_at': HiddenInput(),
-        }
+        fields = ['title', 'description', 'contact']
 
     def __init__(self, *args, **kwargs):
         super(ClassifiedForm, self).__init__(*args, **kwargs)
@@ -213,15 +209,18 @@ class ClassifiedForm(ModelForm):
         self.helper.layout = Layout(
             Fieldset(
                 'Create a classified',
-                'title',
-                'description',
-                'contact',
-                'meta_data',
-                'owner',
-                'created_at',
-                'updated_at'
+                Field('title'),
+                Field('description'),
+                Field('contact')
+            ),
+            Fieldset(
+                'Describe the classified',
+                Div(id='meta')
             )
         )
+
+    def save(self, commit=True):
+        super(ClassifiedForm, self).save()
 
 
 class DbContactForm(ModelForm):
