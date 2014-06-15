@@ -4,12 +4,14 @@ function addKeyPair(idx) {
             '<label for="key_' + idx + '" class="control-label col-lg-3">Description</label>' +
             '<div class="controls col-lg-3 login-fields">' +
             '<input type="text" class="textinput col-lg-12 form-control" placeholder="eg. price" id="key_' +
-            idx + '" name="key_' + idx + '"/>' +
+            //idx + '" name="key_' + idx + '"/>' +
+            idx + '" name="key[]"/>' +
             '</div>' +
 
             '<div class="controls col-lg-3 login-fields">' +
             '<input type="text" class="textinput col-lg-12 form-control" placeholder="eg. GHC 3,000" id="value_' +
-            idx + '" name="value_' + idx + '"/>' +
+            //idx + '" name="value_' + idx + '"/>' +
+            idx + '" name="value[]"/>' +
             '</div>' +
             '<div class="controls col-lg-3 login-fields" id="adder_remover_' + idx + '">' +
             '<a id="adder_' + idx + '" onclick="addKeyPair(' + (idx + 1) + ');removeAdder(' + idx + ');" class="btn btn-success">' +

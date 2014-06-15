@@ -152,7 +152,7 @@ class PhotoUploadForm(ModelForm):
         widgets = {
             'name': TextInput(attrs={'class': 'col-lg-12'}),
             'caption': Textarea(attrs={'cols': 40, 'rows': 5}),
-            #'times_viewed': HiddenInput(),
+            # 'times_viewed': HiddenInput(),
             #'published': HiddenInput(),
             'owner': HiddenInput(),
             #'deleted_at': HiddenInput(),
@@ -174,7 +174,7 @@ class PhotoUploadForm(ModelForm):
             Fieldset(
                 'Please describe your photo',
                 # BEGIN HIDDEN FIELDS
-                #'times_viewed',
+                # 'times_viewed',
                 'published',
                 #'deleted_at',
                 #'created_at',
@@ -196,7 +196,7 @@ class PhotoUploadForm(ModelForm):
 class ClassifiedForm(ModelForm):
     class Meta:
         model = Classified
-        fields = ['title', 'description', 'contact']
+        fields = ['title', 'description', 'contact', 'owner']
 
     def __init__(self, *args, **kwargs):
         super(ClassifiedForm, self).__init__(*args, **kwargs)
@@ -211,16 +211,14 @@ class ClassifiedForm(ModelForm):
                 'Create a classified',
                 Field('title'),
                 Field('description'),
-                Field('contact')
+                Field('contact'),
+                'owner'
             ),
             Fieldset(
                 'Describe the classified',
                 Div(id='meta')
             )
         )
-
-    def save(self, commit=True):
-        super(ClassifiedForm, self).save()
 
 
 class DbContactForm(ModelForm):

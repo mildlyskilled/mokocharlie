@@ -1,3 +1,4 @@
+import json
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect
 from django.shortcuts import redirect
@@ -52,9 +53,13 @@ class NewClassifiedsTemplate(CreateView):
     def post(self, request, *args, **kwargs):
         form = ClassifiedForm(request.POST)
         print request.POST
-
         if form.is_valid():
-            form.save()
+            c = form.save(commit=False)
+            # zip the meta data key values into one dict
+            meta_unclean = dict(zip(request.POST.getlist('key[]'), request.POST.getlist('value[]')))
+            c.meta_data = json.dumps(meta_unclean)
+            c.save()
+
             return HttpResponseRedirect(request.path)
         else:
             return self.form_invalid(form)

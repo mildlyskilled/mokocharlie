@@ -43,7 +43,7 @@ class ProfileViewTemplate(FormMixin, TemplateView):
             context['classifieds'] = classifieds
             context['today'] = datetime.datetime.now()
             classified_form_object = ClassifiedForm(instance=Classified())
-            classified_form_object.fields['owner'].queryset = Contact.objects.filter(owner=self.request.user)
+            classified_form_object.fields['owner'].queryset = MokoUser.objects.filter(id=self.request.user.id)
             context['classified_form'] = classified_form_object
             if edit_tab is not None:
                 context['edit_form'] = MokoUserChangeForm(instance=self.request.user)
