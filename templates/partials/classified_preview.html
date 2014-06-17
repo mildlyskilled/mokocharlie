@@ -1,12 +1,14 @@
+{% load humanize %}
 <div class="bordered">
     <div class="media">
-        <a class="pull-right" href="#">
-            <img class="media-object" src="http://placehold.it/80x80">
-        </a>
-
         <div class="media-body">
             <h5 class="media-heading">{{ classified }}</h5>
             {{ classified.description|truncatewords_html:30 }}
+            <br />
+            <a class="pull-left" href="#" style="margin-right: 4px;">
+                <img class="media-object" src="http://placehold.it/80x80">
+            </a>
+            Added By {{ classified.owner }}<br />On {{ classified.created_at|naturaltime }}
         </div>
     </div>
 </div>

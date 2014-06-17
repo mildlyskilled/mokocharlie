@@ -40,4 +40,4 @@ class CommentIndex(indexes.SearchIndex, indexes.Indexable):
 
     def index_queryset(self, using=None):
         return self.get_model().objects.filter(comment_date__lte=datetime.datetime.now()).filter(
-            comment_approved=1).filter(comment_reported=0)
+            comment_approved=1)

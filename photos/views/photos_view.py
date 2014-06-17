@@ -1,7 +1,6 @@
 import json
 import logging
 
-from cloudinary.forms import cl_init_js_callbacks
 from django.contrib import messages
 from django.views.generic.base import TemplateView
 from django.views.generic.edit import CreateView

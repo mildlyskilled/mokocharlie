@@ -38,14 +38,14 @@ urlpatterns = patterns('',
                        url(r'^comments/$', CommentListViewTemplate.as_view(), name='comment_list'),
 
                        # Favouriting photos
-                       #AJAX endpoint for favouriting a photo
+                       # AJAX endpoint for favouriting a photo
                        url(r'^photos/favourite/(?P<photo_id>\d+)/$', FavouritePhotoViewTemplate.as_view(),
                            name='favourite_photo'),
                        url(r'^photos/unfavourite/(?P<photo_id>\d+)/$', UnFavouritePhotoViewTemplate.as_view(),
                            name='unfavourite_photo'),
 
                        # uploading images
-                       url(r'^upload',  login_required(UploadPhotoTemplate.as_view()), name='upload_photos'),
+                       url(r'^upload', login_required(UploadPhotoTemplate.as_view()), name='upload_photos'),
 
                        # Admin endpoints
                        (r'^admin/', include(admin.site.urls)),
@@ -73,8 +73,8 @@ urlpatterns = patterns('',
                        # create classifieds
                        url(r'^classifieds/new/$', NewClassifiedsTemplate.as_view(), name="new_classifieds"),
                        # types of classifieds
-                       #url(r'^classifieds/list/(?P<type>\s+)$', ClassifiedsTypeListTemplate.as_view(),
-                       #    name="classifieds_type_list"),
+                       # url(r'^classifieds/list/(?P<type>\s+)$', ClassifiedsTypeListTemplate.as_view(),
+                       # name="classifieds_type_list"),
                        # ID and type
                        url(r'^classifieds/(?P<classified_id>\d+)/$', ClassifiedsSingleViewTemplate.as_view(),
                            name="classifieds_view"),
@@ -84,7 +84,6 @@ from django.conf import settings
 
 if settings.DEBUG:
     import debug_toolbar
-
     urlpatterns += patterns('',
                             url(r'^__debug__/', include(debug_toolbar.urls)),
     )

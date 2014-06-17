@@ -224,8 +224,3 @@ class ClassifiedForm(ModelForm):
 class DbContactForm(ModelForm):
     class Meta:
         model = Contact
-
-
-class JobMetaForm(forms.Form):
-    salary = DecimalField()
-    location = Textarea()

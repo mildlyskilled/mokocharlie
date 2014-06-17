@@ -144,6 +144,8 @@ INSERT INTO common_comment (comment_id, image_id, image_comment, comment_author,
     comment_approved
   FROM image_comments;
 
+# Clean up comments with invalid dates
+UPDATE common_comment SET comment_date = NOW() WHERE comment_date = '0000-00-00 00:00:00';
 
 # PHOTO STORIES
 INSERT INTO common_photostory (id, `name`, description, album_id, created_at, published)

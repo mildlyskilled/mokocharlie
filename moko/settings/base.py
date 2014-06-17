@@ -36,7 +36,6 @@ INSTALLED_APPS = (
     'endless_pagination',
     'south',
     'common',
-    'common',
 )
 
 MIDDLEWARE_CLASSES = (
