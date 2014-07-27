@@ -1,5 +1,42 @@
 {% extends "master.html" %}
 {% block title %}Classifieds{% endblock %}
 {% block content %}
+    <div class="page-header">
+        <h2>Mokocharlie Classified</h2>
+    </div>
+    <div class="col-md-4">
+        <div class="page-header">
+            <h5>Categories</h5>
+        </div>
+        <ul class="list-group">
+            {% for classified_type in classified_types %}
+                <li class="list-group-item">
+                    <span class="badge">{{ classified_type.get_listing }}</span>
+                    {% if selected_classified_type %}
+                        {% if classified_type.id == selected_classified_type.id %}
+                            {{ classified_type }}
+                        {% else %}
+                            <a href="{{ classified_type.get_absolute_url }}">{{ classified_type }}</a>
+                        {% endif %}
+                    {% else %}
+                        <a href="{{ classified_type.get_absolute_url }}">{{ classified_type }}</a>
+                    {% endif %}
 
+                </li>
+            {% endfor %}
+
+
+        </ul>
+    </div>
+    <div class="col-md-8">
+        <div class="page-header">
+            <h5>
+                Classifieds listed in <em><strong>{{ selected_classified_type }}</strong></em>
+            </h5>
+        </div>
+        {% for classified in classifieds %}
+            {% include "partials/classified_preview.html" %}
+        {% endfor %}
+
+    </div>
 {% endblock %}

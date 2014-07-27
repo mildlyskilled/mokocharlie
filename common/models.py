@@ -344,7 +344,10 @@ class ClassifiedType(models.Model):
     updated_at = models.DateTimeField(default=timezone.now())
 
     def get_absolute_url(self):
-        return reverse('classified_type_list', args=[str(self.id)])
+        return reverse('classifieds_type_list', args=[str(self.id)])
+
+    def get_listing(self):
+        return self.classified_set.filter(published=1).count()
 
     def __unicode__(self):
         return self.title

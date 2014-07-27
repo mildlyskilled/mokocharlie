@@ -138,12 +138,27 @@ class CollectionAdmin(admin.ModelAdmin):
     def unfeature_collection(self, request, queryset):
         queryset.update(featured=0)
 
-    publish_collection.short_description = "publish Selected Collections"
+    publish_collection.short_description = "Publish Selected Collections"
     unpublish_collection.short_description = "Unpublish Selected Collections"
     feature_collection.short_description = "Feature Selected Collections"
     unfeature_collection.short_description = "Unfeature Selected Collections"
 
     actions = [publish_collection, unpublish_collection, feature_collection, unfeature_collection]
+
+
+class ClassifiedAdmin(admin.ModelAdmin):
+    list_display = ['title', 'created_at', 'updated_at']
+
+    def publish_classifieds(self, request, queryset):
+        queryset.update(published=1)
+
+    def unpublish_classifieds(self, request, queryset):
+        queryset.update(published=0)
+
+    publish_classifieds.short_description = "Publish Selected Classifieds"
+    unpublish_classifieds.short_description = "Unpublish Selected Classifieds"
+
+    actions = [publish_classifieds, unpublish_classifieds]
 
 
 admin.site.register(MokoUser, MokoUserAdmin)
@@ -154,6 +169,6 @@ admin.site.register(Hospitality, HospitalityAdmin)
 admin.site.register(PhotoStory)
 admin.site.register(Promotion)
 admin.site.register(Contact)
-admin.site.register(Classified)
+admin.site.register(Classified, ClassifiedAdmin)
 admin.site.register(ClassifiedType)
 admin.site.register(Collection, CollectionAdmin)

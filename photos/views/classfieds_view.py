@@ -15,13 +15,29 @@ class ClassifiedsTemplate(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super(ClassifiedsTemplate, self).get_context_data()
-        #classified_types = ClassifiedTy;
+        classified_types = ClassifiedType.objects.filter(published=1).all()
+        context['classified_types'] = classified_types
+        context['classifieds'] = Classified.objects.filter(published=1)[:8]
         return context
 
 
-class ClassifiedsTypeListTemplate(ListView):
+class ClassifiedsTypeList(ListView):
+    template_name = "classifieds/index.html"
+    model = Classified
+
     def get_context_data(self, **kwargs):
-        context = super(ClassifiedsTypeListTemplate, self).get_context_data()
+        context = super(ClassifiedsTypeList, self).get_context_data(**kwargs)
+        classified_types = ClassifiedType.objects.filter(published=1).all()
+        all_classifieds = Classified.objects.filter(type=self.kwargs['type'])
+
+        if self.request.user.is_staff:
+            classifieds = all_classifieds.all()
+        else:
+            classifieds = all_classifieds.filter(published=1).all()
+
+        context['selected_classified_type'] = ClassifiedType.objects.filter(id=self.kwargs['type']).get()
+        context['classified_types'] = classified_types
+        context['classifieds'] = classifieds
         return context
 
 

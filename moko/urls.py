@@ -73,7 +73,7 @@ urlpatterns = patterns('',
                        # create classifieds
                        url(r'^classifieds/new/$', NewClassifiedsTemplate.as_view(), name="new_classifieds"),
                        # types of classifieds
-                       url(r'^classifieds/list/(?P<type>\s+)$', ClassifiedsTypeListTemplate.as_view(),
+                       url(r'^classifieds/list/(?P<type>\d+)$', ClassifiedsTypeList.as_view(),
                            name="classifieds_type_list"),
                        # ID and type
                        url(r'^classifieds/(?P<classified_id>\d+)/$', ClassifiedsSingleViewTemplate.as_view(),
