@@ -20,7 +20,7 @@ class CollectionViewTemplate(TemplateView):
         collection = Collection.objects.get(id=collection_id)
 
         # Get comments
-        collection_comments = Comment.objects.filter(image__album__collection=collection_id).filter(comment_approved=1).order_by(
+        collection_comments = Comment.objects.filter(image__albums__collection=collection_id).filter(comment_approved=1).order_by(
             '-comment_date')[:12]
         # Prepare context
         context = super(CollectionViewTemplate, self).get_context_data()

@@ -73,8 +73,8 @@ urlpatterns = patterns('',
                        # create classifieds
                        url(r'^classifieds/new/$', NewClassifiedsTemplate.as_view(), name="new_classifieds"),
                        # types of classifieds
-                       # url(r'^classifieds/list/(?P<type>\s+)$', ClassifiedsTypeListTemplate.as_view(),
-                       # name="classifieds_type_list"),
+                       url(r'^classifieds/list/(?P<type>\s+)$', ClassifiedsTypeListTemplate.as_view(),
+                           name="classifieds_type_list"),
                        # ID and type
                        url(r'^classifieds/(?P<classified_id>\d+)/$', ClassifiedsSingleViewTemplate.as_view(),
                            name="classifieds_view"),
@@ -84,6 +84,7 @@ from django.conf import settings
 
 if settings.DEBUG:
     import debug_toolbar
+
     urlpatterns += patterns('',
                             url(r'^__debug__/', include(debug_toolbar.urls)),
     )

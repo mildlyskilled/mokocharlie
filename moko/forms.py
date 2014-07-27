@@ -1,3 +1,4 @@
+from uuid import uuid4
 from django import forms
 from django.forms import ModelForm, Textarea, TextInput, HiddenInput, DecimalField
 from common.models import Comment, Album, Classified, Contact
@@ -189,14 +190,13 @@ class PhotoUploadForm(ModelForm):
             )
         )
         self.fields['albums'].queryset = Album.objects.filter(label='People and Places')
-
-    cloud_image = CloudinaryFileField()
+        image_id = forms.CharField(initial=uuid4())
 
 
 class ClassifiedForm(ModelForm):
     class Meta:
         model = Classified
-        fields = ['title', 'description', 'contact', 'owner']
+        fields = ['type', 'title', 'description', 'contact', 'owner']
 
     def __init__(self, *args, **kwargs):
         super(ClassifiedForm, self).__init__(*args, **kwargs)
@@ -209,6 +209,7 @@ class ClassifiedForm(ModelForm):
         self.helper.layout = Layout(
             Fieldset(
                 'Create a classified',
+                Field('type'),
                 Field('title'),
                 Field('description'),
                 Field('contact'),

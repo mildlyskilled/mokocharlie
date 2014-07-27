@@ -50,7 +50,7 @@ class Album(models.Model):
 
 
 class Photo(models.Model):
-    image_id = models.CharField(max_length=40, default=uuid.uuid1())
+    image_id = models.CharField(max_length=40)
     name = models.CharField(max_length=250)
     path = models.CharField(max_length=150, null=True, blank=True)
     caption = models.TextField()
@@ -336,10 +336,28 @@ class Contact(models.Model):
         return "{0} {1}".format(self.first_name, self.last_name)
 
 
+class ClassifiedType(models.Model):
+    title = models.CharField(max_length=100)
+    description = models.TextField()
+    published = models.BooleanField(default=True)
+    created_at = models.DateTimeField(default=timezone.now())
+    updated_at = models.DateTimeField(default=timezone.now())
+
+    def get_absolute_url(self):
+        return reverse('classified_type_list', args=[str(self.id)])
+
+    def __unicode__(self):
+        return self.title
+
+    def __str__(self):
+        return self.title
+
+
 class Classified(models.Model):
     title = models.CharField(max_length=100)
     description = models.TextField()
     contact = models.ForeignKey(Contact)
+    type = models.ForeignKey(ClassifiedType)
     published = models.BooleanField(default=False)
     created_at = models.DateTimeField(default=timezone.now())
     updated_at = models.DateTimeField(default=timezone.now())

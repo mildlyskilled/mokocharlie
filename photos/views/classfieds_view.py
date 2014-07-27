@@ -11,8 +11,11 @@ from moko.forms import ClassifiedForm
 
 
 class ClassifiedsTemplate(TemplateView):
+    template_name = "classifieds/index.html"
+
     def get_context_data(self, **kwargs):
         context = super(ClassifiedsTemplate, self).get_context_data()
+        #classified_types = ClassifiedTy;
         return context
 
 

@@ -1,18 +1,23 @@
 {% load cloudinary %}
 {% load humanize %}
 <div class="row">
+    <div class="col-lg-10">
+        <blockquote style="font-size: 12px;">
+            <p>
+                {{ comment|truncatewords:20 }}
+            </p>
+        </blockquote>
+    </div>
+</div>
+<div class="row">
     <div class="col-lg-2">
         <a href="{{ comment.get_absolute_url }}">
             {% cloudinary comment.image.image_id|add:'.jpg' transformation="comment_image_thumbnail" class="thumbnail" %}
         </a>
     </div>
-    <div class="col-lg-10">
-        <blockquote style="font-size: 12px;">
-            <p>
-                {{ comment|truncatewords:20 }}
-                <footer>{{ comment.comment_author }}
-                    <br/>{{ comment.comment_date|naturaltime }}<br></footer>
-            </p>
-        </blockquote>
+    <div class="col-lg-8">
+        <small class="muted">{{ comment.comment_author }}
+            <br/>{{ comment.comment_date|naturaltime }}<br></small>
     </div>
+
 </div>

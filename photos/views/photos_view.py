@@ -1,5 +1,6 @@
 import json
 import logging
+from cloudinary.uploader import upload
 
 from django.contrib import messages
 from django.views.generic.base import TemplateView
@@ -134,17 +135,17 @@ class CommentListViewTemplate(TemplateView):
 
     def get_context_data(self, **kwargs):
         if self.request.GET.get('image_id') is not None:
-            #get comments on an image
+            # get comments on an image
             image_id = self.request.GET.get('image_id')
             image = Photo.objects.get(id=image_id)
             comments = image.comment_set.filter(comment_approved=1).order_by('-comment_date');
         elif self.request.GET.get('album_id') is not None:
-            #get comments on all images in given album
+            # get comments on all images in given album
             album_id = self.request.GET.get('album_id')
             comments = Comment.objects.filter(image__album=album_id).filter(comment_approved=1).order_by(
                 '-comment_date')
         else:
-            #get most recent comments
+            # get most recent comments
             comments = Comment.objects.all()[:10]
 
         context = super(CommentListViewTemplate, self).get_context_data()
@@ -215,12 +216,10 @@ class UploadPhotoTemplate(CreateView):
         form = PhotoUploadForm(request.POST, request.FILES)
         if form.is_valid():
             p = form.save(commit=False)
-            published = 0
-            if request.user.is_staff:
-                published = 1
+            published = request.user.is_staff
             p.published = published
-            public_id = p.cloud_image.public_id
-            p.image_id = public_id
+            cloudinary_data = upload(p.cloud_image)
+            p.image_id = cloudinary_data['public_id']
             p.save()
             form.save_m2m()
             messages.add_message(self.request, messages.SUCCESS,
