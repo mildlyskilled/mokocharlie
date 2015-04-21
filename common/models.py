@@ -333,23 +333,3 @@ class Contact(models.Model):
 
     def __unicode__(self):
         return "{0} {1}".format(self.first_name, self.last_name)
-
-
-class ClassifiedType(models.Model):
-    title = models.CharField(max_length=100)
-    description = models.TextField()
-    published = models.BooleanField(default=True)
-    created_at = models.DateTimeField(default=timezone.now())
-    updated_at = models.DateTimeField(default=timezone.now())
-
-    def get_absolute_url(self):
-        return reverse('classifieds_type_list', args=[str(self.id)])
-
-    def get_listing(self):
-        return self.classified_set.filter(published=1).count()
-
-    def __unicode__(self):
-        return self.title
-
-    def __str__(self):
-        return self.title
