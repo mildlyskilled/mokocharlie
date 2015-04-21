@@ -25,7 +25,7 @@
 {% endblock %}
 {% block content %}
     <div class="row">
-        <div class="col-lg-8">
+        <div class="col-xs-12">
             <div class="row">
                 {% include "partials/home_carousel.html" %}
             </div>
@@ -38,12 +38,6 @@
                     {% include "partials/collection_preview.html" %}
                 {% endfor %}
             </div>
-        </div>
-        <div class="col-lg-4">
-            {% for classified in classifieds %}
-                {% include "partials/classified_preview.html" %}
-            {% endfor %}
-        <a href="{% url 'classifieds_list' %}">More Classifieds</a>
         </div>
     </div>
 {% endblock %}

@@ -109,7 +109,6 @@ class Hospitality(models.Model):
 
     class Meta:
         ordering = ['-featured', '-date_added']
-        verbose_name_plural = 'Hospitality Provider'
         verbose_name_plural = 'Hospitality Providers'
 
     def __unicode__(self):
@@ -353,22 +352,4 @@ class ClassifiedType(models.Model):
         return self.title
 
     def __str__(self):
-        return self.title
-
-
-class Classified(models.Model):
-    title = models.CharField(max_length=100)
-    description = models.TextField()
-    contact = models.ForeignKey(Contact)
-    type = models.ForeignKey(ClassifiedType)
-    published = models.BooleanField(default=False)
-    created_at = models.DateTimeField(default=timezone.now())
-    updated_at = models.DateTimeField(default=timezone.now())
-    owner = models.ForeignKey(MokoUser)
-    meta_data = JSONField()
-
-    def get_absolute_url(self):
-        return reverse('classifieds_view', args=[str(self.id)])
-
-    def __unicode__(self):
         return self.title

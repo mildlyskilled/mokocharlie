@@ -1,7 +1,7 @@
 from uuid import uuid4
 from django import forms
 from django.forms import ModelForm, Textarea, TextInput, HiddenInput, DecimalField
-from common.models import Comment, Album, Classified, Contact
+from common.models import Comment, Album, Contact
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Submit, Layout, Fieldset, Button, Field, Div
 from django.utils.translation import gettext as _
@@ -191,35 +191,6 @@ class PhotoUploadForm(ModelForm):
         )
         self.fields['albums'].queryset = Album.objects.filter(label='People and Places')
         image_id = forms.CharField(initial=uuid4())
-
-
-class ClassifiedForm(ModelForm):
-    class Meta:
-        model = Classified
-        fields = ['type', 'title', 'description', 'contact', 'owner']
-
-    def __init__(self, *args, **kwargs):
-        super(ClassifiedForm, self).__init__(*args, **kwargs)
-        self.helper = FormHelper()
-        self.helper.form_class = 'form-horizontal'
-        self.helper.form_method = 'post'
-        self.helper.label_class = 'col-lg-3'
-        self.helper.field_class = 'col-lg-7 login-fields'
-        self.helper.add_input(Submit('submit', 'Save Changes', css_class='pull-right'))
-        self.helper.layout = Layout(
-            Fieldset(
-                'Create a classified',
-                Field('type'),
-                Field('title'),
-                Field('description'),
-                Field('contact'),
-                'owner'
-            ),
-            Fieldset(
-                'Describe the classified',
-                Div(id='meta')
-            )
-        )
 
 
 class DbContactForm(ModelForm):

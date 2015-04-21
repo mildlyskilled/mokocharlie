@@ -1,11 +1,11 @@
-from common.models import MokoUser, Comment, Classified, Contact
+from common.models import MokoUser, Comment, Contact
 from django.contrib import messages
 from django.http import HttpResponseRedirect
 from django.shortcuts import redirect
 from django.views.generic import DetailView, TemplateView
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
-from moko.forms import CustomUserCreationForm, ClassifiedForm, MokoUserChangeForm
+from moko.forms import CustomUserCreationForm, MokoUserChangeForm
 from django.views.generic.edit import FormView, FormMixin
 import datetime
 
@@ -38,13 +38,8 @@ class ProfileViewTemplate(FormMixin, TemplateView):
             edit_tab = self.request.GET.get('state')
             context = super(ProfileViewTemplate, self).get_context_data()
             photo_comments = Comment.objects.filter(image__owner=user.id)
-            classifieds = Classified.objects.filter(owner=user)
             context['photo_comments'] = photo_comments
-            context['classifieds'] = classifieds
             context['today'] = datetime.datetime.now()
-            classified_form_object = ClassifiedForm(instance=Classified())
-            classified_form_object.fields['owner'].queryset = MokoUser.objects.filter(id=self.request.user.id)
-            context['classified_form'] = classified_form_object
             if edit_tab is not None:
                 context['edit_form'] = MokoUserChangeForm(instance=self.request.user)
 
