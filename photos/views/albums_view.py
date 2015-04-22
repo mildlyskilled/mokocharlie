@@ -13,7 +13,6 @@ class AlbumTemplate(TemplateView):
     default_page = 1
     default_order = 'recent'
 
-
     def get_context_data(self, **kwargs):
 
         _limit = self.request.GET.get('limit', self.default_limit)
@@ -40,6 +39,7 @@ class AlbumTemplate(TemplateView):
         comments = Comment.objects.all().filter(comment_approved=1)[:12]
 
         context = super(AlbumTemplate, self).get_context_data()
+        # TODO set up pagination
         context["albums"] = albums
         context["comments"] = comments
         context["limit"] = _limit
@@ -67,4 +67,9 @@ class AlbumViewTemplate(TemplateView):
         context["album"] = album
         context["album_comments"] = album_comments
         context["limit"] = _limit
+        if album.is_hospitality_album:
+            hospitality = album.hospitality_set.all()
+            context["hospitality_types"] = " or ".join([h.hospitality_type for h in hospitality])
+            context["hospitality_set"] = hospitality
+
         return context

@@ -43,6 +43,10 @@
         <div class="page-header">
             <h5>About this album</h5>
         </div>
+        {% if hospitality_types %}
+            <a href="#" class="btn btn-success btn-large">Ask About This {{ hospitality_types|title }}</a>
+            <hr/>
+        {% endif %}
         {{ album.description }}
         <div class="page-header">
             <h5>Most Recent Comments</h5>

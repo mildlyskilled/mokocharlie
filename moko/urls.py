@@ -61,11 +61,16 @@ urlpatterns = patterns('',
 
                        # Hospitality
                        url(r'^hospitality/$', HospitalityTemplate.as_view(), name='hospitality_list'),
-                       url(r'^hospitality/(?P<hospitality_id>\d+)$', HospitalityViewTemplate.as_view(),
+                       url(r'^hospitality/(?P<hospitality_id>\d+)/$', HospitalityViewTemplate.as_view(),
                            name='hospitality_view'),
+                       url(r'^hospitality/contact/(?P<contact_id>\d+)/$', HospitalityContactTemplate.as_view(),
+                           name='hostpitality_form'),
+
+                       url(r'^hospitality/contact/(?P<contact_id>\d+)/$', HospitalityContactTemplate.as_view(),
+                           name='contact_hospitality_provider'),
 
                        # collections
-                       url(r'^collection/(?P<collection_id>\d+)$', CollectionViewTemplate.as_view(),
+                       url(r'^collection/(?P<collection_id>\d+)/$', CollectionViewTemplate.as_view(),
                            name='collection_view'),
                        )
 
