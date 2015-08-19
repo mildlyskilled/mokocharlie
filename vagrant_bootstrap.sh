@@ -27,7 +27,7 @@ ln -s /usr/lib/x86_64-linux-gnu/libfreetype.so /usr/lib
 ln -s /usr/lib/x86_64-linux-gnu/libz.so /usr/lib
 echo "\n------------------ Done Symlinking ---------------------\n"
 
-echo "\n--- Create pauls bar hire database --\n"
+echo "\n--- Create database --\n"
 mysql -uroot -p$DBPASSWD -e "CREATE DATABASE IF NOT EXISTS $DBNAME;"
 mysql -uroot -p$DBPASSWD -e "GRANT ALL PRIVILEGES ON $DBNAME.* TO '$DBUSER'@'localhost' IDENTIFIED BY '$DBPASSWD';"
 mysql -uroot -p$DBPASSWD -e "FLUSH PRIVILEGES;"
