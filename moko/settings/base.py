@@ -34,8 +34,8 @@ INSTALLED_APPS = (
     'django_gravatar',
     'social.apps.django_app.default',
     'endless_pagination',
-    'south',
     'common',
+    'admin_honeypot',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -125,7 +125,7 @@ STATICFILES_DIRS = (
 )
 
 TEMPLATE_DIRS = (
-    os.path.join(BASE_DIR, '../templates')
+    os.path.join(BASE_DIR, '../templates'),
 )
 
 # Cloudinary settings for Django. Add to your settings file.
@@ -150,7 +150,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
 
 TEMPLATE_LOADERS = (
     'django.template.loaders.filesystem.Loader',
-    'django.template.loaders.app_directories.Loader'
+    'django.template.loaders.app_directories.Loader',
 )
 
 SOCIAL_AUTH_STORAGE = 'social.apps.django_app.default.models.DjangoStorage'

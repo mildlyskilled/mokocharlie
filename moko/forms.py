@@ -1,18 +1,19 @@
 from uuid import uuid4
-from django.forms import Form, ModelForm, Textarea, TextInput, HiddenInput, CharField, PasswordInput, EmailField
-from common.models import Comment, Album, Contact
+from django import forms
+from django.forms import ModelForm, Textarea, TextInput, HiddenInput, DecimalField
+from common.models import Comment, Album, Classified, Contact
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Submit, Layout, Fieldset, Button, Field, Div
 from django.utils.translation import gettext as _
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 from common.models import MokoUser, Photo
 from haystack.forms import SearchForm
-from cloudinary.forms import CloudinaryFileField
 
 
 class CommentForm(ModelForm):
     class Meta:
         model = Comment
+        fields = '__all__'
         labels = {
             'image_comment': _('Your Comment'),
             'comment_author': _('Your Name'),
@@ -44,10 +45,10 @@ class CommentForm(ModelForm):
         )
 
 
-class LoginForm(Form):
+class LoginForm(forms.Form):
     """ Basic username/password based login form. """
-    email = CharField()
-    password = CharField(widget=PasswordInput)
+    email = forms.CharField()
+    password = forms.CharField(widget=forms.PasswordInput)
 
     def __init__(self, *args, **kwargs):
         super(LoginForm, self).__init__(*args, **kwargs)
@@ -68,8 +69,8 @@ class CustomUserCreationForm(UserCreationForm):
     password.
     """
 
-    def __init__(self, *args, **kwargs):
-        super(CustomUserCreationForm, self).__init__(*args, **kwargs)
+    def __init__(self, *args, **kargs):
+        super(CustomUserCreationForm, self).__init__(*args, **kargs)
         del self.fields['username']
         self.fields['email'].error_messages['required'] = \
             "Please enter a username"
@@ -96,6 +97,7 @@ class CustomUserChangeForm(UserChangeForm):
 
     class Meta:
         model = MokoUser
+        fields = '__all__'
 
 
 class MokoUserChangeForm(UserChangeForm):
@@ -104,8 +106,8 @@ class MokoUserChangeForm(UserChangeForm):
     password hash display field.
     """
 
-    def __init__(self, *args, **kwargs):
-        super(MokoUserChangeForm, self).__init__(*args, **kwargs)
+    def __init__(self, *args, **kargs):
+        super(MokoUserChangeForm, self).__init__(*args, **kargs)
         self.helper = FormHelper()
         self.helper.form_class = 'form-horizontal'
         self.helper.label_class = 'col-xs-2'
@@ -153,9 +155,6 @@ class PhotoUploadForm(ModelForm):
             'name': TextInput(attrs={'class': 'col-lg-12'}),
             'caption': Textarea(attrs={'cols': 40, 'rows': 5}),
             'owner': HiddenInput(),
-            # 'deleted_at': HiddenInput(),
-            # 'created_at': HiddenInput(),
-            # 'updated_at': HiddenInput(),
             'image_id': HiddenInput()
         }
 
@@ -172,11 +171,7 @@ class PhotoUploadForm(ModelForm):
             Fieldset(
                 'Please describe your photo',
                 # BEGIN HIDDEN FIELDS
-                # 'times_viewed',
                 'published',
-                # 'deleted_at',
-                # 'created_at',
-                # 'updated_at',
                 'owner',
                 'image_id',
                 # END HIDDEN FIELDS
@@ -187,27 +182,39 @@ class PhotoUploadForm(ModelForm):
             )
         )
         self.fields['albums'].queryset = Album.objects.filter(label='People and Places')
-        image_id = CharField(initial=uuid4())
+        image_id = forms.CharField(initial=uuid4())
+
+
+class ClassifiedForm(ModelForm):
+    class Meta:
+        model = Classified
+        fields = ['type', 'title', 'description', 'contact', 'owner']
+
+    def __init__(self, *args, **kwargs):
+        super(ClassifiedForm, self).__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.form_class = 'form-horizontal'
+        self.helper.form_method = 'post'
+        self.helper.label_class = 'col-lg-3'
+        self.helper.field_class = 'col-lg-7 login-fields'
+        self.helper.add_input(Submit('submit', 'Save Changes', css_class='pull-right'))
+        self.helper.layout = Layout(
+            Fieldset(
+                'Create a classified',
+                Field('type'),
+                Field('title'),
+                Field('description'),
+                Field('contact'),
+                'owner'
+            ),
+            Fieldset(
+                'Describe the classified',
+                Div(id='meta')
+            )
+        )
 
 
 class DbContactForm(ModelForm):
     class Meta:
         model = Contact
-
-
-class HospitalityContactForm(Form):
-    name = CharField(widget=TextInput)
-    email = EmailField()
-    subject = CharField()
-    message = CharField(widget=Textarea)
-    contact = CharField(widget=HiddenInput)
-
-    def __init__(self, *args, **kwargs):
-        super(HospitalityContactForm, self).__init__(*args, **kwargs)
-        self.helper = FormHelper()
-        self.helper.form_class = 'form-horizontal'
-        self.helper.form_method = 'post'
-        self.helper.form_action = 'contact_hospitality_provider'
-        self.helper.label_class = 'col-lg-3'
-        self.helper.field_class = 'col-lg-7'
-        self.helper.add_input(Submit('submit', 'Send', css_class='pull-right'))
+        fields = '__all__'

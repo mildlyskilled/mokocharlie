@@ -6,3 +6,7 @@ staticfiles
 prepare_local.sh
 teardown_local.sh
 static/photos
+.bash_history
+.cache
+.cloud-locale-test.skip
+.vagrant
