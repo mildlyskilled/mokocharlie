@@ -33,9 +33,9 @@ mysql -uroot -p$DBPASSWD -e "CREATE DATABASE IF NOT EXISTS $DBNAME;"
 mysql -uroot -p$DBPASSWD -e "GRANT ALL PRIVILEGES ON $DBNAME.* TO '$DBUSER'@'localhost' IDENTIFIED BY '$DBPASSWD';"
 mysql -uroot -p$DBPASSWD -e "FLUSH PRIVILEGES;"
 
-mysql -u$DBUSER -p$DBPASSWD $DBNAME < data/moko.sql
+mysql -u$DBUSER -p$DBPASSWD $DBNAME < /home/vagrant/mokocharlie/data/moko.sql
 
-pip install -r /home/vagrant/requirements.txt
+pip install -r /home/vagrant/mokocharlie/requirements.txt
 
 echo "\n------ PROVISIONING COMPLETE RUN PYTHON MANAGE ------"
 echo "\n-----------------------------------"

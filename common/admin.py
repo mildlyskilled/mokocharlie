@@ -13,10 +13,11 @@ class PhotoForm(ModelForm):
 
 
 class PhotoAdmin(admin.ModelAdmin):
-    list_display = ['name', 'get_albums', 'get_owner', 'published', 'times_viewed', 'created_at']
+    list_display = ['name', 'get_albums', 'owner', 'published', 'times_viewed', 'created_at']
     search_fields = ['name', 'description']
-    list_display_links = ('name', 'get_owner')
-    list_select_related = ('get_owner', 'albums')
+    list_display_links = ('name', 'owner')
+    list_select_related = ('owner',)
+    prefetch_related = ('albums', )
 
     def get_owner(self, obj):
         return '<a href="/admin/common/mokouser/{0}">{1}</a>'.format(obj.owner.id, obj.owner.get_full_name())
