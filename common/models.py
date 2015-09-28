@@ -4,7 +4,7 @@ from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseU
 from django.core.mail import send_mail
 from cloudinary.models import CloudinaryField
 from django.db import models
-from django.utils import timezone
+from django.utils.timezone import now as current_time
 from django.utils.http import urlquote
 from django.utils.translation import ugettext_lazy as _
 from django.core.urlresolvers import reverse
@@ -17,8 +17,8 @@ class Album(models.Model):
     label = models.CharField(max_length=150)
     description = models.TextField(blank=True)
     cover = models.ForeignKey('Photo', blank=True, null=True, related_name='cover_photo')
-    created_at = models.DateTimeField(default=timezone.now())
-    updated_at = models.DateTimeField(default=timezone.now(), null=True)
+    created_at = models.DateTimeField(default=current_time)
+    updated_at = models.DateTimeField(default=current_time, null=True)
     published = models.BooleanField(default=True)
     featured = models.BooleanField(default=False)
 
@@ -56,8 +56,8 @@ class Photo(models.Model):
     caption = models.TextField()
     video = models.ManyToManyField('Video')
     times_viewed = models.IntegerField(default=0)
-    created_at = models.DateTimeField(verbose_name="Date Uploaded", default=datetime.datetime.now())
-    updated_at = models.DateTimeField(verbose_name="Date Modified", default=datetime.datetime.now())
+    created_at = models.DateTimeField(verbose_name="Date Uploaded", default=current_time)
+    updated_at = models.DateTimeField(verbose_name="Date Modified", default=current_time)
     owner = models.ForeignKey('MokoUser', related_name='photo_owner', db_column='owner')
     published = models.BooleanField(default=False)
     deleted_at = models.DateTimeField(blank=True, null=True)
@@ -81,9 +81,6 @@ class Photo(models.Model):
         return Comment.objects.filter(image=self)
 
     get_albums.short_description = 'Image Appears In'
-    from south.modelsinspector import add_introspection_rules
-
-    add_introspection_rules([], ["^cloudinary\.models\.CloudinaryField"])
 
 
 class Hospitality(models.Model):
@@ -103,13 +100,13 @@ class Hospitality(models.Model):
     telephone = models.TextField()
     website = models.TextField()
     contact_email = models.EmailField(default="hotelinquiry@mokocharlie.com")
-    date_added = models.DateTimeField()
+    date_added = models.DateTimeField(default=current_time)
     published = models.BooleanField(default=False)
     albums = models.ManyToManyField('Album')
 
     class Meta:
         ordering = ['-featured', '-date_added']
-        verbose_name_plural = 'Hospitality Provider'
+        verbose_name = 'Hospitality Provider'
         verbose_name_plural = 'Hospitality Providers'
 
     def __unicode__(self):
@@ -157,7 +154,7 @@ class PhotoStory(models.Model):
     name = models.CharField(max_length=150)
     description = models.TextField()
     album = models.ForeignKey(Album)
-    created_at = models.DateTimeField(default=timezone.now())
+    created_at = models.DateTimeField(default=current_time)
     published = models.BooleanField()
 
     class Meta:
@@ -205,7 +202,7 @@ class MokoUserManager(BaseUserManager):
         """
         Creates and saves a User with the given email and password.
         """
-        now = timezone.now()
+        now = current_time
         if not email:
             raise ValueError('The given email must be set')
         email = self.normalize_email(email)
@@ -242,7 +239,7 @@ class MokoUser(AbstractBaseUser, PermissionsMixin):
     is_active = models.BooleanField(_('active'), default=True,
                                     help_text=_('Designates whether this user should be treated as '
                                                 'active. Unselect this instead of deleting accounts.'))
-    date_joined = models.DateTimeField(_('date joined'), default=timezone.now)
+    date_joined = models.DateTimeField(_('date joined'), default=current_time)
 
     objects = MokoUserManager()
 
@@ -296,7 +293,7 @@ class Favourite(models.Model):
     photo = models.ForeignKey(Photo)
     user = models.ForeignKey(MokoUser)
     client_ip = models.CharField(max_length=13, null=True)
-    created_at = models.DateTimeField(default=timezone.now())
+    created_at = models.DateTimeField(default=current_time)
 
 
 class Collection(models.Model):
@@ -304,8 +301,8 @@ class Collection(models.Model):
     albums = models.ManyToManyField('Album')
     featured = models.BooleanField(default=False)
     published = models.BooleanField(default=False)
-    created_at = models.DateTimeField(default=timezone.now())
-    updated_at = models.DateTimeField(default=timezone.now())
+    created_at = models.DateTimeField(default=current_time)
+    updated_at = models.DateTimeField(default=current_time)
     description = models.TextField(null=True)
     cover_album = models.ForeignKey('Album', related_name='cover_album', null=True)
 
@@ -340,8 +337,8 @@ class ClassifiedType(models.Model):
     title = models.CharField(max_length=100)
     description = models.TextField()
     published = models.BooleanField(default=True)
-    created_at = models.DateTimeField(default=timezone.now())
-    updated_at = models.DateTimeField(default=timezone.now())
+    created_at = models.DateTimeField(default=current_time)
+    updated_at = models.DateTimeField(default=current_time)
 
     def get_absolute_url(self):
         return reverse('classifieds_type_list', args=[str(self.id)])
@@ -362,8 +359,8 @@ class Classified(models.Model):
     contact = models.ForeignKey(Contact)
     type = models.ForeignKey(ClassifiedType)
     published = models.BooleanField(default=False)
-    created_at = models.DateTimeField(default=timezone.now())
-    updated_at = models.DateTimeField(default=timezone.now())
+    created_at = models.DateTimeField(default=current_time)
+    updated_at = models.DateTimeField(default=current_time)
     owner = models.ForeignKey(MokoUser)
     meta_data = JSONField()
 

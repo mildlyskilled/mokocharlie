@@ -9,4 +9,4 @@ static/photos
 .bash_history
 .cache
 .cloud-locale-test.skip
-
+.vagrant

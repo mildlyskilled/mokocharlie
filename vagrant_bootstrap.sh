@@ -1,10 +1,11 @@
+#!/usr/bin/env bash
 !/bin/sh
 clear
 echo "\n--- Ladies and Gentlemen, hold on to your shirts ---"
 echo "\n--- we're building Mokocharlie  dev box... ---"
 
 DBHOST=localhost
-DBNAME=mokodata
+DBNAME=moko
 DBUSER=root
 DBPASSWD=root
 

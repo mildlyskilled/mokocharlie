@@ -8,12 +8,12 @@ from django.utils.translation import gettext as _
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 from common.models import MokoUser, Photo
 from haystack.forms import SearchForm
-from cloudinary.forms import CloudinaryFileField
 
 
 class CommentForm(ModelForm):
     class Meta:
         model = Comment
+        fields = '__all__'
         labels = {
             'image_comment': _('Your Comment'),
             'comment_author': _('Your Name'),
@@ -97,6 +97,7 @@ class CustomUserChangeForm(UserChangeForm):
 
     class Meta:
         model = MokoUser
+        fields = '__all__'
 
 
 class MokoUserChangeForm(UserChangeForm):
@@ -153,12 +154,7 @@ class PhotoUploadForm(ModelForm):
         widgets = {
             'name': TextInput(attrs={'class': 'col-lg-12'}),
             'caption': Textarea(attrs={'cols': 40, 'rows': 5}),
-            # 'times_viewed': HiddenInput(),
-            #'published': HiddenInput(),
             'owner': HiddenInput(),
-            #'deleted_at': HiddenInput(),
-            #'created_at': HiddenInput(),
-            #'updated_at': HiddenInput(),
             'image_id': HiddenInput()
         }
 
@@ -175,11 +171,7 @@ class PhotoUploadForm(ModelForm):
             Fieldset(
                 'Please describe your photo',
                 # BEGIN HIDDEN FIELDS
-                # 'times_viewed',
                 'published',
-                #'deleted_at',
-                #'created_at',
-                #'updated_at',
                 'owner',
                 'image_id',
                 # END HIDDEN FIELDS
@@ -225,3 +217,4 @@ class ClassifiedForm(ModelForm):
 class DbContactForm(ModelForm):
     class Meta:
         model = Contact
+        fields = '__all__'

@@ -48,7 +48,8 @@ urlpatterns = patterns('',
                        url(r'^upload', login_required(UploadPhotoTemplate.as_view()), name='upload_photos'),
 
                        # Admin endpoints
-                       (r'^admin/', include(admin.site.urls)),
+                        url(r'^admin/', include('admin_honeypot.urls', namespace='admin_honeypot')),
+                        url(r'^mokoadmin/', include(admin.site.urls)),
 
                        # Social log ins
                        url(r'^social/', include('social.apps.django_app.urls', namespace='social')),
