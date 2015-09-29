@@ -1,4 +1,5 @@
 import logging
+from django.http import HttpResponseRedirect
 from django.views.generic import CreateView, FormView
 
 from django.views.generic.base import TemplateView
@@ -38,7 +39,6 @@ class HospitalityViewTemplate(TemplateView):
         _page = self.request.GET.get('page', self.default_page)
         hospitality_id = self.kwargs.get('hospitality_id')
         hospitality = Hospitality.objects.get(id=hospitality_id)
-
         # Get images for this hotel/resort
         albums = hospitality.albums.all()
         images = Photo.objects.filter(albums__in=albums)
@@ -47,6 +47,9 @@ class HospitalityViewTemplate(TemplateView):
             '-comment_date')
 
         context = super(HospitalityViewTemplate, self).get_context_data()
+        contact = self.request.GET.get('contact')
+        if contact:
+            context["contact"] = True
         context['hospitality'] = hospitality
         context['limit'] = _limit
         context['album_images'] = images
@@ -54,9 +57,17 @@ class HospitalityViewTemplate(TemplateView):
         return context
 
 
-class HospitalityContactTemplate(FormView):
-    template_name = "partials/hospitality_contact_form.html"
-    form_class = HospitalityContactForm
+class HospitalityContactTemplate(TemplateView):
+    template_name = "hospitality/view.html"
 
-    def get(self, request, *args, **kwargs):
-        return super(HospitalityContactTemplate, self).get(request, *args, **kwargs)
+    def get_context_data(self, **kwargs):
+        hospitality_id = self.kwargs.get('hospitality_id')
+        hospitality = Hospitality.objects.get(id=hospitality_id)
+        context = super(HospitalityContactTemplate, self).get_context_data()
+        context['hospitality'] = hospitality
+        context["form"] = HospitalityContactForm()
+        return context
+
+    def post(self, request, *args, **kwargs):
+        print request.POST
+        return HttpResponseRedirect(request.path)

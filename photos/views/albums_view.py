@@ -73,3 +73,4 @@ class AlbumViewTemplate(TemplateView):
             context["hospitality_set"] = hospitality
 
         return context
+

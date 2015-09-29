@@ -99,7 +99,7 @@ class Hospitality(models.Model):
     address = models.TextField()
     telephone = models.TextField()
     website = models.TextField()
-    contact_email = models.EmailField(default="hotelinquiry@mokocharlie.com")
+    contact = models.ForeignKey("Contact")
     date_added = models.DateTimeField(default=current_time)
     published = models.BooleanField(default=False)
     albums = models.ManyToManyField('Album')

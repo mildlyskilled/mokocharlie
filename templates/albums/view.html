@@ -23,20 +23,9 @@
         <hr/>
 
         <hr/>
-        <div class="row" id="albumimages">
-            {% load endless %}
-            {% paginate limit album_images %}
-            {% for image in album_images %}
-                <div class="col-sm-6 col-md-3" style="min-height: 95px">
-                    {% include "partials/image_preview.html" %}
-                </div>
-            {% endfor %}
-            <hr/>
-
-        </div>
-        <ul class="pagination">
-            {% show_pages %}
-        </ul>
+        {% if album_images %}
+            {% include "partials/album_images.html" %}
+        {% endif %}
     </div>
 
     <div class="col-lg-4">
@@ -44,7 +33,8 @@
             <h5>About this album</h5>
         </div>
         {% if hospitality_types %}
-            <a href="#" class="btn btn-success btn-large">Ask About This {{ hospitality_types|title }}</a>
+            <a href="{% url "contact_hospitality_provider" hospitality_set.0.id %}" class="btn btn-success btn-large">Contact
+                This {{ hospitality_types|title }}</a>
             <hr/>
         {% endif %}
         {{ album.description }}

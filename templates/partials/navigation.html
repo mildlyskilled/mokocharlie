@@ -34,13 +34,13 @@
                         <li><a href="{% url 'profile' %}">My Profile</a></li>
                         <li><a href="#">My Images</a></li>
                         {% if user.is_superuser %}
-                            <li><a href="/admin">Site Admin</a></li>
+                            <li><a href="{% url "admin:index" %}">Site Admin</a></li>
                         {% endif %}
                         <li><a href="{% url 'logout' %}?next={{ request.path }}">Logout</a></li>
                     </ul>
                 {% endif %}
             </ul>
-            <form class="navbar-form navbar-right" role="search" action="/search">
+            <form class="navbar-form navbar-right" role="search" action="{% url "haystack_search" %}">
                 <div class="form-group">
                     <input type="text" class="form-control" name="q"
                            placeholder="Search {{ photo_count }} images">

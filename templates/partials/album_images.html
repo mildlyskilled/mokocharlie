@@ -1,0 +1,14 @@
+<div class="row" id="albumimages">
+    {% load endless %}
+    {% paginate limit album_images %}
+    {% for image in album_images %}
+        <div class="col-sm-6 col-md-3" style="min-height: 95px">
+            {% include "partials/image_preview.html" %}
+        </div>
+    {% endfor %}
+    <hr/>
+
+</div>
+<ul class="pagination">
+    {% show_pages %}
+</ul>

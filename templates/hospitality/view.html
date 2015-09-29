@@ -21,28 +21,22 @@
             </div>
         </div>
         <hr/>
-        <div class="row" id="albumimages">
-            {% load endless %}
-            {% paginate limit album_images %}
-            {% for image in album_images %}
-                <div class="col-sm-6 col-md-3" style="min-height: 95px">
-                    {% include "partials/image_preview.html" %}
-                </div>
-            {% endfor %}
-            <hr/>
-
-        </div>
-        <ul class="pagination">
-            {% show_pages %}
-        </ul>
+        {% if album_images %}
+            {% include "partials/album_images.html" %}
+        {% elif form %}
+            {% load crispy_forms_tags %}
+            {% crispy form %}
+        {% endif %}
     </div>
 
     <div class="col-lg-4">
         <div class="page-header">
             <h4>About this {{ hospitality.hospitality_type|title }}</h4>
         </div>
-        <a href="#" class="btn btn-success btn-large">Ask About This {{ hospitality.hospitality_type|title }}</a>
-        <hr />
+        {% if not form %}
+            <a href="#" class="btn btn-success btn-large">Ask About This {{ hospitality.hospitality_type|title }}</a>
+            <hr/>
+        {% endif %}
         {{ hospitality.description }}
         <div class="page-header">
             <h5>Most Recent Comments</h5>

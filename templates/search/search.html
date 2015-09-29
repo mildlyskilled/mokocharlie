@@ -20,7 +20,7 @@
                 {% elif result.content_type == "common.comment" %}
                     {% include "partials/comment_search_preview.html" with comment=result.object %}
                 {% endif %}
-            {% empty %}
+                {% empty %}
                 <p>No results found.</p>
             {% endfor %}
         </div>

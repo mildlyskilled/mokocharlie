@@ -45,7 +45,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    #'common.middleware.moko_social.MokoSocialMiddleWare',
+    # 'common.middleware.moko_social.MokoSocialMiddleWare',
 )
 
 ROOT_URLCONF = 'moko.urls'
@@ -170,7 +170,7 @@ SOCIAL_AUTH_LINKEDIN_OAUTH2_EXTRA_DATA = [('id', 'id'),
                                           ('last-name', 'last_name'),
                                           ('email-address', 'email_address')]
 
-#SOCIAL_AUTH_PROTECTED_USER_FIELDS = ['email', ]
+# SOCIAL_AUTH_PROTECTED_USER_FIELDS = ['email', ]
 
 SESSION_SERIALIZER = 'django.contrib.sessions.serializers.JSONSerializer'
 LOGIN_URL = "/login"
@@ -252,7 +252,7 @@ IPWARE_PRIVATE_IP_PREFIX = (
                                   'fc00:',  # IPv6 private block
                                   'fe80:',  # link-local unicast
                                   'ff00:',  # IPv6 multicast
-                           )
+                                  )
 
 CLOUDINARY_TRANSFORMATIONS = [
     ("LARGE_COMMENT_PREVIEW", "comment_image_pre"),
