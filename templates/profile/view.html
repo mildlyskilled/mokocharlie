@@ -5,7 +5,7 @@
     <script src="{{ STATIC_URL }}js/photos.js"></script>
 {% endblock %}
 {% block content %}
-    <div class="panel">
+    <div class="panel panel-default">
         <ul class="nav nav-tabs" id="profileTabs">
             <li><a href="#profile" data-toggle="tab">Profile</a></li>
             <li><a href="#pictures" data-toggle="tab">Pictures</a></li>
@@ -15,15 +15,21 @@
         <div class="tab-content" style="padding-top: 20px;">
 
             <div class="tab-pane" id="profile">
-                {% include "partials/user_profile.html" %}
+                <div class="panel-body">
+                    {% include "partials/user_profile.html" %}
+                </div>
             </div>
 
             <div class="tab-pane" id="pictures">
-                {% include "partials/user_photos.html" %}
+                <div class="panel-body">
+                    {% include "partials/user_photos.html" %}
+                </div>
             </div>
 
             <div class="tab-pane" id="comments">
-                {% include "partials/user_photo_comments.html" %}
+                <div class="panel-body">
+                    {% include "partials/user_photo_comments.html" %}
+                </div>
             </div>
 
 
@@ -35,8 +41,8 @@
             var hash = window.location.hash;
             if (hash == '') {
                 $('#profileTabs').find('a[href="#profile"]').tab('show');
-            }else{
-                $('#profileTabs').find('a[href="'+hash+'"]').tab('show');
+            } else {
+                $('#profileTabs').find('a[href="' + hash + '"]').tab('show');
             }
             endlessPaginatorStyleFix();
         });

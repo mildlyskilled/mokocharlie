@@ -10,7 +10,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'moko',
         'USER': 'root',
-        'PASSWORD': ''
+        'PASSWORD': 'root'
     }
 }
 

@@ -1,6 +1,6 @@
 from uuid import uuid4
 from django import forms
-from django.forms import ModelForm, Textarea, TextInput, HiddenInput, DecimalField
+from django.forms import ModelForm, Textarea, TextInput, HiddenInput, DecimalField, Form
 from common.models import Comment, Album, Classified, Contact
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Submit, Layout, Fieldset, Button, Field, Div
@@ -218,3 +218,7 @@ class DbContactForm(ModelForm):
     class Meta:
         model = Contact
         fields = '__all__'
+
+
+class HospitalityContactForm(Form):
+    pass

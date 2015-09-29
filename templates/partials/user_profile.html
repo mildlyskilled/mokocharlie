@@ -1,66 +1,64 @@
 {% load gravatar %}
 {% load humanize %}
-<div class="row">
-    <div class="col-lg-3">
-        <div class='container'>
-            <a href="https://en.gravatar.com/"
-               target="_blank">{% gravatar user.email size=195 css_class="thumbnail pull-left" %}</a>
-        </div>
-        <small>Image sourced from Gravatar. Click on the profile image to update</small>
-        <br/>
-
+<div class="col-lg-3">
+    <div class='container'>
+        <a href="https://en.gravatar.com/"
+           target="_blank">{% gravatar user.email size=195 css_class="thumbnail pull-left" %}</a>
     </div>
-    <div class="col-lg-9">
-        {% if edit_form == None %}
-            <div class="page-header"><h3>{{ user.get_full_name }}
+    <small>Image sourced from Gravatar. Click on the profile image to update</small>
+    <br/>
+
+</div>
+<div class="col-lg-9">
+    {% if edit_form == None %}
+        <div class="page-header"><h3>{{ user.get_full_name }}
             {% if edit_form == None %}
                 <a href="{% url 'edit_profile' %}?state=1" class="btn btn-default btn-xs">
                     <i class="glyphicon glyphicon-pencil"></i>
                 </a>
             {% endif %}
-            </h3>
-            </div>
-            {{ user.email }}<br/>
-            Member since {{ user.date_joined|naturaltime }}
-        {% else %}
-            {% load crispy_forms_tags %}
-            {% crispy edit_form %}
-            <hr />
-        {% endif %}
-
-        <div class="page-header">
-            <h4>Your Social Accounts</h4>
+        </h3>
         </div>
-        {% if user.social_accounts %}
-            {% if 'linkedin_oauth2' not in user.social_accounts.keys %}
-                <a href="{% url 'social:begin' 'linkedin-oauth2' %}?next={{ request.path }}"
-                   class="social-login-linkedin dissociate">LinkedIn</a>
-            {% else %}
-                <span class="social-login-linkedin" title="Already connected to LinkedIn">LinkedIn</span>
-            {% endif %}
+        {{ user.email }}<br/>
+        Member since {{ user.date_joined|naturaltime }}
+    {% else %}
+        {% load crispy_forms_tags %}
+        {% crispy edit_form %}
+        <hr/>
+    {% endif %}
 
-            {% if 'facebook' not in user.social_accounts.keys %}
-                <a href="{% url 'social:begin' 'facebook' %}?next={{ request.path }}"
-                   class="social-login-facebook dissociate">Facebook</a>
-            {% else %}
-                <span class="social-login-facebook" title="Already connected to Facebook">Facebook</span>
-            {% endif %}
-
-            {% if 'twitter' not in user.social_accounts.keys %}
-                <a href="{% url 'social:begin' 'twitter' %}?next={{ request.path }}"
-                   class="social-login-twitter dissociate">Twitter</a>
-            {% else %}
-                <span class="social-login-twitter" title="Already connected to Twitter">Twitter</span>
-            {% endif %}
-        {% else %}
+    <div class="page-header">
+        <h4>Your Social Accounts</h4>
+    </div>
+    {% if user.social_accounts %}
+        {% if 'linkedin_oauth2' not in user.social_accounts.keys %}
             <a href="{% url 'social:begin' 'linkedin-oauth2' %}?next={{ request.path }}"
                class="social-login-linkedin dissociate">LinkedIn</a>
-            <a href="{% url 'social:begin' 'facebook' %}?next={{ request.path }}"
-               class="social-login-facebook dissociate">Facebook</a>
-            <a href="{% url 'social:begin' 'twitter' %}?next={{ request.path }}"
-               class="social-login-twitter dissociate">Twitter</a>
+        {% else %}
+            <span class="social-login-linkedin" title="Already connected to LinkedIn">LinkedIn</span>
         {% endif %}
 
+        {% if 'facebook' not in user.social_accounts.keys %}
+            <a href="{% url 'social:begin' 'facebook' %}?next={{ request.path }}"
+               class="social-login-facebook dissociate">Facebook</a>
+        {% else %}
+            <span class="social-login-facebook" title="Already connected to Facebook">Facebook</span>
+        {% endif %}
 
-    </div>
+        {% if 'twitter' not in user.social_accounts.keys %}
+            <a href="{% url 'social:begin' 'twitter' %}?next={{ request.path }}"
+               class="social-login-twitter dissociate">Twitter</a>
+        {% else %}
+            <span class="social-login-twitter" title="Already connected to Twitter">Twitter</span>
+        {% endif %}
+    {% else %}
+        <a href="{% url 'social:begin' 'linkedin-oauth2' %}?next={{ request.path }}"
+           class="social-login-linkedin dissociate">LinkedIn</a>
+        <a href="{% url 'social:begin' 'facebook' %}?next={{ request.path }}"
+           class="social-login-facebook dissociate">Facebook</a>
+        <a href="{% url 'social:begin' 'twitter' %}?next={{ request.path }}"
+           class="social-login-twitter dissociate">Twitter</a>
+    {% endif %}
+
+
 </div>

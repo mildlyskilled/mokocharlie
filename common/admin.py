@@ -59,8 +59,8 @@ class AlbumAdmin(admin.ModelAdmin):
     def publish_album(self, request, queryset):
         queryset.update(published=1)
 
-    publish_album.short_description = "Publish Selected Photos"
-    unpublish_album.short_description = "Unpublish Selected Photos"
+    publish_album.short_description = "Publish Selected Albums"
+    unpublish_album.short_description = "Unpublish Selected Albums"
     feature_album.short_description = "Feature Selected Albums"
     unfeature_album.short_description = "Remove Selected Albums from Featured List"
 

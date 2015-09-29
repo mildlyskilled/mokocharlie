@@ -28,12 +28,12 @@ class AlbumTemplate(TemplateView):
             if _order == 'popular':
                 from django.db.models.aggregates import Avg
 
-                albums = Album.objects.annotate(average_views=Avg('photos__times_viewed')).order_by(
-                    _order_dict_unsorted[_order][0]).all()
+                albums = Album.objects.annotate(average_views=Avg('photo__times_viewed')).order_by(
+                    _order_dict_unsorted[_order][0]).filter(published=1)
             else:
-                albums = Album.objects.distinct().order_by(_order_dict_unsorted[_order][0]).all()
+                albums = Album.objects.distinct().order_by(_order_dict_unsorted[_order][0]).filter(published=1)
         else:
-            albums = Album.objects.all()
+            albums = Album.objects.filter(published=1)
 
         _order_dict = OrderedDict(reversed(sorted(_order_dict_unsorted.items())), key=lambda t: t[0])
         comments = Comment.objects.all().filter(comment_approved=1)[:12]
@@ -67,8 +67,8 @@ class AlbumViewTemplate(TemplateView):
         context["album"] = album
         context["album_comments"] = album_comments
         context["limit"] = _limit
-        if album.is_hospitality_album:
-            hospitality = album.hospitality_set.all()
+        hospitality = album.hospitality_set.all()
+        if hospitality:
             context["hospitality_types"] = " or ".join([h.hospitality_type for h in hospitality])
             context["hospitality_set"] = hospitality
 

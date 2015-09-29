@@ -4,10 +4,12 @@
     <script src="{{ STATIC_URL }}js/main.js"></script>
 {% endblock %}
 {% block content %}
-    {% include "partials/album_ordering.html" with order_data=order %}
-    <br/>
+    <div class="row">
+        {% include "partials/album_ordering.html" with order_data=order %}
+    </div>
+    <br />
     <div class='row'>
-        <div class="col-lg-8">
+        <div class="col-xs-8">
             <div class="row">
                 {% load endless %}
                 {% paginate limit albums %}

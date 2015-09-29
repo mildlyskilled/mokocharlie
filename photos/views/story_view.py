@@ -10,7 +10,8 @@ class StoryIndexViewTemplate(TemplateView):
         context = super(StoryIndexViewTemplate, self).get_context_data()
         stories = PhotoStory.objects.filter(published=True)
         albums = [a.album for a in stories]
-        comments = Comment.objects.filter(image__album__in=albums).filter(comment_approved=1)[:6]
+        print albums
+        comments = Comment.objects.filter(album__album__in=albums).filter(comment_approved=1)[:6]
         context['stories'] = stories
         context['comments'] = comments
         return context
