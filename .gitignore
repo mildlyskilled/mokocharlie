@@ -10,3 +10,4 @@ static/photos
 .cache
 .cloud-locale-test.skip
 .vagrant
+.DS_Store
