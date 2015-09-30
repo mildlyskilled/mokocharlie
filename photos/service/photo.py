@@ -1,5 +1,5 @@
 
-class PhotoService():
+class PhotoService:
     def __init__(self):
         pass
 

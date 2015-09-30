@@ -7,7 +7,7 @@ import cloudinary.api
 from common.models import Photo
 
 
-class CloudinaryService():
+class CloudinaryService:
     """
     Wrapper class around the cloudinary API for mokocharlie specific
     operations
@@ -16,7 +16,7 @@ class CloudinaryService():
     def __init__(self):
         pass
 
-    def upload_image(image_path, image_id):
+    def upload_image(self, image_path, image_id):
         """ Upload an image to cloudinary
         :param image_path: Relative or absolute path to image
         :param image_id: This will be used as the public id for
@@ -36,16 +36,18 @@ class CloudinaryService():
         path = "static/photos"
 
         for image in _images:
-            print "[INFO] Uploading cloud image for {0}/{1}".format(path, image.image_path)
-            file_path = os.path.join(path, image.image_path)
+            print "[INFO] Uploading cloud image for {0}/{1}".format(path, image.path)
+            file_path = os.path.join(path, image.path)
             if os.path.exists(file_path):
                 try:
                     self.upload_image(file_path, image.image_id)
-                    print "[INFO] Cloud Image data saved {0}".format(image.image_id)
+                    print "[INFO] Cloud Image data saved {0} {1}".format(image.image_id, image.name)
                 except cloudinary.api.Error, e:
                     print "[ERROR] Failed to upload image to the cloud {0}".format(str(e))
                 except urllib2.URLError, e:
                     print "[ERROR] Failed to upload image to the cloud {0}".format(str(e))
+
+        print "[INFO] Image upload complete"
 
     def resource_list(self):
         image_list = cloudinary.api.resources()

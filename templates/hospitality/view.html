@@ -34,7 +34,7 @@
             <h4>About this {{ hospitality.hospitality_type|title }}</h4>
         </div>
         {% if not form %}
-            <a href="#" class="btn btn-success btn-large">Ask About This {{ hospitality.hospitality_type|title }}</a>
+            <a href="{% url "contact_hospitality_provider" hospitality.id %}" class="btn btn-success btn-large">Contact This {{ hospitality.hospitality_type|title }}</a>
             <hr/>
         {% endif %}
         {{ hospitality.description }}

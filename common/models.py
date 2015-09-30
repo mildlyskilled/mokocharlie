@@ -40,8 +40,8 @@ class Album(models.Model):
     def album_cover(self):
         if self.cover:
             return self.cover
-
-        return self.photo_set.order_by('?')[0]
+        else:
+            return self.photo_set.order_by('?')[0]
 
     def album_images(self):
         return self.photo_set.count()

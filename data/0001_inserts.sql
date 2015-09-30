@@ -106,9 +106,12 @@ INSERT INTO `common_album` (
 INSERT INTO common_album (label, description, published, created_at, featured)
 VALUES ('People and Places', "Photos uploaded by various members of the public", 1, NOW(), 0);
 
+INSERT INTO common_contact(first_name, last_name, email, owner_id)
+VALUES ("Kwabena", "Aning", "kwabena.aning@gmail.com", (SELECT id FROM common_mokouser WHERE email = "contact@kaning.co.uk"));
+
 # HOTELS AND RESORTS - Populate hospitality table with old hospitality data
 INSERT INTO common_hospitality (
-  featured, name, hospitality_type, description, address, telephone, website, date_added, published, contact_email
+  featured, name, hospitality_type, description, address, telephone, website, date_added, published, contact_id
 )
   SELECT
     featured,
@@ -120,7 +123,7 @@ INSERT INTO common_hospitality (
     website,
     date_added,
     published,
-    'hotelinfo@mokocharlie.com'
+    1
   FROM hospitality;
 
 # purge comments where we do not have images

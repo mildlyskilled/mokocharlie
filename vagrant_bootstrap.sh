@@ -36,6 +36,12 @@ mysql -uroot -p$DBPASSWD -e "FLUSH PRIVILEGES;"
 mysql -u$DBUSER -p$DBPASSWD $DBNAME < /home/vagrant/mokocharlie/data/moko.sql
 
 pip install -r /home/vagrant/mokocharlie/requirements.txt
+cd /home/vagrant/mokocharlie
+python manage.py syncdb --settings=moko.settings.dev
+mysql -u$DBUSER -p$DBPASSWD $DBNAME < /home/vagrant/mokocharlie/data/0001_inserts.sql
+mysql -u$DBUSER -p$DBPASSWD $DBNAME < /home/vagrant/mokocharlie/data/0002_m2m.sql
+mysql -u$DBUSER -p$DBPASSWD $DBNAME < /home/vagrant/mokocharlie/data/0003_drops.sql
+python manage.py migrate --fake-initial --settings=moko.settings.dev
 
 echo "\n------ PROVISIONING COMPLETE RUN PYTHON MANAGE ------"
 echo "\n-----------------------------------"
