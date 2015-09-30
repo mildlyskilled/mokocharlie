@@ -286,3 +286,9 @@ HAYSTACK_CONNECTIONS = {
         'INDEX_NAME': 'mokocharlie',
     },
 }
+
+EMAIL_BACKEND = 'django_mailgun.MailgunBackend'
+MAILGUN_ACCESS_KEY = "key-47e4aa5e5f26543ceb3684d57f17c1ce"
+MAILGUN_SERVER_NAME = "appb25f7ea2221b49c18f51bd3fa23ce4a9.mailgun.org"
+
+ADMIN_EMAIL = "info@mokocharlie.com"

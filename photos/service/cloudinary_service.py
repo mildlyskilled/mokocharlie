@@ -5,6 +5,7 @@ import cloudinary
 import cloudinary.uploader
 import cloudinary.api
 from common.models import Photo
+import sys
 
 
 class CloudinaryService:
@@ -40,12 +41,22 @@ class CloudinaryService:
             file_path = os.path.join(path, image.path)
             if os.path.exists(file_path):
                 try:
-                    self.upload_image(file_path, image.image_id)
+                    if not image.cloud_image:
+                        self.upload_image(file_path, image.image_id)
+                        image.cloud_image = image.image_id
+                        image.save()
+                    else:
+                        print "[INFO] skipping {0} cloud_image entry {1} exists".format(image.name, image.cloud_image)
                     print "[INFO] Cloud Image data saved {0} {1}".format(image.image_id, image.name)
                 except cloudinary.api.Error, e:
                     print "[ERROR] Failed to upload image to the cloud {0}".format(str(e))
                 except urllib2.URLError, e:
                     print "[ERROR] Failed to upload image to the cloud {0}".format(str(e))
+                except UnicodeEncodeError, e:
+                    print "[WARN] encountered an encoding error switching to UTF 8 {0}".format(str(e))
+                    reload(sys)
+                    sys.setdefaultencoding("utf-8")
+                    print "[INFO] Cloud Image data saved {0} {1}".format(image.image_id, image.name)
 
         print "[INFO] Image upload complete"
 
@@ -58,4 +69,4 @@ class CloudinaryService:
         if confirm.lower() == 'y':
             return cloudinary.api.delete_all_resources()
         else:
-            print "Aborting purge operation..."
+            return "Aborting purge operation..."

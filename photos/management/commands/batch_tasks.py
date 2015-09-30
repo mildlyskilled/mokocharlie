@@ -1,9 +1,11 @@
 from django.core.management.base import BaseCommand, CommandError
 from photos.service.cloudinary_service import CloudinaryService
+import pprint
 
 
 class Command(BaseCommand):
     help = 'Run batch commands on photos for cloudinary services and others'
+    pp = pprint.PrettyPrinter(indent=4)
 
     def add_arguments(self, parser):
         parser.add_argument('--action')

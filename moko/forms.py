@@ -224,23 +224,20 @@ class HospitalityContactForm(Form):
     name = forms.CharField()
     email = forms.EmailField()
     message = forms.CharField(widget=forms.Textarea(attrs={"cols": 40, "rows": 5}))
-
-    def __init__(self):
-        super(HospitalityContactForm, self).__init__()
-        self.helper = FormHelper()
-        self.helper.form_class = 'form-horizontal'
-        self.helper.form_method = 'post'
-        self.helper.label_class = 'col-lg-3'
-        self.helper.field_class = 'col-lg-9'
-        self.helper.layout = Layout(
-            Fieldset(
-                'Send a message',
-                Field('name'),
-                Field('email'),
-                Field('message')
-            )
+    helper = FormHelper()
+    helper.form_class = 'form-horizontal'
+    helper.form_method = 'post'
+    helper.label_class = 'col-lg-3'
+    helper.field_class = 'col-lg-9'
+    helper.layout = Layout(
+        Fieldset(
+            'Send a message',
+            Field('name'),
+            Field('email'),
+            Field('message')
         )
-        self.helper.add_input(Submit('submit', 'Send Message', css_class='pull-right btn'))
+    )
+    helper.add_input(Submit('submit', 'Send Message', css_class='pull-right btn'))
 
     def send_email(self):
         # send email using the self.cleaned_data dictionary

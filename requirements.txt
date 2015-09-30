@@ -13,6 +13,7 @@ django-gravatar2==1.3.0
 django-haystack==2.4.0
 django-ipware==1.1.1
 django-jsonfield==0.9.15
+django-mailgun==0.7.2
 django-mptt==0.7.4
 django-multiuploader==0.2.9
 django-sekizai==0.8.2
