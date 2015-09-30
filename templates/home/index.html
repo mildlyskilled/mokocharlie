@@ -16,7 +16,9 @@
 
             <div class="row">
                 {% for collection in featured_collections %}
-                    {% include "partials/collection_preview.html" %}
+                    <div class="col-xs-3">
+                        {% include "partials/collection_preview.html" %}
+                    </div>
                 {% endfor %}
             </div>
         </div>

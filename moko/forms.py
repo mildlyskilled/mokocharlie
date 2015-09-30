@@ -93,7 +93,6 @@ class CustomUserChangeForm(UserChangeForm):
 
     def __init__(self, *args, **kargs):
         super(CustomUserChangeForm, self).__init__(*args, **kargs)
-        del self.fields['username']
 
     class Meta:
         model = MokoUser
@@ -125,7 +124,6 @@ class MokoUserChangeForm(UserChangeForm):
             )
         )
         del self.fields['password']
-        del self.fields['username']
 
     class Meta:
         model = MokoUser
@@ -165,8 +163,8 @@ class PhotoUploadForm(ModelForm):
         self.helper.form_method = 'post'
         self.helper.form_action = 'upload_photos'
         self.helper.label_class = 'col-lg-3'
-        self.helper.field_class = 'col-lg-7 login-fields'
-        self.helper.add_input(Submit('submit', 'Submit', css_class='pull-right'))
+        self.helper.field_class = 'col-lg-7'
+        self.helper.add_input(Submit('submit', 'Upload', css_class='pull-right btn btn-success'))
         self.helper.layout = Layout(
             Fieldset(
                 'Please describe your photo',

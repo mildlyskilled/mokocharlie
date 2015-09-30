@@ -70,3 +70,6 @@ class CloudinaryService:
             return cloudinary.api.delete_all_resources()
         else:
             return "Aborting purge operation..."
+
+    def delete_image(self, public_id):
+        return cloudinary.api.delete_resources([public_id])

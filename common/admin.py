@@ -89,6 +89,25 @@ class HospitalityAdmin(admin.ModelAdmin):
     select_related = True
     list_filter = ['published', 'featured']
 
+    def publish_provider(self, request, queryset):
+        queryset.update(published=1)
+
+    def unpublish_provider(self, request, queryset):
+        queryset.update(published=0)
+
+    def feature_provider(self, request, queryset):
+        queryset.update(featured=1)
+
+    def unfeature_provider(self, request, queryset):
+        queryset.update(featured=0)
+
+    publish_provider.short_description = "Publish Selected Provider(s)"
+    unpublish_provider.short_description = "Unpublish Selected Provider(s)"
+    feature_provider.short_description = "Feature Selected Provider(s)"
+    unfeature_provider.short_description = "Unfeature Selected Provider(s)"
+
+    actions = [publish_provider, unpublish_provider, feature_provider, unfeature_provider]
+
 
 class MokoUserAdmin(UserAdmin):
     # The forms to add and change user instances

@@ -1,11 +1,13 @@
 <div id="footer">
     <div class="container text-right" style="padding-top: 20px;">
-        <a href="/classifieds">Classifieds</a> ||
         <a href="">Contact us</a> ||
         <a href="">Developers and API</a> ||
         <a href="">About Us</a> ||
-        <a href="">Blog</a> ||
-        <a href="/mokoadmin">Administrator</a><br/>
+        <a href="http://blog.mokocharlie.com">Blog</a>
+        {% if user.is_authenticated and user.is_staff %}
+            || <a href="{% url "admin:index" %}">Administrator</a>
+        {% endif %}
+        <br/>
         &copy; Mokocharlie Systems 2015. All Rights Reserved
     </div>
 </div>

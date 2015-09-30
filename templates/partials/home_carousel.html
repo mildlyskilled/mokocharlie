@@ -3,7 +3,7 @@
     <div class="carousel-inner">
         {% for a in featured_albums %}
             <div class="item {% if a == featured_albums.0 %}active{% endif %}">
-                {% cloudinary a.cover.image_id|add:'.jpg' transformation="home_carousel_850_crop" alt=a %}
+                {% cloudinary a.cover.image_id|add:'.jpg' transformation="home_carousel" alt=a %}
                 <h2><span><a href="{{ a.get_absolute_url }}">{{ a }}</a></span></h2>
             </div>
         {% endfor %}

@@ -94,11 +94,10 @@ class Hospitality(models.Model):
 
     featured = models.BooleanField()
     hospitality_type = models.CharField(max_length=20, choices=HOTEL_TYPE_CHOICES, default=HOTEL)
-    name = models.TextField()
+    name = models.CharField(max_length=100)
     description = models.TextField()
     address = models.TextField()
-    telephone = models.TextField()
-    website = models.TextField()
+    website = models.URLField(max_length=100)
     contact = models.ForeignKey("Contact")
     date_added = models.DateTimeField(default=current_time)
     published = models.BooleanField(default=False)

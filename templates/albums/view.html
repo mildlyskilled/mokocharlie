@@ -32,12 +32,15 @@
         <div class="page-header">
             <h5>About this album</h5>
         </div>
+        <p>
+            {{ album.description }}
+        </p>
+        <hr/>
         {% if hospitality_types %}
             <a href="{% url "contact_hospitality_provider" hospitality_set.0.id %}" class="btn btn-success btn-large">Contact
                 This {{ hospitality_types|title }}</a>
-            <hr/>
+
         {% endif %}
-        {{ album.description }}
         <div class="page-header">
             <h5>Most Recent Comments</h5>
         </div>
