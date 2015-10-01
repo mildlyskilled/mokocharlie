@@ -1,9 +1,9 @@
 from __future__ import unicode_literals
-import datetime
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseUserManager
 from django.core.mail import send_mail
 from cloudinary.models import CloudinaryField
 from django.db import models
+from django.db.models import Count
 from django.utils.timezone import now as current_time
 from django.utils.http import urlquote
 from django.utils.translation import ugettext_lazy as _
@@ -55,7 +55,6 @@ class Photo(models.Model):
     path = models.CharField(max_length=150, null=True, blank=True)
     caption = models.TextField()
     video = models.ManyToManyField('Video')
-    times_viewed = models.IntegerField(default=0)
     created_at = models.DateTimeField(verbose_name="Date Uploaded", default=current_time)
     updated_at = models.DateTimeField(verbose_name="Date Modified", default=current_time)
     owner = models.ForeignKey('MokoUser', related_name='photo_owner', db_column='owner')
@@ -79,6 +78,11 @@ class Photo(models.Model):
     @property
     def get_comments(self):
         return Comment.objects.filter(image=self)
+
+    @property
+    def get_times_viewed(self):
+        p = PhotoViews.objects.annotate(times_viewed=Count('id')).filter(photo_id=self.id)
+        return p[0].times_viewed
 
     get_albums.short_description = 'Image Appears In'
 
@@ -368,3 +372,9 @@ class Classified(models.Model):
 
     def __unicode__(self):
         return self.title
+
+
+class PhotoViews(models.Model):
+    ip_address = models.GenericIPAddressField()
+    user = models.ForeignKey(MokoUser, null=True)
+    photo = models.ForeignKey(Photo)

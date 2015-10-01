@@ -1,5 +1,6 @@
 import logging
 from django.contrib import messages
+from django.core.exceptions import ValidationError
 from django.core.mail import send_mail, BadHeaderError, EmailMultiAlternatives
 from django.http import HttpResponseRedirect
 from django.views.generic import CreateView, FormView
@@ -101,17 +102,19 @@ class HospitalityContactTemplate(TemplateView):
                 email.extra_headers['X-Mailgun-Tag'] = [hospitality.name]
                 email.attach_alternative(html_content, "text/html")
                 email.send()
-
-                # send_mail(subject,
-                #          content,
-                #          settings.ADMIN_EMAIL,
-                #          [hospitality.contact.email], html_message=html_content)
             except BadHeaderError:
-                messages.add_message(self.request, messages.ERROR, 'Invalid header')
+                messages.add_message(self.request, messages.ERROR, 'Invalid header', extra_tags={"DANGER": "danger"})
+                return HttpResponseRedirect(request.path)
+            except ValidationError:
+                messages.add_message(self.request, messages.ERROR, 'Please check your form input',
+                                     extra_tags={"DANGER": "danger"})
+                return HttpResponseRedirect(request.path)
 
             messages.add_message(self.request, messages.SUCCESS, 'Your message has been sent')
 
         else:
             messages.add_message(self.request, messages.INFO, 'Please check your form input')
+            return HttpResponseRedirect(request.path)
 
+        LOGGER.info("Email sent to {0} from {1}".format(hospitality.contact.email, sender_email))
         return HttpResponseRedirect(reverse("hospitality_view", args=(hospitality_id,)))

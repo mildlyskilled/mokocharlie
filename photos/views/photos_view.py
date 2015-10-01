@@ -3,6 +3,7 @@ import logging
 from cloudinary.uploader import upload
 
 from django.contrib import messages
+from django.utils.timezone import now
 from django.views.generic.base import TemplateView
 from django.views.generic.edit import CreateView
 from django.http import HttpResponseRedirect
@@ -11,8 +12,24 @@ from moko.forms import CommentForm, PhotoUploadForm
 from moko.mixins.ajax import AjaxResponseMixin
 from common.models import *
 
-
 LOGGER = logging.getLogger(__name__)
+
+
+def increment_views(request, kwargs):
+    view_count = PhotoViews.objects.filter(photo_id=kwargs.get("image_id"))
+    if request.user.is_authenticated:
+        view_count.filter(user=request.user)
+    else:
+        view_count.filter(ip_address=get_real_ip(request))
+
+    print len(view_count.all())
+    if len(view_count.all()) == 0:
+        pv = PhotoViews()
+        pv.ip_address = get_ip(request)
+        pv.photo_id = kwargs.get("image_id")
+        if request.user.is_authenticated:
+            pv.user = request.user
+        pv.save()
 
 
 class PhotosTemplate(TemplateView):
@@ -30,7 +47,7 @@ class PhotosTemplate(TemplateView):
         _order_dict_unsorted = {
             'recent': ['-created_at', 'Most Recent'],
             'alpha': ['name', 'Alphabetical'],
-            'popular': ['-times_viewed', 'Most Popular'],
+            'popular': ['-times_viewed', 'Most Viewed'],
             'rating': ['-times_rated', 'Most Rated'],
             'mostcomments': ['-comment_count', 'Most Comments'],
         }
@@ -38,8 +55,11 @@ class PhotosTemplate(TemplateView):
         if _order in _order_dict_unsorted:
             if _order == 'mostcomments':
                 from django.db.models.aggregates import Sum
-
                 images = Photo.objects.annotate(comment_count=Sum('comment')).order_by(
+                    _order_dict_unsorted[_order][0]).all()
+            elif _order == "popular":
+                from django.db.models.aggregates import Count
+                images = Photo.objects.annotate(times_viewed=Count('photoviews')).order_by(
                     _order_dict_unsorted[_order][0]).all()
             else:
                 images = Photo.objects.distinct().order_by(_order_dict_unsorted[_order][0]).all()
@@ -58,6 +78,7 @@ class PhotoViewTemplate(TemplateView):
     template_name = "photos/view.html"
 
     def get_context_data(self, **kwargs):
+        increment_views(self.request, kwargs)
         image_id = self.kwargs.get('image_id')
         context = super(PhotoViewTemplate, self).get_context_data()
         photo = Photo.objects.get(id=image_id)
@@ -104,7 +125,8 @@ class NewCommentViewTemplate(AjaxResponseMixin, CreateView):
         if self.request.user.is_authenticated():
             author_name = "{0} {1}".format(self.request.user.first_name, self.request.user.last_name)
         kwargs = super(CreateView, self).get_form_kwargs()
-        kwargs['initial'] = {'image': self.request.GET.get('image_id'), 'comment_author': author_name}
+        kwargs['initial'] = {'image': self.request.GET.get('image_id'), 'comment_author': author_name,
+                             'comment_date': now()}
         return kwargs
 
     def get(self, request, *args, **kwargs):

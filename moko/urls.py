@@ -3,6 +3,8 @@ from django.contrib import admin
 from haystack.views import SearchView, search_view_factory
 from photos.views import *
 from moko.views import *
+from django.conf import settings
+
 
 admin.autodiscover()
 
@@ -48,8 +50,11 @@ urlpatterns = patterns('',
                        url(r'^upload', login_required(UploadPhotoTemplate.as_view()), name='upload_photos'),
 
                        # Admin endpoints
-                        url(r'^admin/', include('admin_honeypot.urls', namespace='admin_honeypot')),
-                        url(r'^mokoadmin/', include(admin.site.urls)),
+                       url(r'^admin/', include('admin_honeypot.urls', namespace='admin_honeypot')),
+                       url(r'^mokoadmin/', include(admin.site.urls)),
+
+                       # captcha
+                       url(r'^captcha/', include('captcha.urls')),
 
                        # Social log ins
                        url(r'^social/', include('social.apps.django_app.urls', namespace='social')),
@@ -65,7 +70,6 @@ urlpatterns = patterns('',
                        url(r'^hospitality/(?P<hospitality_id>\d+)/$', HospitalityViewTemplate.as_view(),
                            name='hospitality_view'),
 
-
                        url(r'^hospitality/(?P<hospitality_id>\d+)/contact/$', HospitalityContactTemplate.as_view(),
                            name='contact_hospitality_provider'),
 
@@ -73,8 +77,6 @@ urlpatterns = patterns('',
                        url(r'^collection/(?P<collection_id>\d+)/$', CollectionViewTemplate.as_view(),
                            name='collection_view'),
                        )
-
-from django.conf import settings
 
 if settings.DEBUG:
     import debug_toolbar

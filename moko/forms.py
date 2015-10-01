@@ -1,4 +1,5 @@
 from uuid import uuid4
+from captcha.fields import CaptchaField
 from django import forms
 from django.forms import ModelForm, Textarea, TextInput, HiddenInput, DecimalField, Form
 from common.models import Comment, Album, Classified, Contact
@@ -11,6 +12,8 @@ from haystack.forms import SearchForm
 
 
 class CommentForm(ModelForm):
+    captcha = CaptchaField()
+
     class Meta:
         model = Comment
         fields = '__all__'
@@ -23,6 +26,7 @@ class CommentForm(ModelForm):
             'image_comment': Textarea(attrs={'cols': 40, 'rows': 5}),
             'comment_author': TextInput(attrs={'class': 'col-lg-12'}),
             'image': HiddenInput(),
+            'comment_date': HiddenInput(),
         }
 
     def __init__(self, *args, **kwargs):
@@ -41,6 +45,8 @@ class CommentForm(ModelForm):
                 'image',
                 'image_comment',
                 'comment_author',
+                'captcha',
+                'comment_date'
             )
         )
 
@@ -222,6 +228,7 @@ class HospitalityContactForm(Form):
     name = forms.CharField()
     email = forms.EmailField()
     message = forms.CharField(widget=forms.Textarea(attrs={"cols": 40, "rows": 5}))
+    captcha = CaptchaField()
     helper = FormHelper()
     helper.form_class = 'form-horizontal'
     helper.form_method = 'post'
@@ -232,11 +239,32 @@ class HospitalityContactForm(Form):
             'Send a message',
             Field('name'),
             Field('email'),
-            Field('message')
+            Field('message'),
+            Field('captcha'),
         )
     )
     helper.add_input(Submit('submit', 'Send Message', css_class='pull-right btn'))
 
-    def send_email(self):
-        # send email using the self.cleaned_data dictionary
-        pass
+
+class ContactUs(Form):
+    name = forms.CharField()
+    email = forms.EmailField()
+    message = forms.CharField(widget=forms.Textarea(attrs={"cols": 40, "rows": 5}))
+    captcha = CaptchaField()
+    helper = FormHelper()
+    helper.form_class = 'form-horizontal'
+    helper.form_method = 'post'
+    helper.label_class = 'col-lg-3'
+    helper.field_class = 'col-lg-9'
+    helper.layout = Layout(
+        Fieldset(
+            'Send a message',
+            Field('name'),
+            Field('email'),
+            Field('message'),
+            Field('captcha'),
+        )
+    )
+    helper.add_input(Submit('submit', 'Send Message', css_class='pull-right btn'))
+
+

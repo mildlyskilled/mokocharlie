@@ -36,6 +36,7 @@ INSTALLED_APPS = (
     'endless_pagination',
     'common',
     'admin_honeypot',
+    'captcha',
 )
 
 MIDDLEWARE_CLASSES = (
