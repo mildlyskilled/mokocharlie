@@ -1,7 +1,7 @@
 from uuid import uuid4
-from captcha.fields import CaptchaField
 from django import forms
 from django.forms import ModelForm, Textarea, TextInput, HiddenInput, DecimalField, Form
+from nocaptcha_recaptcha import NoReCaptchaField
 from common.models import Comment, Album, Classified, Contact
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Submit, Layout, Fieldset, Button, Field, Div
@@ -12,7 +12,6 @@ from haystack.forms import SearchForm
 
 
 class CommentForm(ModelForm):
-    captcha = CaptchaField()
 
     class Meta:
         model = Comment
@@ -45,8 +44,7 @@ class CommentForm(ModelForm):
                 'image',
                 'image_comment',
                 'comment_author',
-                'captcha',
-                'comment_date'
+                'comment_date',
             )
         )
 
@@ -228,12 +226,13 @@ class HospitalityContactForm(Form):
     name = forms.CharField()
     email = forms.EmailField()
     message = forms.CharField(widget=forms.Textarea(attrs={"cols": 40, "rows": 5}))
-    captcha = CaptchaField()
+    captcha = NoReCaptchaField()
     helper = FormHelper()
     helper.form_class = 'form-horizontal'
     helper.form_method = 'post'
     helper.label_class = 'col-lg-3'
     helper.field_class = 'col-lg-9'
+    helper.form_show_errors = True
     helper.layout = Layout(
         Fieldset(
             'Send a message',
@@ -246,16 +245,17 @@ class HospitalityContactForm(Form):
     helper.add_input(Submit('submit', 'Send Message', css_class='pull-right btn'))
 
 
-class ContactUs(Form):
+class ContactUsForm(Form):
     name = forms.CharField()
     email = forms.EmailField()
     message = forms.CharField(widget=forms.Textarea(attrs={"cols": 40, "rows": 5}))
-    captcha = CaptchaField()
+    captcha = NoReCaptchaField()
     helper = FormHelper()
     helper.form_class = 'form-horizontal'
     helper.form_method = 'post'
     helper.label_class = 'col-lg-3'
     helper.field_class = 'col-lg-9'
+    helper.error_text_inline = True
     helper.layout = Layout(
         Fieldset(
             'Send a message',

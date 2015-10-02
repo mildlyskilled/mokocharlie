@@ -53,9 +53,6 @@ urlpatterns = patterns('',
                        url(r'^admin/', include('admin_honeypot.urls', namespace='admin_honeypot')),
                        url(r'^mokoadmin/', include(admin.site.urls)),
 
-                       # captcha
-                       url(r'^captcha/', include('captcha.urls')),
-
                        # Social log ins
                        url(r'^social/', include('social.apps.django_app.urls', namespace='social')),
 
@@ -76,6 +73,9 @@ urlpatterns = patterns('',
                        # collections
                        url(r'^collection/(?P<collection_id>\d+)/$', CollectionViewTemplate.as_view(),
                            name='collection_view'),
+
+                       # contact
+                       url(r'^/contact/$', ContactViewTemplate.as_view(), name="contact_us"),
                        )
 
 if settings.DEBUG:

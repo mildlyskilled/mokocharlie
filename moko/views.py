@@ -1,14 +1,20 @@
+import logging
 from django.conf import settings
+from django.core.mail import EmailMultiAlternatives, BadHeaderError
+from django.http import HttpResponseRedirect
+from django.template import RequestContext
 from django.views.generic import TemplateView
 from django.views.generic.edit import FormView
 from django.utils.http import is_safe_url
 from django.contrib.auth import logout
-from django.shortcuts import redirect, resolve_url
+from django.shortcuts import redirect, resolve_url, render_to_response
 from django.contrib.auth import authenticate, login
 from django.contrib import messages
 from common.models import *
-from moko.forms import LoginForm
-import datetime
+from moko.forms import LoginForm, ContactUsForm
+from django.core.exceptions import ValidationError
+
+LOGGER = logging.getLogger(__name__)
 
 
 class HomeTemplateView(TemplateView):
@@ -64,3 +70,61 @@ class LogoutViewTemplate(TemplateView):
             redirect_to = resolve_url(settings.LOGIN_REDIRECT_URL)
 
         return redirect(redirect_to)
+
+
+class ContactViewTemplate(FormView):
+    form_class = ContactUsForm
+    template_name = "home/contact.html"
+
+    def get(self, request, *args, **kwargs):
+        return super(ContactViewTemplate, self).get(request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+
+        form = ContactUsForm(request.POST or None)
+        context = {"form": form}
+
+        if form.is_valid():
+            sender_email = request.POST.get("email")
+            sender_name = request.POST.get("name")
+            sender_message = request.POST.get("message")
+
+            # TODO use a template for this
+            html_content = """Dear {0}, you got a message through the website <br />
+                           From <strong>{1}<{2}></strong><br />
+                           {3}<br />
+                           Kind Regards,<br />
+                           Mokocharlie
+                          """.format("Mokocharlie Team", sender_name, sender_email, sender_message)
+
+            content = """Dear {0}, you got a message through the website
+                           From {1}<{2}>
+                           {3}
+                           Kind Regards,
+                           Mokocharlie
+                          """.format("Mokocharlie Team", sender_name, sender_email, sender_message)
+
+            subject = 'Contact From Mokocharlie'
+
+            try:
+
+                email = EmailMultiAlternatives(subject, content, sender_email, [settings.ADMIN_EMAIL])
+                email.extra_headers['X-Mailgun-Tag'] = ["web contact"]
+                email.attach_alternative(html_content, "text/html")
+                email.send()
+            except BadHeaderError:
+                messages.add_message(request, messages.ERROR, 'Invalid header', extra_tags={"DANGER": "danger"})
+                return render_to_response(self.template_name, context=context, context_instance=RequestContext(request))
+            except ValidationError:
+                messages.add_message(request, messages.ERROR, 'Please check your form input',
+                                     extra_tags={"DANGER": "danger"})
+                return render_to_response(self.template_name,  context=context, context_instance=RequestContext(request))
+
+            messages.add_message(request, messages.SUCCESS, 'Your message has been sent')
+
+        else:
+            messages.add_message(request, messages.INFO, 'Please check your form input')
+            return render_to_response(self.template_name, context=context, context_instance=RequestContext(request))
+
+        LOGGER.info("Email sent to {0} from {1}".format(settings.ADMIN_EMAIL, sender_email))
+        return HttpResponseRedirect(reverse("home"))

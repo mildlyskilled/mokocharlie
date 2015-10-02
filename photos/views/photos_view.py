@@ -81,7 +81,7 @@ class PhotoViewTemplate(TemplateView):
         increment_views(self.request, kwargs)
         image_id = self.kwargs.get('image_id')
         context = super(PhotoViewTemplate, self).get_context_data()
-        photo = Photo.objects.get(id=image_id)
+        photo = Photo.objects.get(request=image_id, args=null)
 
         album_photos = Photo.objects.filter(albums__photo__id__exact=image_id).order_by('created_at').all()
 
@@ -137,7 +137,7 @@ class NewCommentViewTemplate(AjaxResponseMixin, CreateView):
         if form.is_valid():
             c = form.save(commit=False)
             c.comment_approved = request.user.is_authenticated()  # use authenticated value to set approval status
-            c.image = Photo.objects.get(id=request.POST.get('image'))
+            c.image = Photo.objects.get(request=request.POST.get('image'), args=null)
             c.comment_reported = False
             c.comment_report_type = 0
             c.save()
@@ -159,7 +159,7 @@ class CommentListViewTemplate(TemplateView):
         if self.request.GET.get('image_id') is not None:
             # get comments on an image
             image_id = self.request.GET.get('image_id')
-            image = Photo.objects.get(id=image_id)
+            image = Photo.objects.get(request=image_id, args=null)
             comments = image.comment_set.filter(comment_approved=1).order_by('-comment_date');
         elif self.request.GET.get('album_id') is not None:
             # get comments on all images in given album

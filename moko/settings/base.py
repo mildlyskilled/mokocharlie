@@ -36,7 +36,7 @@ INSTALLED_APPS = (
     'endless_pagination',
     'common',
     'admin_honeypot',
-    'captcha',
+    'nocaptcha_recaptcha',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -293,3 +293,7 @@ MAILGUN_ACCESS_KEY = "key-47e4aa5e5f26543ceb3684d57f17c1ce"
 MAILGUN_SERVER_NAME = "appb25f7ea2221b49c18f51bd3fa23ce4a9.mailgun.org"
 
 ADMIN_EMAIL = "info@mokocharlie.com"
+
+NORECAPTCHA_SITE_KEY = "6Lc3_Q0TAAAAAJDEIEQCgy1BZLFLu_iyyfIL1qIA"
+NORECAPTCHA_SECRET_KEY = "6Lc3_Q0TAAAAADXy__ghexYw8klueuvHITw8Wlb8"
+

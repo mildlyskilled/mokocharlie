@@ -23,11 +23,11 @@ class StoryViewTemplate(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super(StoryViewTemplate, self).get_context_data()
-        story = PhotoStory.objects.get(id=kwargs['story_id'])
+        story = PhotoStory.objects.get(request=kwargs['story_id'], args=null)
         images = story.album.photos.all()
         photo = images[self.default_index]
         if 'image_id' in kwargs:
-            photo = Photo.objects.get(id=kwargs['image_id'])
+            photo = Photo.objects.get(request=kwargs['image_id'], args=null)
 
         current = [p for p in images].index(photo)
         next_item = 0

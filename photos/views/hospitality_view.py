@@ -3,6 +3,8 @@ from django.contrib import messages
 from django.core.exceptions import ValidationError
 from django.core.mail import send_mail, BadHeaderError, EmailMultiAlternatives
 from django.http import HttpResponseRedirect
+from django.shortcuts import render_to_response
+from django.template import RequestContext
 from django.views.generic import CreateView, FormView
 
 from django.views.generic.base import TemplateView
@@ -40,7 +42,7 @@ class HospitalityViewTemplate(TemplateView):
         _limit = self.request.GET.get('limit', self.default_limit)
         _page = self.request.GET.get('page', self.default_page)
         hospitality_id = self.kwargs.get('hospitality_id')
-        hospitality = Hospitality.objects.get(id=hospitality_id)
+        hospitality = Hospitality.objects.get(request=hospitality_id, args=null)
         # Get images for this hotel/resort
         albums = hospitality.albums.all()
         images = Photo.objects.filter(albums__in=albums)
@@ -64,7 +66,7 @@ class HospitalityContactTemplate(TemplateView):
 
     def get_context_data(self, **kwargs):
         hospitality_id = self.kwargs.get('hospitality_id')
-        hospitality = Hospitality.objects.get(id=hospitality_id)
+        hospitality = Hospitality.objects.get(request=hospitality_id, args=None)
         context = super(HospitalityContactTemplate, self).get_context_data()
         context['hospitality'] = hospitality
         context["form"] = HospitalityContactForm()
@@ -72,9 +74,11 @@ class HospitalityContactTemplate(TemplateView):
 
     def post(self, request, *args, **kwargs):
         hospitality_id = kwargs.get("hospitality_id")
-        form = HospitalityContactForm(request.POST)
+        hospitality = Hospitality.objects.get(request=hospitality_id, args=None)
+        form = HospitalityContactForm(request.POST or None)
+        context = {"form": form, "hospitality": hospitality}
+
         if form.is_valid():
-            hospitality = Hospitality.objects.get(id=hospitality_id)
             sender_email = request.POST.get("email")
             sender_name = request.POST.get("name")
             sender_message = request.POST.get("message")
@@ -103,18 +107,18 @@ class HospitalityContactTemplate(TemplateView):
                 email.attach_alternative(html_content, "text/html")
                 email.send()
             except BadHeaderError:
-                messages.add_message(self.request, messages.ERROR, 'Invalid header', extra_tags={"DANGER": "danger"})
-                return HttpResponseRedirect(request.path)
+                messages.add_message(request, messages.ERROR, 'Invalid header', extra_tags={"DANGER": "danger"})
+                return render_to_response(self.template_name, context=context, context_instance=RequestContext(request))
             except ValidationError:
-                messages.add_message(self.request, messages.ERROR, 'Please check your form input',
+                messages.add_message(request, messages.ERROR, 'Please check your form input',
                                      extra_tags={"DANGER": "danger"})
-                return HttpResponseRedirect(request.path)
+                return render_to_response(self.template_name,  context=context, context_instance=RequestContext(request))
 
-            messages.add_message(self.request, messages.SUCCESS, 'Your message has been sent')
+            messages.add_message(request, messages.SUCCESS, 'Your message has been sent')
 
         else:
-            messages.add_message(self.request, messages.INFO, 'Please check your form input')
-            return HttpResponseRedirect(request.path)
+            messages.add_message(request, messages.INFO, 'Please check your form input')
+            return render_to_response(self.template_name, context=context, context_instance=RequestContext(request))
 
         LOGGER.info("Email sent to {0} from {1}".format(hospitality.contact.email, sender_email))
         return HttpResponseRedirect(reverse("hospitality_view", args=(hospitality_id,)))
