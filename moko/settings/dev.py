@@ -5,6 +5,8 @@ import os
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
+ENABLE_NEW_RELIC = False
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',

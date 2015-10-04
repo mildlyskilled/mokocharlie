@@ -16,6 +16,7 @@ ALLOWED_HOSTS = ['*']
 
 SITE_ID = 1
 
+ENV = "development"
 # Application definition
 
 INSTALLED_APPS = (
