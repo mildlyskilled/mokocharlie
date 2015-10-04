@@ -37,26 +37,27 @@ class CloudinaryService:
         path = "static/photos"
 
         for image in _images:
-            print "[INFO] Uploading cloud image for {0}/{1}".format(path, image.path)
-            file_path = os.path.join(path, image.path)
-            if os.path.exists(file_path):
-                try:
-                    if not image.cloud_image:
-                        self.upload_image(file_path, image.image_id)
-                        image.cloud_image = image.image_id
-                        image.save()
-                    else:
-                        print "[INFO] skipping {0} cloud_image entry {1} exists".format(image.name, image.cloud_image)
-                    print "[INFO] Cloud Image data saved {0} {1}".format(image.image_id, image.name)
-                except cloudinary.api.Error, e:
-                    print "[ERROR] Failed to upload image to the cloud {0}".format(str(e))
-                except urllib2.URLError, e:
-                    print "[ERROR] Failed to upload image to the cloud {0}".format(str(e))
-                except UnicodeEncodeError, e:
-                    print "[WARN] encountered an encoding error switching to UTF 8 {0}".format(str(e))
-                    reload(sys)
-                    sys.setdefaultencoding("utf-8")
-                    print "[INFO] Cloud Image data saved {0} {1}".format(image.image_id, image.name)
+            if image.path:
+                print "[INFO] Uploading cloud image for {0}/{1}".format(path, image.path)
+                file_path = os.path.join(path, image.path)
+                if os.path.exists(file_path):
+                    try:
+                        if not image.cloud_image:
+                            cloudinary_data = self.upload_image(file_path, image.image_id)
+                            image.cloud_image = cloudinary_data["public_id"]
+                            image.save()
+                        else:
+                            print "[INFO] skipping {0} cloud_image entry {1} exists".format(image.name, image.cloud_image)
+                        print "[INFO] Cloud Image data saved {0} {1}".format(image.image_id, image.name)
+                    except cloudinary.api.Error, e:
+                        print "[ERROR] Failed to upload image to the cloud {0}".format(str(e))
+                    except urllib2.URLError, e:
+                        print "[ERROR] Failed to upload image to the cloud {0}".format(str(e))
+                    except UnicodeEncodeError, e:
+                        print "[WARN] encountered an encoding error switching to UTF 8 {0}".format(str(e))
+                        reload(sys)
+                        sys.setdefaultencoding("utf-8")
+                        print "[INFO] Cloud Image data saved {0} {1}".format(image.image_id, image.name)
 
         print "[INFO] Image upload complete"
 
