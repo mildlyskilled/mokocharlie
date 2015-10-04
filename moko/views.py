@@ -22,7 +22,7 @@ class HomeTemplateView(TemplateView):
 
     def get_context_data(self, **kwargs):
         recent_albums = Album.objects.filter(published=1).filter(featured=1)[:5]
-        featured_collections = Collection.objects.filter(published=1).filter(featured=1)[:8]
+        featured_collections = Collection.objects.filter(published=1).filter(featured=1)
         context = super(HomeTemplateView, self).get_context_data()
         context['featured_albums'] = recent_albums
         context['featured_collections'] = featured_collections

@@ -1,6 +1,6 @@
 {% load cloudinary %}
 <div class="collection">
-    {% cloudinary collection.cover_album.album_cover.image_id|add:'.jpg' transformation="collection_preview" alt=collection %}
+    {% cloudinary collection.cover_album.album_cover.image_id|add:'.jpg' transformation="collection_preview" alt=collection class="img-responsive img-thumbnail" width="300"%}
     <h2><span><a href="{{ collection.get_absolute_url }}">{{ collection }}</a></span></h2>
 </div>
 
@@ -12,7 +12,7 @@
 
     .collection h2 {
         position: absolute;
-        top: 120px;
+        top: 80px;
         left: 0;
         width: 100%;
     }
