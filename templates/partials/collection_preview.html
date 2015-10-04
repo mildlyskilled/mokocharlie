@@ -1,6 +1,6 @@
 {% load cloudinary %}
-<div class="collection pull-left">
-    {% cloudinary collection.cover_album.album_cover.image_id|add:'.jpg' transformation="collection_preview_home_f" alt=collection %}
+<div class="collection">
+    {% cloudinary collection.cover_album.album_cover.image_id|add:'.jpg' transformation="collection_preview" alt=collection %}
     <h2><span><a href="{{ collection.get_absolute_url }}">{{ collection }}</a></span></h2>
 </div>
 

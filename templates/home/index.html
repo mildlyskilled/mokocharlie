@@ -5,22 +5,19 @@
     {% include "partials/navigation.html" %}
 {% endblock %}
 {% block content %}
-    <div class="row">
-        <div class="col-xs-12">
-            <div class="row">
-                {% include "partials/home_carousel.html" %}
-            </div>
-            <div class="row">
-                <hr/>
-            </div>
 
-            <div class="row">
-                {% for collection in featured_collections %}
-                    <div class="col-xs-3">
-                        {% include "partials/collection_preview.html" %}
-                    </div>
-                {% endfor %}
-            </div>
-        </div>
+    <div class="row">
+        {% include "partials/home_carousel.html" %}
     </div>
+    <div class="row">
+        <hr/>
+    </div>
+    <div class="row">
+        {% for collection in featured_collections %}
+            <div class="col-xs-3">
+                {% include "partials/collection_preview.html" %}
+            </div>
+        {% endfor %}
+    </div>
+
 {% endblock %}
