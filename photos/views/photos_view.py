@@ -11,7 +11,7 @@ from ipware.ip import get_real_ip, get_ip
 from moko.forms import CommentForm, PhotoUploadForm
 from moko.mixins.ajax import AjaxResponseMixin
 from common.models import *
-
+from datetime import datetime
 LOGGER = logging.getLogger(__name__)
 
 
@@ -81,7 +81,7 @@ class PhotoViewTemplate(TemplateView):
         increment_views(self.request, kwargs)
         image_id = self.kwargs.get('image_id')
         context = super(PhotoViewTemplate, self).get_context_data()
-        photo = Photo.objects.get(request=image_id, args=null)
+        photo = Photo.objects.get(id=image_id)
 
         album_photos = Photo.objects.filter(albums__photo__id__exact=image_id).order_by('created_at').all()
 
@@ -137,7 +137,7 @@ class NewCommentViewTemplate(AjaxResponseMixin, CreateView):
         if form.is_valid():
             c = form.save(commit=False)
             c.comment_approved = request.user.is_authenticated()  # use authenticated value to set approval status
-            c.image = Photo.objects.get(request=request.POST.get('image'), args=null)
+            c.image = Photo.objects.get(id=request.POST.get('image'))
             c.comment_reported = False
             c.comment_report_type = 0
             c.save()
@@ -159,7 +159,7 @@ class CommentListViewTemplate(TemplateView):
         if self.request.GET.get('image_id') is not None:
             # get comments on an image
             image_id = self.request.GET.get('image_id')
-            image = Photo.objects.get(request=image_id, args=null)
+            image = Photo.objects.get(id=image_id)
             comments = image.comment_set.filter(comment_approved=1).order_by('-comment_date');
         elif self.request.GET.get('album_id') is not None:
             # get comments on all images in given album
@@ -226,8 +226,8 @@ class UploadPhotoTemplate(CreateView):
         import uuid
         owner = self.request.user
         kwargs = super(CreateView, self).get_form_kwargs()
-        kwargs['initial'] = {'owner': owner, 'created_at': datetime.datetime.now(),
-                             'updated_at': datetime.datetime.now(), 'image_id': uuid.uuid1()}
+        kwargs['initial'] = {'owner': owner, 'created_at': datetime.now(),
+                             'updated_at': datetime.now(), 'image_id': uuid.uuid1()}
 
         return kwargs
 

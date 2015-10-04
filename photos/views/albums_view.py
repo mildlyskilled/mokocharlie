@@ -56,7 +56,7 @@ class AlbumViewTemplate(TemplateView):
         album_id = self.kwargs.get('album_id')
         _limit = self.request.GET.get('limit', self.default_limit)
         _page = self.request.GET.get('page', self.default_page)
-        album = Album.objects.get(request=album_id, args=None)
+        album = Album.objects.get(id=album_id)
 
         # Get comments
         album_comments = Comment.objects.filter(image__albums=album_id).filter(comment_approved=1).order_by(

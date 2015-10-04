@@ -3,9 +3,7 @@ import logging
 from django.views.generic.base import TemplateView
 from common.models import *
 
-
 LOGGER = logging.getLogger(__name__)
-
 
 
 class CollectionViewTemplate(TemplateView):
@@ -17,7 +15,7 @@ class CollectionViewTemplate(TemplateView):
         collection_id = self.kwargs.get('collection_id')
         _limit = self.request.GET.get('limit', self.default_limit)
         _page = self.request.GET.get('page', self.default_page)
-        collection = Collection.objects.get(request=collection_id, args=null)
+        collection = Collection.objects.get(id=collection_id)
 
         # Get comments
         collection_comments = Comment.objects.filter(image__albums__collection=collection_id).filter(comment_approved=1).order_by(

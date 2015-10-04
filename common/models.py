@@ -46,6 +46,10 @@ class Album(models.Model):
     def album_images(self):
         return self.photo_set.count()
 
+    @property
+    def photos(self):
+        return self.photo_set.all()
+
     album_images.short_description = "Images in Album"
 
 

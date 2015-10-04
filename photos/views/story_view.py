@@ -9,9 +9,7 @@ class StoryIndexViewTemplate(TemplateView):
     def get_context_data(self, **kwargs):
         context = super(StoryIndexViewTemplate, self).get_context_data()
         stories = PhotoStory.objects.filter(published=True)
-        albums = [a.album for a in stories]
-        print albums
-        comments = Comment.objects.filter(album__album__in=albums).filter(comment_approved=1)[:6]
+        comments = Comment.objects.filter(comment_approved=True)[:6]
         context['stories'] = stories
         context['comments'] = comments
         return context
@@ -23,11 +21,11 @@ class StoryViewTemplate(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super(StoryViewTemplate, self).get_context_data()
-        story = PhotoStory.objects.get(request=kwargs['story_id'], args=null)
+        story = PhotoStory.objects.get(id=kwargs.get('story_id'))
         images = story.album.photos.all()
         photo = images[self.default_index]
         if 'image_id' in kwargs:
-            photo = Photo.objects.get(request=kwargs['image_id'], args=null)
+            photo = Photo.objects.get(id=kwargs.get('image_id'))
 
         current = [p for p in images].index(photo)
         next_item = 0

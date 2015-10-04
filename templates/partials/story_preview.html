@@ -3,13 +3,12 @@
 <div class="col-sm-6 col-md-4" style="min-height: 290px">
     <div class="thumbnail">
         <a href="{{ story.get_absolute_url }}">
-            {% cloudinary story.album.album_cover.image_id|add:'.jpg' transformation="album_preview" alt=album %}</a>
-
+            {% cloudinary story.album.album_cover.image_id|add:'.jpg' transformation="album_preview_fill_face" alt=story.album %}</a>
         <div class="caption">
-            <h5>
+            <h6>
                 <a href="{{ album.get_absolute_url }}">
-                {{ story.album.label|truncatewords:4 }}
-            </a></h5>
+                {{ story.album.label|truncatewords:3 }}
+            </a></h6>
             <p>
                 <small><i class="glyphicon glyphicon-plus"> </i>
                     {{ story.created_at|naturaltime }}<br>
