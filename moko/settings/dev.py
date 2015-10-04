@@ -64,3 +64,4 @@ INSTALLED_APPS += (
 )
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 ADMIN_EMAIL = "kwabena.aning@gmail.com"
+

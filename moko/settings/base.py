@@ -129,11 +129,14 @@ TEMPLATE_DIRS = (
     os.path.join(BASE_DIR, '../templates'),
 )
 
+CLOUDINARY_URL = os.environ["CLOUDINARY_URL"]
+urlparse.uses_netloc.append('cloudinary')
+cloud_images = urlparse.urlparse(CLOUDINARY_URL)
 # Cloudinary settings for Django. Add to your settings file.
 CLOUDINARY = {
-    'cloud_name': 'hv52shllz',
-    'api_key': '211234747938451',
-    'api_secret': 'ATmGWjd4_UyVsC9vwTfLqI_xzx0',
+    'cloud_name': cloud_images.hostname,
+    'api_key': cloud_images.username,
+    'api_secret': cloud_images.password,
 }
 
 CRISPY_TEMPLATE_PACK = 'bootstrap3'
@@ -156,14 +159,15 @@ TEMPLATE_LOADERS = (
 
 SOCIAL_AUTH_STORAGE = 'social.apps.django_app.default.models.DjangoStorage'
 
-SOCIAL_AUTH_TWITTER_KEY = "bqOTvdYoySztq1ylQFqzw"
-SOCIAL_AUTH_TWITTER_SECRET = "STWqPpO0O02vKptUpiNrYsHpgrj1HMExtPn3xhf336I"
+SOCIAL_AUTH_TWITTER_KEY = os.environ["SOCIAL_AUTH_TWITTER_KEY"]
+SOCIAL_AUTH_TWITTER_SECRET = os.environ["SOCIAL_AUTH_TWITTER_SECRET"]
 
-SOCIAL_AUTH_FACEBOOK_KEY = "81700851985"
-SOCIAL_AUTH_FACEBOOK_SECRET = "1abaa53b4babeb3c860506d8f57e577a"
+SOCIAL_AUTH_FACEBOOK_KEY = os.environ["SOCIAL_AUTH_FACEBOOK_KEY"]
+SOCIAL_AUTH_FACEBOOK_SECRET = os.environ["SOCIAL_AUTH_FACEBOOK_SECRET"]
 
-SOCIAL_AUTH_LINKEDIN_OAUTH2_KEY = "77esqvhx7ukhea"
-SOCIAL_AUTH_LINKEDIN_OAUTH2_SECRET = "ICfanfvnlIjY7o3N"
+SOCIAL_AUTH_LINKEDIN_OAUTH2_KEY = os.environ["SOCIAL_AUTH_LINKEDIN_OAUTH2_KEY"]
+SOCIAL_AUTH_LINKEDIN_OAUTH2_SECRET = os.environ["SOCIAL_AUTH_LINKEDIN_OAUTH2_SECRET"]
+
 SOCIAL_AUTH_LINKEDIN_OAUTH2_SCOPE = ['r_basicprofile', 'r_emailaddress']
 SOCIAL_AUTH_LINKEDIN_OAUTH2_FIELD_SELECTORS = ['id', 'email-address', 'first-name', 'last-name']
 SOCIAL_AUTH_LINKEDIN_OAUTH2_EXTRA_DATA = [('id', 'id'),
@@ -174,8 +178,6 @@ SOCIAL_AUTH_LINKEDIN_OAUTH2_EXTRA_DATA = [('id', 'id'),
 # SOCIAL_AUTH_PROTECTED_USER_FIELDS = ['email', ]
 
 SESSION_SERIALIZER = 'django.contrib.sessions.serializers.JSONSerializer'
-LOGIN_URL = "/login"
-LOGIN_REDIRECT_URL = "/profile/"
 SOCIAL_AUTH_NEW_USER_REDIRECT_URL = "/profile/"
 
 AUTHENTICATION_BACKENDS = (
@@ -203,7 +205,7 @@ SOCIAL_AUTH_PIPELINE = (
     'social.pipeline.social_auth.auth_allowed',
     'social.pipeline.social_auth.social_user',
     'social.pipeline.user.get_username',
-    'social.pipeline.social_auth.associate_by_email',  # <--- enable this one
+    'social.pipeline.social_auth.associate_by_email',
     'social.pipeline.user.create_user',
     'social.pipeline.social_auth.associate_user',
     'social.pipeline.social_auth.load_extra_data',
@@ -270,15 +272,7 @@ YOUTUBE_CLIENT_ID = '118063279160-9qge7douhfnghrn3dk8qnthfiglp5thl.apps.googleus
 YOUTUBE_UPLOAD_REDIRECT_URL = '/youtube/videos/'
 YOUTUBE_DELETE_REDIRECT_URL = '/video/'
 
-if 'SEARCHBOX_SSL_URL' in os.environ:
-    search_box_elastic_search_url = os.environ['SEARCHBOX_SSL_URL']
-else:
-    search_box_elastic_search_url = 'https://paas:d4b18f626b95e75fdac571b738cbb402@dwalin-us-east-1.searchly.com'
-
-if 'BONSAI_URL' in os.environ:
-    bonsai_url = os.environ['BONSAI_URL']
-else:
-    bonsai_url = 'https://np2fdvyv:4m0v2p37cknwe7js@box-4649745.us-east-1.bonsai.io/'
+search_box_elastic_search_url = os.environ['SEARCHBOX_SSL_URL']
 
 HAYSTACK_CONNECTIONS = {
     'default': {
@@ -292,4 +286,4 @@ EMAIL_BACKEND = 'django_mailgun.MailgunBackend'
 MAILGUN_ACCESS_KEY = "key-47e4aa5e5f26543ceb3684d57f17c1ce"
 MAILGUN_SERVER_NAME = "appb25f7ea2221b49c18f51bd3fa23ce4a9.mailgun.org"
 
-ADMIN_EMAIL = "info@mokocharlie.com"
+ADMIN_EMAIL = EMAIL_FROM
