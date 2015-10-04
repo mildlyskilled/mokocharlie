@@ -36,7 +36,7 @@ INSTALLED_APPS = (
     'endless_pagination',
     'common',
     'admin_honeypot',
-    'captcha',
+    'nocaptcha_recaptcha',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -178,6 +178,8 @@ SOCIAL_AUTH_LINKEDIN_OAUTH2_EXTRA_DATA = [('id', 'id'),
 # SOCIAL_AUTH_PROTECTED_USER_FIELDS = ['email', ]
 
 SESSION_SERIALIZER = 'django.contrib.sessions.serializers.JSONSerializer'
+LOGIN_URL = "/login"
+LOGIN_REDIRECT_URL = "/profile/"
 SOCIAL_AUTH_NEW_USER_REDIRECT_URL = "/profile/"
 
 AUTHENTICATION_BACKENDS = (
@@ -287,3 +289,8 @@ MAILGUN_ACCESS_KEY = "key-47e4aa5e5f26543ceb3684d57f17c1ce"
 MAILGUN_SERVER_NAME = "appb25f7ea2221b49c18f51bd3fa23ce4a9.mailgun.org"
 
 ADMIN_EMAIL = EMAIL_FROM
+ADMIN_EMAIL = "info@mokocharlie.com"
+
+NORECAPTCHA_SITE_KEY = os.environ['NORECAPTCHA_SITE_KEY']
+NORECAPTCHA_SECRET_KEY = os.environ["NORECAPTCHA_SECRET_KEY"]
+

@@ -16,8 +16,8 @@ django-jsonfield==0.9.15
 django-mailgun==0.7.2
 django-mptt==0.7.4
 django-multiuploader==0.2.9
+django-nocaptcha-recaptcha==0.0.18
 django-sekizai==0.8.2
-django-simple-captcha==0.4.6
 django-toolbelt==0.0.1
 djangocms-admin-style==0.2.8
 elasticsearch==1.7.0
@@ -27,7 +27,6 @@ jsonfield==1.0.3
 MySQL-python==1.2.5
 newrelic==2.54.0.41
 oauthlib==1.0.3
-Pillow==3.0.0
 psycopg2==2.6.1
 pyelasticsearch==1.4
 PyJWT==1.4.0
@@ -41,7 +40,6 @@ requests-oauthlib==0.5.0
 simplejson==3.8.0
 six==1.9.0
 sorl-thumbnail==12.3
-South==0.8.4
 sqlparse==0.1.16
 static==1.1.1
 static3==0.6.1

@@ -1,0 +1,10 @@
+{% extends "master.html" %}
+{% load cloudinary %}
+{% block title %}Organising Community Photos{% endblock %}
+{% block navigation %}
+    {% include "partials/navigation.html" %}
+{% endblock %}
+{% block content %}
+    {% load crispy_forms_tags %}
+    {% crispy form %}
+{% endblock %}
