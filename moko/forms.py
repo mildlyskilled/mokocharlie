@@ -64,7 +64,7 @@ class LoginForm(forms.Form):
         self.helper.form_class = 'form-horizontal'
         self.helper.label_class = 'col-lg-3'
         self.helper.field_class = 'col-lg-7 login-fields'
-        self.helper.add_input(Submit('submit', 'Login'))
+        self.helper.add_input(Submit('submit', 'Login', css_class="btn btn-success pull-right"))
 
 
 class CustomUserCreationForm(UserCreationForm):
@@ -82,7 +82,7 @@ class CustomUserCreationForm(UserCreationForm):
         self.helper.form_class = 'form-horizontal'
         self.helper.label_class = 'col-lg-3'
         self.helper.field_class = 'col-lg-7 login-fields'
-        self.helper.add_input(Submit('submit', 'Save'))
+        self.helper.add_input(Submit('submit', 'Save', css_class="btn btn-success pull-right"))
 
     class Meta:
         model = MokoUser
