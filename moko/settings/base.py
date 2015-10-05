@@ -97,10 +97,10 @@ except Exception:
 
 # Test database
 if 'test' in sys.argv or 'test_coverage' in sys.argv:
-    print "TESTING"
     DATABASES['default'] = {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, '../data/test.sqlite')
+        'NAME': os.path.join(BASE_DIR, '../data/tests.sqlite3'),
+        'TEST': {'NAME': os.path.join(BASE_DIR, '../data/tests.sqlite3')}
     }
 
 LANGUAGE_CODE = 'en-gb'
@@ -112,7 +112,6 @@ USE_I18N = True
 USE_L10N = True
 
 USE_TZ = False
-
 
 STATIC_URL = '/static/'
 STATIC_ROOT = 'staticfiles'
@@ -288,4 +287,3 @@ ADMIN_EMAIL = "info@mokocharlie.com"
 
 NORECAPTCHA_SITE_KEY = os.environ['NORECAPTCHA_SITE_KEY']
 NORECAPTCHA_SECRET_KEY = os.environ["NORECAPTCHA_SECRET_KEY"]
-
