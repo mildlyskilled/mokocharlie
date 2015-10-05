@@ -7,14 +7,6 @@ DEBUG = True
 
 ENABLE_NEW_RELIC = False
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'moko',
-        'USER': 'root',
-        'PASSWORD': 'root'
-    }
-}
 
 LOGGING = {
     'version': 1,

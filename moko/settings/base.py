@@ -96,15 +96,12 @@ except Exception:
     print 'Unexpected error:', sys.exc_info()
 
 # Test database
-
-if 'test' in sys.argv:
+if 'test' in sys.argv or 'test_coverage' in sys.argv:
+    print "TESTING"
     DATABASES['default'] = {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': 'test.db'
+        'NAME': os.path.join(BASE_DIR, '../data/test.sqlite')
     }
-
-# Internationalization
-# https://docs.djangoproject.com/en/1.6/topics/i18n/
 
 LANGUAGE_CODE = 'en-gb'
 
@@ -116,9 +113,6 @@ USE_L10N = True
 
 USE_TZ = False
 
-
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/1.6/howto/static-files/
 
 STATIC_URL = '/static/'
 STATIC_ROOT = 'staticfiles'
