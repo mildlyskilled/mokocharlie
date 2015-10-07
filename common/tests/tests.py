@@ -3,12 +3,14 @@ from django.test import TestCase
 
 
 class HomepageTest(TestCase):
-
     fixtures = ["common/fixtures/initial_data.json"]
+    photo_to_test = "182"
 
     def setUp(self):
         self.c = Client()
         self.home = self.c.get('/')
+        self.photos = self.c.get('/photos/')
+        self.photo = self.c.get('/photos/{0}'.format(self.photo_to_test))
 
     def tearDown(self):
         self.c = None
@@ -34,5 +36,19 @@ class HomepageTest(TestCase):
 
     def test_photos_page_has_photos(self):
         """Photos page must have a photo set to loop through"""
-        self.photos = self.c.get('/photos/')
         self.assertIn('images', self.photos.context)
+
+    def test_photos_page_has_comments(self):
+        """Photos page must make an attempt to displat comments"""
+        self.assertIn('comments', self.photos.context)
+
+    def test_photos_page_has_favourite_flag(self):
+        """A photos page must have a favourite flag"""
+        self.assertIn("favourited", self.photos.context)
+
+    def test_photos_page_has_total_number_of_photos(self):
+        """Photos page must have the total number of photos in given album"""
+        from common.models import Photo
+        album_photos = Photo.objects.filter(albums__photo__id__exact=self.photo_to_test).filter(
+            published=True).order_by('created_at').all()
+        self.assertEquals(album_photos.count(), self.photos.context["total_photos"])
