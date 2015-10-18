@@ -30,7 +30,11 @@
                         <button type="button" id="like-button" class="btn btn-default btn-sm pull-right"
                                 data-toggle="tooltip" data-placement="top"
                                 {% if not favourited %}
+                                    {% if user.is_authenticated %}
                                 title="Click here to add this image to your favourites"
+                                    {% else %}
+                                title="You need to log in first"
+                                    {% endif %}
                                 {% else %}
                                 title="Click here to remove this image to your favourites"
                                 {% endif %}
@@ -39,8 +43,8 @@
                                 {% else %}
                                 onclick="unfavouritePhoto({{ image.id }})"
                                 {% endif %}
-                        >
-                        <span class="glyphicon glyphicon-heart{% if not favourited %}-empty{% endif %}"></span>
+                                >
+                            <span class="glyphicon glyphicon-heart{% if not favourited %}-empty{% endif %}"></span>
                         </button>
                     </div>
                     <br/>
