@@ -18,7 +18,7 @@ LOGGER = logging.getLogger(__name__)
 def increment_views(request, kwargs):
     view_count = PhotoViews.objects.filter(photo_id=kwargs.get("image_id"))
     if request.user.is_authenticated:
-        view_count.filter(user=request.user)
+        view_count.filter(user=request.user.id)
     else:
         view_count.filter(ip_address=get_real_ip(request))
 
