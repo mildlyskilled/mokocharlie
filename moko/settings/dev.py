@@ -1,12 +1,10 @@
 from base import *
-import django.conf.global_settings as DEFAULT_SETTINGS
-import os
+import django.conf.global_settings as default_settings
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
 ENABLE_NEW_RELIC = False
-
 
 LOGGING = {
     'version': 1,
