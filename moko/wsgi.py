@@ -5,7 +5,7 @@ from django.conf import settings
 
 if settings.ENABLE_NEW_RELIC:
     import newrelic.agent
-    newrelic.agent.initialize(environment=settings.ENV)
+    newrelic.agent.initialize()
 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "moko.settings")
 application = Cling(get_wsgi_application())
