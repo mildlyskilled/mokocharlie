@@ -1,7 +1,7 @@
 from base import *
 import django.conf.global_settings as default_settings
 
-DEBUG = False
+DEBUG = True
 
 ENABLE_NEW_RELIC = True
 
