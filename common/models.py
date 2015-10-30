@@ -86,7 +86,10 @@ class Photo(models.Model):
     @property
     def get_times_viewed(self):
         p = PhotoViews.objects.annotate(times_viewed=Count('id')).filter(photo_id=self.id)
-        return p[0].times_viewed
+        if p:
+            return p[0].times_viewed
+        else:
+            return 0
 
     get_albums.short_description = 'Image Appears In'
 

@@ -1,5 +1,5 @@
 from base import *
-import django.conf.global_settings as DEFAULT_SETTINGS
+import django.conf.global_settings as default_settings
 
 DEBUG = False
 

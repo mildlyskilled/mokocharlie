@@ -96,15 +96,12 @@ except Exception:
     print 'Unexpected error:', sys.exc_info()
 
 # Test database
-
-if 'test' in sys.argv:
+if 'test' in sys.argv or 'test_coverage' in sys.argv:
     DATABASES['default'] = {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': 'test.db'
+        'NAME': os.path.join(BASE_DIR, '../data/tests.sqlite3'),
+        'TEST': {'NAME': os.path.join(BASE_DIR, '../data/tests.sqlite3')}
     }
-
-# Internationalization
-# https://docs.djangoproject.com/en/1.6/topics/i18n/
 
 LANGUAGE_CODE = 'en-gb'
 
@@ -115,10 +112,6 @@ USE_I18N = True
 USE_L10N = True
 
 USE_TZ = False
-
-
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/1.6/howto/static-files/
 
 STATIC_URL = '/static/'
 STATIC_ROOT = 'staticfiles'
@@ -294,4 +287,3 @@ ADMIN_EMAIL = "info@mokocharlie.com"
 
 NORECAPTCHA_SITE_KEY = os.environ['NORECAPTCHA_SITE_KEY']
 NORECAPTCHA_SECRET_KEY = os.environ["NORECAPTCHA_SECRET_KEY"]
-
