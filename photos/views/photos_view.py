@@ -27,7 +27,7 @@ def increment_views(request, kwargs):
         pv = PhotoViews()
         pv.ip_address = get_ip(request)
         pv.photo_id = kwargs.get("image_id")
-        if request.user.is_authenticated:
+        if request.user.is_authenticated():
             pv.user = request.user
         pv.save()
 
